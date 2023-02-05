@@ -103,8 +103,9 @@ function App() {
         onChange={onChange}/>
         ))}
         <button>SIGN UP</button>
-        <p>By signing up, you aceept Mimik's privacy policy and terms of service</p>
-      </form>
+        
+        <p>By signing up, you aceept Mimik's privacy policy and <a href="https://drive.google.com/file/d/1KOu6CPQsmvR-gWBsGK85KRJn65RXXcDB/view?usp=sharing" target={"_blank"}>terms of service</a></p>
+         </form>
     </div>
   );
 }
