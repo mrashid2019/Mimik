@@ -1,5 +1,7 @@
+
 .App {
   text-align: center;
+  background-color: white;
 }
 
 .App-logo {
@@ -35,4 +37,62 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/*CSS FOR LOGIN PAGE*/
+
+.login-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.login-form {
+  width: 420px;
+  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.login-form-content {
+  padding-left: 12%;
+  padding-right: 12%;
+  text-align: center;
+}
+
+.login-form .form-group {
+  border: #6969A8;
+  border-radius: 20px; 
+}
+
+.login-form-title {
+  text-align: center;
+  margin-bottom: 1em;
+  font-size: 24px;
+  color: rgb(34, 34, 34);
+  font-weight: 800;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(34, 34, 34);
+}
+
+hr {
+  height: 2px;
+  border: #9f9f9f;
+  color: black;
+}
+
+.login-btn{
+background-color: #6969A8 !important;
+border: #6969A8 !important;
+padding: 15px 20px !important;
+border-radius: 20px !important;
+font-size: medium !important;
 }
