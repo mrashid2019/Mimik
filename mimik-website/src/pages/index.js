@@ -4,6 +4,8 @@ const Home = () => {
 return (
 	<div>
 	<h1>Homepage of Mimik</h1>
+	<h1>Homepage of Mimik</h1>
+	
 	</div>
 );
 };

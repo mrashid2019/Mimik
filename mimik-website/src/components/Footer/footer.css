@@ -1,0 +1,28 @@
+.main-footer{
+    color: white;
+    background-color: #4A4E69;
+    padding-top:.1em;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer_link{
+    color: white;
+    text-decoration: none;
+}
+
+.col-sm{
+   text-align: center;
+
+}
+
+.footer_img{
+    width: 10%;
+}
+
+.col-sm-3{
+    padding-top: .5rem;
+}
+
+
