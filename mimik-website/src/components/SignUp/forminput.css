@@ -1,0 +1,77 @@
+.formInput{
+    display: flex;
+    flex-direction: column;
+    /* //width: 280px; */
+}
+
+input{
+
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; 
+
+    width: 320px;
+    box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    border-radius: 8px;
+    background-color: white;
+
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+
+
+}
+
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(34, 34, 34);
+}
+
+.signup-btn{
+    background-color: #6969A8 !important;
+    border: #6969A8 !important;
+    padding: 15px 20px !important;
+    border-radius: 20px !important;
+    font-size: medium !important;
+}
+
+
+.pt-3 {
+    padding-top: 1rem!important;
+}
+
+.mt-3 {
+    margin-top: 1rem!important;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+
+
+span{
+    font-size: 10px;
+    padding: 0.006rem;
+    color: red;
+    display: none;
+}
+
+input:invalid[focused="true"]{
+    border: 1px solid red;
+}
+
+input:invalid[focused="true"] ~ span{
+    display: block;
+}
+
+

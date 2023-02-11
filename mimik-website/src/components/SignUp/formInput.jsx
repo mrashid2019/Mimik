@@ -12,7 +12,7 @@ const FormInput = (props) =>{
     };
     
     return(
-        <div className = "formInput">
+        <div className = "formInput mt-3 pt-3">
         <label>{label}</label>
         <input {...inputProps}
         onChange={onChange}
