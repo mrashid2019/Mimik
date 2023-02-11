@@ -1,52 +1,89 @@
-import React from 'react';
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Form, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import GoogleButton from "react-google-button";
+import { useUserAuth } from "../context/userAuthContext";
 
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { logIn, googleSignIn } = useUserAuth();
+  const navigate = useNavigate();
 
-export default function (props) {
-	return (
-	  <div className="login-form-container">
-		<form className="login-form">
-		  <div className="login-form-content">
-			<h3 className="login-form-title">Welcome!</h3>
-			<div className="googleOauth mt-3"> 
-			<button type="button" className="btn btn-primary ">
-				Continue with Google
-			  </button>
-			</div>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      await logIn(email, password);
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
+  const handleGoogleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      await googleSignIn();
+      navigate("/home");
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-			<div className="form-group mt-3 pt-3">
-			  <input
-				type="email"
-				className="form-control mt-1"
-				placeholder="&#xf0e0; Email" 
-			  />
-			</div>
-			<div className="form-group mt-3 pt-3">
-			  <input
-				type="password"
-				className="form-control mt-1"
-				placeholder="Password"
-			  />
-			</div>
-			<div className="d-grid gap-2 mt-3 pt-3">
-			  <button type="submit" className="btn btn-primary login-btn">
-				LOG IN
-			  </button>
-			</div>
-			<div className= ""> 
-			<p className="forgot-password mt-3 pt-3">
-			  <a href="#"> Forgot password?</a>
-			</p>
-			<hr></hr>
-			<p className="register ">
-			  New to Mimik? <a href="#">Register Today!</a>
-			</p>
+  return (
+    <>
+      <div className="p-4 box">
+        <h2 className="mb-3">Welcome</h2>
+        {error && <Alert variant="danger">{error}</Alert>}
 
-			</div>
-			
-		  </div>
-		</form>
-	  </div>
-	)
-  }
+        <div>
+          <GoogleButton
+            className="g-btn"
+            type="dark"
+            onClick={handleGoogleSignIn}
+          />
+        </div>
+        <div>
+          <p> OR</p>
+        </div>
+
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3 p-2" controlId="formBasicEmail">
+            <Form.Control className="info"
+              type="email"
+              placeholder="Email address"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3 p-2" controlId="formBasicPassword">
+            <Form.Control className="info"
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+
+          <div className="d-grid gap-2 p-3">
+            <Button variant="primary" type="Submit" className="login-btn">
+              Log In
+            </Button>
+          </div>
+        </Form>
+        <hr />
+        <div className="mt-3 text-center">
+       <Link to="/signup">Forgot Password?</Link>
+      </div>
+      <div className="mt-3 text-center">
+        New to Mimik? <Link to="/signup">Register Today</Link>
+      </div>
+      </div>
+  
+    </>
+  );
+};
+
+export default Login;
