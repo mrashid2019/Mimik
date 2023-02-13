@@ -1,6 +1,6 @@
 import React from "react";
 import "../Footer/footer.css"
- 
+
 
 function Footer(){
     return(
@@ -21,13 +21,12 @@ function Footer(){
                     <div class="col-sm-3">FAQs</div>
                     </div>                
                 </div>
-
             </div>
 
                 <div className="row">
                     <hr/>
                     <p className="col-sm">
-                        &copy;{new Date().getFullYear()} Mimik | All rights Reserved | terms of service 
+                        &copy;{new Date().getFullYear()} Mimik | All rights Reserved | <a class="terms" href={require('../SignUp/terms/MIMIKUserAgreement.pdf')} target="_blank"> Terms of Service</a> 
                     </p>
                 </div>
             </div>
