@@ -1,0 +1,26 @@
+{
+  "name": "mimik_backend",
+  "version": "1.0.0",
+  "description": "Backend Voice Conversion/Cloning for Mimik application",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wdure2018/Mimik.git"
+  },
+  "keywords": [
+    "Deepfake"
+  ],
+  "author": "Group 6",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wdure2018/Mimik/issues"
+  },
+  "homepage": "https://github.com/wdure2018/Mimik#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.0"
+  }
+}
