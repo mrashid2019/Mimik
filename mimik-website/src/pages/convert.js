@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
+import Footer from '../components/Footer/index'
 
 const socket = io('http://localhost:8000')
 // socket.on
@@ -107,6 +108,8 @@ return (
 			<div style={waveformBar}></div>
 			<audio ref={localAudioRef}></audio>
 			</div>
+
+			<Footer></Footer>
 		</div>
 	</div>
 );

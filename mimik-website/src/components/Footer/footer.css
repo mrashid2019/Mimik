@@ -5,6 +5,7 @@
     position: relative;
     bottom: 0;
     width: 100%;
+    max-width: 100vw;
 }
 
 .footer_link{
