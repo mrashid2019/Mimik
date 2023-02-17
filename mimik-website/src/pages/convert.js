@@ -8,6 +8,15 @@ const socket = io('http://localhost:8000')
 
 
 
+<<<<<<< HEAD
+=======
+const socket = io('http://localhost:8000')
+// socket.on
+// const audio = new Audio()
+
+
+
+>>>>>>> main
 const main = {
 	height:'100%',
 	width:'100%',
