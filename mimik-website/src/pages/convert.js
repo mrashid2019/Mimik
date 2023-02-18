@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
 
-const socket = io.connect('http://localhost:3001')
+const socket = io('http://localhost:8000')
+// socket.on
+// const audio = new Audio()
+
+
+
 const main = {
 	height:'100%',
 	width:'100%',
@@ -19,27 +24,54 @@ const waveformBar = {
 
 const Convert = () => {
 
+	const localAudioRef = useRef()
+
+	useEffect(()=>{
+
+		socket.emit("connection")
+
+		const constraints = {
+			audio:true,
+			video:false
+		}
+		
+		if (isRecording){
+		navigator.mediaDevices.getUserMedia(constraints)
+			.then(stream =>{
+				console.log('STREAMING...')
+				console.log({stream})
+				localAudioRef.current.srcObject = stream
+			}) 
+			.catch(e =>{console.log('error getting user media...',e)})
+		}else{
+			console.log('STOPPED STREAMING')
+		}
+	
+
+	})
+
 	const[isRecording, setRecording] = useState(false)
 	const clickPlay = ()=>{
 		setRecording(!isRecording)
 		console.log('Hello!')
 	}
 
+	
 	const Pause = ({isRecording}) => {
 		
 		return (
 			<div>
 			
 			{!isRecording && (<svg onClick={()=>setRecording(true)} className="button" viewBox="-15 -25 110 110" width="50" height="50">
-			<circle cx="40" cy="30" r="50" fill='white' stroke='red' stroke-width='4'/>  
-			<polygon points="15,0 30,0 30,60 15,60" stroke='black' stroke-width='4' fill='white' />
-			<polygon points="50,0 65,0 65,60 50,60" stroke='black' stroke-width='4' fill='white' />
+			<circle cx="40" cy="30" r="50" fill='white' stroke='red' strokeWidth='4'/>  
+			<polygon points="15,0 30,0 30,60 15,60" stroke='black' strokeWidth='4' fill='white' />
+			<polygon points="50,0 65,0 65,60 50,60" stroke='black' strokeWidth='4' fill='white' />
 			</svg>
 			)}
 			
 			{isRecording && (<svg onClick={()=>setRecording(false)} className="button" viewBox="-15 -25 110 110" width="50" height="50">
-			<circle cx="40" cy="30" r="50" fill='white' stroke='red' stroke-width='4'/>  
-			<polygon points="25,0 25,60 75,30" stroke='black' stroke-width='4' fill="#fff"/>
+			<circle cx="40" cy="30" r="50" fill='white' stroke='red' strokeWidth='4'/>  
+			<polygon points="25,0 25,60 75,30" stroke='black' strokeWidth='4' fill="#fff"/>
 			</svg>
 			)}
 			</div>
@@ -73,6 +105,7 @@ return (
 			{isRecording &&(<h1 style={{margin:'0%',fontSize: '1.8vmax', color:'#4A4E69', alignSelf:'start', justifySelf:'start'}}>Recording...</h1>)}
 			{!isRecording &&(<h1 style={{margin:'0%',fontSize: '1.8vmax', color:'#4A4E69', alignSelf:'start', justifySelf:'start'}}>Paused</h1>)}
 			<div style={waveformBar}></div>
+			<audio ref={localAudioRef}></audio>
 			</div>
 		</div>
 	</div>
