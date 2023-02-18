@@ -9,7 +9,7 @@ const Navbar = () => {
 return (
 	<>
 	<Nav>
-		<img src={logo} alt='logo' width={150} height={100}/>
+		<img src={logo} alt='logo' height={100} width= {150}/>
 		<Bars />
 		<NavMenu>
 		<NavLink to="/" activeStyle>
@@ -17,12 +17,6 @@ return (
 		</NavLink>
 		<NavLink to="/apptour" activeStyle>
 			App Tour
-		</NavLink>
-		<NavLink to="/train" activeStyle>
-			Train
-		</NavLink>
-		<NavLink to="/convert" activeStyle>
-			Convert
 		</NavLink>
 		<NavLink to="/signup" activeStyle>
 			Sign Up
