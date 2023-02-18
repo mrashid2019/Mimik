@@ -1,0 +1,30 @@
+.About_main {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center
+}
+
+.aBlock {
+    display:flex;
+    width: 90vw;
+    min-height:200px;
+    margin:100px;
+    justify-content: space-evenly;
+}
+
+.bBlock {
+    width: 40vw; 
+    min-height:200px;
+    margin:50px;
+    position:relative;
+    left:25vw
+}
+
+.cBlock {
+    width: 40vw;
+    min-height: 100px;
+    margin: 50px;
+
+}
