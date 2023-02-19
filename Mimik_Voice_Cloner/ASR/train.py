@@ -1,6 +1,7 @@
 from model import Transcriber
 from pytorch_lightning.loggers.tensorboard import TensorBoardLogger
 from pytorch_lightning import Trainer
+#from torch.utils import tensorboard
 from torchaudio.datasets import LIBRISPEECH
 from torch.utils.data import DataLoader
 from argparse import ArgumentParser
@@ -18,8 +19,8 @@ def train(*args):
 
     model = Transcriber(**h_params)
 
-    # logger = TensorBoardLogger(save_dir='./tb_logs',name = 'ASR')
-    # trainer = Trainer(logger=logger)
+    logger = TensorBoardLogger(save_dir='./tb_logs',name = 'ASR')
+    trainer = Trainer(logger=logger)
     trainer = Trainer(
         max_epochs=10, accelerator=None, devices=0,
         num_nodes=1, gradient_clip_val=1.0,

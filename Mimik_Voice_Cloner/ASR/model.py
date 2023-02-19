@@ -1,10 +1,13 @@
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+from torch import optim
 from torch.types import _TensorOrTensors as Tensor
+from pytorch_lightning import LightningModule
 
 
-class CustomCNN(nn.Module):
+
+class CustomCNN(LightningModule):
     def __init__(self, dropout, n_features, same_shape = False) -> None:
         super(CustomCNN, self).__init__()
         self.dropout = nn.Dropout(dropout)
@@ -35,32 +38,7 @@ class Transcriber(nn.Module):
         self.n_features = n_features
         self.n_classes = n_classes
 
-        # self.layers = nn.ModuleList([])
-
-        # self.layers.append(nn.Sequential(
-        #     nn.Conv1d(n_features, n_features, 10, 2, padding=5),
-        #     CustomCNN(dropout=self.dropout, n_features=self.n_features)
-        # ))
-
-        # self.layers.append(nn.Sequential(
-        #     nn.Linear(n_features,128),
-        #     nn.LayerNorm(128),
-        #     nn.GELU(),
-        #     nn.Dropout(dropout),
-        #     nn.Linear(128,128),
-        #     nn.LayerNorm(128),
-        #     nn.GELU(),
-        #     nn.Dropout(dropout)
-        # ))
-
-        # self.layers.append(nn.LSTM(input_size=128, hidden_size=hidden_size,
-        #                     num_layers=n_layers, dropout=0.0,
-        #                     bidirectional=False))
-
-        # self.layers.append(nn.LayerNorm(hidden_size))
-        # self.layers.append(nn.Dropout(dropout))
-        # self.layers.append(nn.Linear(hidden_size, n_classes))
-        
+       
 
         self.cnn = nn.Sequential(
             nn.Conv1d(n_features, n_features, 10, 2, padding=5),
@@ -103,6 +81,34 @@ class Transcriber(nn.Module):
         out, (hn, cn) = self.lstm(x, hidden)
         x = self.dropout2(F.gelu(self.layer_norm2(out)))  # (time, batch, n_class)
         return self.final_fc(x), (hn, cn)
+
+
+class ASRLightningModule(LightningModule):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.model = Transcriber()
+        self.loss_func = nn.CTCLoss(blank=28, zero_infinity=True)
+
+
+    def step(self, batch):
+        spectrograms, labels, input_lengths, label_lengths = batch 
+        bs = spectrograms.shape[0]
+        hidden = self.model._init_hidden(bs)
+        hn, c0 = hidden[0].to(self.device), hidden[1].to(self.device)
+        output, _ = self(spectrograms, (hn, c0))
+        output = F.log_softmax(output, dim=2)
+        loss = self.criterion(output, labels, input_lengths, label_lengths)
+        return loss
+
+    def training_step(self, batch, batch_idx):
+        loss = self.step(batch)
+        logs = {'loss': loss, 'lr': self.optimizer.param_groups[0]['lr'] }
+        return {'loss': loss, 'log': logs}
+    
+    def configure_optimizers(self):
+        self.optimizer = optim.AdamW(self.model.parameters(), self.args.learning_rate)
+        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min',factor=0.50, patience=6)
+        return [self.optimizer], [self.scheduler]
 
 if __name__ == '__main__':
 
