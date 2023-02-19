@@ -4,7 +4,8 @@ from torch.nn import functional as F
 from torch import optim
 from torch.types import _TensorOrTensors as Tensor
 from pytorch_lightning import LightningModule
-
+from typing import Any
+import argparse
 
 
 class CustomCNN(LightningModule):
@@ -37,8 +38,6 @@ class Transcriber(nn.Module):
         self.hidden_size = hidden_size
         self.n_features = n_features
         self.n_classes = n_classes
-
-       
 
         self.cnn = nn.Sequential(
             nn.Conv1d(n_features, n_features, 10, 2, padding=5),
@@ -86,11 +85,12 @@ class Transcriber(nn.Module):
 class ASRLightningModule(LightningModule):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.model = Transcriber()
+        self.model = Transcriber(0.1,1,512,50,20)
         self.loss_func = nn.CTCLoss(blank=28, zero_infinity=True)
 
 
     def step(self, batch):
+        print('\n\nBATCH:',batch, '\n',len(batch),'\n\n')
         spectrograms, labels, input_lengths, label_lengths = batch 
         bs = spectrograms.shape[0]
         hidden = self.model._init_hidden(bs)
@@ -106,9 +106,10 @@ class ASRLightningModule(LightningModule):
         return {'loss': loss, 'log': logs}
     
     def configure_optimizers(self):
-        self.optimizer = optim.AdamW(self.model.parameters(), self.args.learning_rate)
-        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min',factor=0.50, patience=6)
-        return [self.optimizer], [self.scheduler]
+        self.optimizer = optim.AdamW(self.model.parameters(), 0.005)
+        # self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, mode='min',factor=0.50, patience=6)
+        # return [self.optimizer], [self.scheduler], ['val_loss']
+        return self.optimizer
 
 if __name__ == '__main__':
 
