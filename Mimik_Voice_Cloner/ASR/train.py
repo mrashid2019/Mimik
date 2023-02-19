@@ -10,8 +10,8 @@ def get_trainer_details():
     help(Trainer)
 
 def get_librispeech_data():
-    return LIBRISPEECH(root='./ASR/datasets/LibriSpeech_tc100',download='True')
-
+    ls_data = LIBRISPEECH(root='./datasets/LibriSpeech',download=True)
+    return ls_data
 
 def train(*args):
     h_params = Transcriber.h_params
