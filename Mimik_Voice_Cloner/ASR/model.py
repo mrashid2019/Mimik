@@ -5,22 +5,21 @@ from torch import optim
 from torch.types import _TensorOrTensors as Tensor
 from pytorch_lightning import LightningModule
 from typing import Any
-import argparse
 
 
-class CustomCNN(LightningModule):
+class CustomCNN(nn.Module):
     def __init__(self, dropout, n_features, same_shape = False) -> None:
         super(CustomCNN, self).__init__()
         self.dropout = nn.Dropout(dropout)
         self.norm = nn.LayerNorm(normalized_shape = n_features)
         self.same_shape = same_shape
         
-    def forward(self, X:Tensor):
-        X = X.transpose(1,2)
+    def forward(self, x):
+        x = x.transpose(1,2)
         x=self.dropout(F.gelu(self.norm(x)))
         if self.same_shape:
-            return X.transpose(1,2)
-        return X
+            return x.transpose(1,2)
+        return x
 
 class Transcriber(nn.Module):
     h_params = {

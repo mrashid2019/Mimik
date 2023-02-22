@@ -4,7 +4,9 @@ import torch.nn as nn
 import pandas as pd
 import numpy as np
 from utils import TextProcess
-
+import json
+import librosa
+from numpy import float32
 
 # NOTE: add time stretch
 class SpecAugment(nn.Module):
@@ -84,7 +86,8 @@ class Data(torch.utils.data.Dataset):
         self.text_process = TextProcess()
 
         print("Loading data json file from", json_path)
-        self.data = pd.read_json(json_path, lines=True)
+        with open(json_path,'r') as file:
+            self.data = json.load(file)
 
         if valid:
             self.audio_transforms = torch.nn.Sequential(
@@ -105,30 +108,34 @@ class Data(torch.utils.data.Dataset):
             idx = idx.item()
 
         try:
-            file_path = self.data.key.iloc[idx]
-            waveform, _ = torchaudio.load(file_path)
-            label = self.text_process.text_to_int_sequence(self.data['text'].iloc[idx])
+            # print('WITH DATA:',*self.data[idx])
+            file_path = self.data[idx]['Filepath']
+            # print('FILE_PATH:',file_path, idx)
+            audio = librosa.load(file_path, self.data[idx]['sample_rate'])[0]
+            waveform = torch.as_tensor(audio).flatten(0)
+            label = self.text_process.text_to_int_sequence(self.data[idx]['text'])
             spectrogram = self.audio_transforms(waveform) # (channel, feature, time)
             spec_len = spectrogram.shape[-1] // 2
             label_len = len(label)
             if spec_len < label_len:
                 raise Exception('spectrogram len is bigger then label len')
             if spectrogram.shape[0] > 1:
-                raise Exception('dual channel, skipping audio file %s'%file_path)
+                raise Exception(f'dual channel, Spectrogram shape is: {spectrogram.shape}, skipping audio file {file_path}')
             if spectrogram.shape[2] > 1650:
-                raise Exception('spectrogram to big. size %s'%spectrogram.shape[2])
+                raise Exception('spectrogram too big. size %s'%spectrogram.shape[2])
             if label_len == 0:
                 raise Exception('label len is zero... skipping %s'%file_path)
         except Exception as e:
             if self.log_ex:
-                print(str(e), file_path)
+                err = str(e).replace(', ','\n')
+                print(f'ERROR : {err}\n{file_path}\n')
             return self.__getitem__(idx - 1 if idx != 0 else idx + 1)  
         return spectrogram, label, spec_len, label_len
 
     def describe(self):
         return self.data.describe()
 
-
+#look deeper into this function
 def collate_fn_padd(data):
     '''
     Padds batch of variable length

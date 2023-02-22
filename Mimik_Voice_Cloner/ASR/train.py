@@ -31,13 +31,13 @@ def train(*args):
    )
     
     # data = get_librispeech_data()
-    train_dataset = Data(json_path='./datasets/LibriSpeech/train', sample_rate = 8000, n_feats = 81, specaug_rate = 0.5, specaug_policy = 3,
+    train_dataset = Data(json_path='/home/group6/Voice_Cloning/Mimik/Mimik_Voice_Cloner/ASR/datasets/LibriSpeech/train_tc100.json', sample_rate = 8000, n_feats = 81, specaug_rate = 0.5, specaug_policy = 3,
     time_mask = 70, freq_mask = 15, valid=True )
     data_loader = DataLoader(
     train_dataset,
     batch_size=64,
     shuffle=True,
-    num_workers=12)
+    num_workers=0)
 
     trainer.fit(model, data_loader)
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
                         help='which distributed backend to use. defaul ddp')
 
     # train and valid
-    parser.add_argument('--train_file', default=None, required=False, type=str,
+    parser.add_argument('--train_file', default=None, required=True, type=str,
                         help='json file to load training data')
     parser.add_argument('--valid_file', default=None, required=False, type=str,
                         help='json file to load testing data')
