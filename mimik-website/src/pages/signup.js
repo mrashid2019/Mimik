@@ -4,6 +4,7 @@ import FormInput from "../components/SignUp/formInput";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import { firebaseConfig } from '../firebase.js';
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
 function SignUp() {
@@ -16,17 +17,6 @@ function SignUp() {
     password:"",
     confirmPassword:"",
   })
-
-  //Added Firebase config but needs to come from firebase.js
-  const firebaseConfig = {
-    apiKey: "AIzaSyDKcKsinKxSnE0wcJoDqpGG2U6OCZIEc-w",
-    authDomain: "voice-cloning-890fc.firebaseapp.com",
-    projectId: "voice-cloning-890fc",
-    storageBucket: "voice-cloning-890fc.appspot.com",
-    messagingSenderId: "331864957414",
-    appId: "1:331864957414:web:afdcab3b7b97f50d5db627",
-    measurementId: "G-V60ZHHLM4H"
-  };
 
   firebase.initializeApp(firebaseConfig);
   const auth = getAuth();
