@@ -55,7 +55,7 @@ class SpecAugment(nn.Module):
 
 class LogMelSpec(nn.Module):
 
-    def __init__(self, sample_rate=8000, n_mels=128, win_length=160, hop_length=80):
+    def __init__(self, sample_rate=16000, n_mels=128, win_length=160, hop_length=80):
         super(LogMelSpec, self).__init__()
         self.transform = torchaudio.transforms.MelSpectrogram(
                             sample_rate=sample_rate, n_mels=n_mels,
@@ -67,7 +67,7 @@ class LogMelSpec(nn.Module):
         return x
 
 
-def get_featurizer(sample_rate, n_feats=81):
+def get_featurizer(sample_rate, n_feats=1):
     return LogMelSpec(sample_rate=sample_rate, n_mels=n_feats,  win_length=160, hop_length=80)
 
 
@@ -75,7 +75,7 @@ class Data(torch.utils.data.Dataset):
 
     # this makes it easier to be ovveride in argparse
     parameters = {
-        "sample_rate": 8000, "n_feats": 81,
+        "sample_rate": 16000, "n_feats": 1,
         "specaug_rate": 0.5, "specaug_policy": 3,
         "time_mask": 70, "freq_mask": 15 
     }
@@ -90,14 +90,20 @@ class Data(torch.utils.data.Dataset):
             self.data = json.load(file)
 
         if valid:
+            print('\nTRANSFORMINg\n')
+        
             self.audio_transforms = torch.nn.Sequential(
                 LogMelSpec(sample_rate=sample_rate, n_mels=n_feats,  win_length=160, hop_length=80)
             )
         else:
+            print('\nTRANSFORMINg\n')
+            
             self.audio_transforms = torch.nn.Sequential(
                 LogMelSpec(sample_rate=sample_rate, n_mels=n_feats,  win_length=160, hop_length=80),
                 SpecAugment(specaug_rate, specaug_policy, freq_mask, time_mask)
             )
+        
+        print({self})
 
 
     def __len__(self):
