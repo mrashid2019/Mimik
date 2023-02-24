@@ -20,6 +20,7 @@ function SignUp() {
 
   firebase.initializeApp(firebaseConfig);
   const auth = getAuth();
+  const db = firebase.firestore();
 
     const inputs = [
       {
