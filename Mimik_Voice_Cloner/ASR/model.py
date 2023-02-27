@@ -26,14 +26,14 @@ class Transcriber(nn.Module):
         'dropout':0.1,
         'n_layers':1,
         'hidden_size':512,
-        'n_features':50,
+        'n_features':81,
         'n_classes':20,
     }
 
     def __init__(self, dropout, n_layers, hidden_size, n_features, n_classes):
         super(Transcriber, self).__init__()
         self.dropout = dropout
-        self.n_layers = n_layers
+        self.num_layers = n_layers
         self.hidden_size = hidden_size
         self.n_features = n_features
         self.n_classes = n_classes
@@ -74,33 +74,36 @@ class Transcriber(nn.Module):
     def forward(self, x, hidden):
         x = x.squeeze(1)  # batch, feature, time
         x = self.cnn(x) # batch, time, feature
+        # print('CHECK')
+        x = x.transpose(1,2)
         x = self.dense(x) # batch, time, feature
+        # print('CHECK')
+        # x = x.transpose(1,2)
         x = x.transpose(0, 1) # time, batch, feature
         out, (hn, cn) = self.lstm(x, hidden)
-        x = self.dropout2(F.gelu(self.layer_norm2(out)))  # (time, batch, n_class)
+        x = self.dropout(F.gelu(self.layer_norm2(out)))  # (time, batch, n_class)
         return self.final_fc(x), (hn, cn)
 
 
 class ASRLightningModule(LightningModule):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.model = Transcriber(0.1,1,512,50,20)
-        self.loss_func = nn.CTCLoss(blank=28, zero_infinity=True)
+        self.model = Transcriber(0.1,1,512,81,20)
+        self.criterion = nn.CTCLoss(zero_infinity=True)
 
-
-    def step(self, batch):
+    def forward(self, batch):
         print('\n\nBATCH:',batch, '\n',len(batch),'\n\n')
         spectrograms, labels, input_lengths, label_lengths = batch 
         bs = spectrograms.shape[0]
         hidden = self.model._init_hidden(bs)
         hn, c0 = hidden[0].to(self.device), hidden[1].to(self.device)
-        output, _ = self(spectrograms, (hn, c0))
+        output, _ = self.model.forward(spectrograms, (hn, c0))
         output = F.log_softmax(output, dim=2)
         loss = self.criterion(output, labels, input_lengths, label_lengths)
         return loss
 
     def training_step(self, batch, batch_idx):
-        loss = self.step(batch)
+        loss = self.forward(batch)
         logs = {'loss': loss, 'lr': self.optimizer.param_groups[0]['lr'] }
         return {'loss': loss, 'log': logs}
     

@@ -7,6 +7,7 @@ from utils import TextProcess
 import json
 import librosa
 from numpy import float32
+from pydub import AudioSegment
 
 # NOTE: add time stretch
 class SpecAugment(nn.Module):
@@ -90,13 +91,13 @@ class Data(torch.utils.data.Dataset):
             self.data = json.load(file)
 
         if valid:
-            print('\nTRANSFORMINg\n')
+            print(f'\nTRANSFORMING A:\n')
         
             self.audio_transforms = torch.nn.Sequential(
                 LogMelSpec(sample_rate=sample_rate, n_mels=n_feats,  win_length=160, hop_length=80)
             )
         else:
-            print('\nTRANSFORMINg\n')
+            print(f'\nTRANSFORMING B:\n')
             
             self.audio_transforms = torch.nn.Sequential(
                 LogMelSpec(sample_rate=sample_rate, n_mels=n_feats,  win_length=160, hop_length=80),
@@ -115,19 +116,26 @@ class Data(torch.utils.data.Dataset):
 
         try:
             # print('WITH DATA:',*self.data[idx])
-            file_path = self.data[idx]['Filepath']
+            data = self.data[idx]
+            file_path = data['Filepath']
             # print('FILE_PATH:',file_path, idx)
-            audio = librosa.load(file_path, self.data[idx]['sample_rate'])[0]
-            waveform = torch.as_tensor(audio).flatten(0)
-            label = self.text_process.text_to_int_sequence(self.data[idx]['text'])
+            # audio = librosa.load(file_path, self.data[idx]['sample_rate'])[0]
+            # audio_file = AudioSegment.from_file(file_path, format="flac", frame_rate=data['sample_rate'])
+            # mono_file = audio_file.set_channels(1)
+            # print("FILE CHANNELS", mono_file.channels)
+            waveform,sr = torchaudio.load(file_path)
+            print("OK!")
+            label = self.text_process.text_to_int_sequence(data['text'])
             spectrogram = self.audio_transforms(waveform) # (channel, feature, time)
             spec_len = spectrogram.shape[-1] // 2
             label_len = len(label)
+            print(f"Original data: {self.data[idx]}")
+            print(f"Label: {label}\nSpectrogram: {spectrogram}\nSpectrogram length: {spec_len}\nSpectrogtam shape: {spectrogram.shape}\nLabel length: {label_len}\n")
             if spec_len < label_len:
                 raise Exception('spectrogram len is bigger then label len')
             if spectrogram.shape[0] > 1:
-                raise Exception(f'dual channel, Spectrogram shape is: {spectrogram.shape}, skipping audio file {file_path}')
-            if spectrogram.shape[2] > 1650:
+                raise Exception(f'Not mono channel, Spectrogram shape is: {spectrogram.shape}, skipping audio file {file_path}')
+            if spectrogram.shape[2] > 3650:
                 raise Exception('spectrogram too big. size %s'%spectrogram.shape[2])
             if label_len == 0:
                 raise Exception('label len is zero... skipping %s'%file_path)
@@ -135,6 +143,7 @@ class Data(torch.utils.data.Dataset):
             if self.log_ex:
                 err = str(e).replace(', ','\n')
                 print(f'ERROR : {err}\n{file_path}\n')
+                exit()
             return self.__getitem__(idx - 1 if idx != 0 else idx + 1)  
         return spectrogram, label, spec_len, label_len
 

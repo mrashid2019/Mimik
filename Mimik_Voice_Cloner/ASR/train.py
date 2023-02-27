@@ -35,9 +35,10 @@ def train(*args):
     time_mask = 70, freq_mask = 15, valid=True )
     data_loader = DataLoader(
     train_dataset,
-    batch_size=64,
+    batch_size=1,
     shuffle=True,
-    num_workers=0)
+    num_workers=1,
+    collate_fn=collate_fn_padd)
 
     trainer.fit(model, data_loader)
 
