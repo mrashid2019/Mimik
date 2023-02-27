@@ -1,0 +1,1 @@
+python transcribe.py --audio /home/durewil/Mimik/mimik_backend/src/audio/Recording\ 6.wav --model /home/durewil/.local/share/coqui/models/English\ STT\ v1.0.0-large-vocab/model.tflite
