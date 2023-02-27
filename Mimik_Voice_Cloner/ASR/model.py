@@ -27,7 +27,7 @@ class Transcriber(nn.Module):
         'n_layers':1,
         'hidden_size':512,
         'n_features':81,
-        'n_classes':20,
+        'n_classes':20
     }
 
     def __init__(self, dropout, n_layers, hidden_size, n_features, n_classes):
@@ -92,7 +92,7 @@ class ASRLightningModule(LightningModule):
         self.criterion = nn.CTCLoss(zero_infinity=True)
 
     def forward(self, batch):
-        print('\n\nBATCH:',batch, '\n',len(batch),'\n\n')
+        # print('\n\nBATCH:',batch, '\n',len(batch),'\n\n')
         spectrograms, labels, input_lengths, label_lengths = batch 
         bs = spectrograms.shape[0]
         hidden = self.model._init_hidden(bs)
