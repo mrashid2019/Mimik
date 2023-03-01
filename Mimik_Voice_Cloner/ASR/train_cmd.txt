@@ -1,0 +1,1 @@
+python train.py --train_file="train_tc100.json" --save_model_path="/home/group6/Voice_Cloning/Mimik/Mimik_Voice_Cloner/ASR/models/model1.pth"
