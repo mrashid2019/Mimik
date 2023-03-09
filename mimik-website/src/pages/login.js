@@ -3,13 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import GoogleButton from "react-google-button";
-import { useUserAuth } from "../context/userAuthContext";
+import { useAuth } from "../context/userAuthContext";
+import { PasswordRecovery } from "../firebase";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { logIn, googleSignIn } = useUserAuth();
+  const { logIn, googleSignIn } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -32,6 +33,21 @@ const Login = () => {
       console.log(error.message);
     }
   };
+
+  const handlePasswordRecovery = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const result = await PasswordRecovery(email);
+      if (result) {
+        // Show success message
+        setError("Password reset email sent successfully.");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
 
   return (
     <>
@@ -75,7 +91,7 @@ const Login = () => {
         </Form>
         <hr />
         <div className="mt-3 text-center">
-       <Link to="/signup">Forgot Password?</Link>
+       <Link to="/passwordRecovery">Forgot Password?</Link>
       </div>
       <div className="mt-3 text-center">
         New to Mimik? <Link to="/signup">Register Today</Link>

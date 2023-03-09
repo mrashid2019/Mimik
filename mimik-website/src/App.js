@@ -11,11 +11,12 @@ import Convert from './pages/convert';
 import Train from './pages/train';
 import SignUp from './pages/signup';
 import Login from './pages/login';
-import { UserAuthContextProvider } from './context/userAuthContext';
+import PasswordRecovery from '../src/components/PasswordRecover/passwordRecovery'
+import UserAuthContext from './context/userAuthContext';
 
 function App() {
 return (
-    <UserAuthContextProvider>
+    <UserAuthContext>
     <Router>
     <Navbar />
     <Routes>
@@ -26,9 +27,10 @@ return (
         <Route path='/train' element={<Train/>} />
         <Route path='/signup' element={<SignUp/>} />
         <Route path='/login' element={<Login/>} />
+        <Route path="/passwordRecovery" element={<PasswordRecovery />} />
     </Routes>
     </Router>
-    </UserAuthContextProvider>
+    </UserAuthContext>
 );
 }
 
