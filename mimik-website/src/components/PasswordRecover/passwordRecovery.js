@@ -8,14 +8,14 @@ const PasswordRecovery = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const firebase = useAuth();
+    const { forgotPassword } = useAuth();;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setSuccess("");
         try {
-          await firebase.auth().sendPasswordResetEmail(email);
+          await forgotPassword(email); 
           setSuccess(
             "A password reset email has been sent to your email address. Please check your inbox and follow the instructions to reset your password."
           );

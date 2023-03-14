@@ -13,6 +13,7 @@ import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
 const userContext = createContext({});
+export const AuthContext = createContext();
 export const useAuth = () => { return useContext(userContext)};
 
 const UserAuthContext = ({ children }) => {
@@ -54,6 +55,9 @@ const UserAuthContext = ({ children }) => {
           .catch((error) => {
             console.error("Error writing document: ", error);
           });
+          user.updateProfile({
+            displayName: `${firstName} ${lastName}`,
+          });
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -91,21 +95,31 @@ const UserAuthContext = ({ children }) => {
     signInWithPopup(auth, googleAuthProvider)
       .then((result) => {
         const user = result.user;
+        if (user.displayName === null) {
+          const firstName = user.displayName.split(" ")[0];
+          const lastName = user.displayName.split(" ")[1];
+        }
+        
         setCurrentUser(user);
       })
       .catch((error) => {
         setError(error.message);
       });
+      
   }
 
+  // function forgotPassword(email) {
+  //   sendPasswordResetEmail(auth, email)
+  //     .then(() => {
+  //       console.log("Password reset email sent");
+  //     })
+  //     .catch((error) => {
+  //       setError(error.message);
+  //     });
+  // }
+
   function forgotPassword(email) {
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        console.log("Password reset email sent");
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
+    return sendPasswordResetEmail(auth, email);
   }
 
   const contextValue = {

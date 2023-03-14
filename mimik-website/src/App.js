@@ -13,10 +13,11 @@ import SignUp from './pages/signup';
 import Login from './pages/login';
 import PasswordRecovery from '../src/components/PasswordRecover/passwordRecovery'
 import UserAuthContext from './context/userAuthContext';
+import { UserProvider } from "./context/user";
 
 function App() {
 return (
-    <UserAuthContext>
+    <UserProvider>
     <Router>
     <Navbar />
     <Routes>
@@ -30,7 +31,7 @@ return (
         <Route path="/passwordRecovery" element={<PasswordRecovery />} />
     </Routes>
     </Router>
-    </UserAuthContext>
+    </UserProvider>
 );
 }
 

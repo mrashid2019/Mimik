@@ -14,4 +14,7 @@ audio = tts.tts(output)
 
 audio = np.array(audio)
 write(AUDIO_DIR+'output.wav', 22500,audio)
-print('The output is:', output)
+# print('The output is:', output)
+
+response = {'status': 'success'}
+print(json.dumps(response))
