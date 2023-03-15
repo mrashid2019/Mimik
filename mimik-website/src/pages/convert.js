@@ -96,12 +96,11 @@ return (
 	<div>
 		<div style={main}>
 
-			<h1 style={{margin:'2%', padding:'15px', color:'#303978', fontSize:'300%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
+			<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'375%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
 			
-			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px' }}>
-				<p > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
 
-				<div className='Search' style={{margin:'0px', padding:'0px',fontFamily:'IM Fell Double Pica'}} >
+				<div className='Search' style={{margin:'5px', padding:'0px',fontFamily:'IM Fell Double Pica', align:'center'}} >
 					<div className='search-bar-container' style={{ PaddingTop:'20vh', width:'100%', display:'flex', flexDirection: 'column', alignItems:'center', minWidth:'200px'}}>
 						<SearchBar setResults={setResults}/>
 						<SearchResultsList results = {results}/>
