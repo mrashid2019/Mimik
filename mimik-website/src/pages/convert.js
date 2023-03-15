@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
-import Footer from '../components/Footer/index'
+import Footer from "../../src/components/Footer";
 import { SearchBar } from '../components/SearchBar/searchbar';
 import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
+import { FileUploader } from '../components/FileUpload/fileUpload';
+import { Button } from 'bootstrap';
 
 
 
@@ -97,7 +99,13 @@ return (
 		<div style={main}>
 
 			<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'375%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
-			
+
+			<div style={{textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
+
+			<div>
+				<FileUploader/>
+			</div>
+
 			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
 
 				<div className='Search' style={{margin:'5px', padding:'0px',fontFamily:'IM Fell Double Pica', align:'center'}} >
