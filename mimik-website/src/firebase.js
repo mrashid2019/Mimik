@@ -2,6 +2,16 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {getAuth} from "firebase/auth";
+// import { RecaptchaVerifier } from "firebase/auth";
+
+// const recaptchaVerifier = new RecaptchaVerifier("sign-in-button", {
+//     "size": "invisible",
+//     "callback": function(response) {
+//         // reCAPTCHA solved, you can proceed with
+//         // phoneAuthProvider.verifyPhoneNumber(...).
+//         onSolvedRecaptcha();
+//     }
+// }, auth);
 
 
 const firebaseConfig = {
