@@ -7,10 +7,10 @@ import Col from 'react-bootstrap/Col';
 import { MDBAccordion, MDBAccordionItem, MDBContainer } from "mdb-react-ui-kit";
 import Footer from "../../src/components/Footer";
 
-import bolt from './/key feature icons/bolt.svg';
-import coins from './/key feature icons/coins.svg';
-import clone from './/key feature icons/clone.svg'
-import glass from './/key feature icons/magnifying-glass.svg'
+import bolt from './/key-feature-icons/bolt.svg';
+import coins from './/key-feature-icons/coins.svg';
+import clone from './/key-feature-icons/clone.svg'
+import glass from './/key-feature-icons/magnifying-glass.svg'
 
 import logo from './head-background.jpg'
 
