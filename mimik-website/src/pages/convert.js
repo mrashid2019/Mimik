@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
+// import socketIOClient from "socket.io-client"
 import axios from "axios"
 
 const socket = io('http://localhost:8000')
@@ -23,13 +24,13 @@ const waveformBar = {
 	const Convert = () => {
 		const [buttonName, setButtonName] = useState("Play")
 		const [audio, setAudio] = useState();
-		const [socket, setSocket] = useState();
+		// const [socket, setSocket] = useState();
 	  
 		useEffect(() => {
 			// Set up WebSocket connection to server
-			const s = socketIOClient('http://localhost:3000');
-			setSocket(s);
-			return () => s.disconnect();
+			// const s = socketIOClient('http://localhost:3000');
+			// setSocket(s);
+			// return () => s.disconnect();
 		}, []);
 
 		useEffect(() => {
@@ -65,18 +66,40 @@ const waveformBar = {
 		  if (e.target.files[0]) {
 				const formData = new FormData();
 				formData.append('input_file', e.target.files[0]);
+				console.log("DATA:", e.target.files[0])
+				// console.log("DATA:", formData.entries().next())
+				// const config = {
+				// 	method: 'post',
+				// 	baseurl:'http://localhost:8000',
+				// 	url: '/transcribe',
+				// 	data: new Blob([e.target.files[0]], { type: 'application/octet-stream' }),
+				// 	headers: {
+				// 	  'Content-Type': 'application/octet-stream',
+				// 	},
+				// };
+				// formData, { 	
+				// 	headers: {
+				// 	'Content-Type': 'multipart/form-data',
+				//   },
+				//   validateStatus: false }
+				const data = {
+					text:"Message sent!"
+				}
 				axios
-					.post('http://localhost:3000/transcribe', formData, {
-					headers: {
-						'Content-Type': 'multipart/form-data'
-					}
-				})
-				.then((response) => {
-					setAudio(response.data.audio);
-				  })
-				  .catch((error) => {
-					console.log(error);
-				});
+					.get('http://localhost:8000/transcribe', data, {
+						headers:{
+						'Content-Type':'application-json'
+					}})
+					.then((response) => {
+						console.log("RESPONSE:",{response})
+						// setAudio(response.data.audio);
+					})
+					.catch((error) => {
+						// console.log("Error Response:",error.response);
+						// console.log("Error Headers:",error.headers);
+						// console.log("Error Body:",error.body);
+						console.log(error)
+					})
 			}
 		};
 	  
