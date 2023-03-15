@@ -81,9 +81,26 @@ const Convert = () => {
 		}
 
 return (
+
 	<div>
 		<div style={main}>
-			<h1 style={{margin:'5%', padding:'20px', color:'#4A4E69'}}>Convert</h1>
+
+			<h1 style={{margin:'2%', padding:'15px', color:'#303978', fontSize:'300%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
+			
+			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '85%',margin: 'auto',margin: '25px 25px',borderRadius: '15px' }}>
+				<p > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			
+			
+				
+			
+			
+			
+			
+			</div>
+			
+			
+			
+			
 			<div style={{display:'flex'}}>
 				<h2 style={{margin:'inherit', marginRight:'10px',fontSize:'2vmax', color:'#4A4E69'}}>Select Target:</h2>
 				<select style={{margin:'inherit', width:'10vw', minWidth:'60pxl'}} name="speaker" id="speaker-select">

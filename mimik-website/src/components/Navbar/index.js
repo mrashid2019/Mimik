@@ -21,6 +21,9 @@ return (
 		<NavLink to="/signup" activeStyle>
 			Sign Up
 		</NavLink>
+		<NavLink to="/convert" activeStyle>
+			Convert
+		</NavLink>
 		</NavMenu>
 		<NavBtn>
 			<NavBtnLink to ="/login">Login</NavBtnLink>
