@@ -1,6 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
 import Footer from '../components/Footer/index'
+import { SearchBar } from '../components/SearchBar/searchbar';
+import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
+
+
 
 const socket = io('http://localhost:8000')
 // socket.on
@@ -22,6 +26,7 @@ const waveformBar = {
 	width: '100%',
 	height:'40px'
 }
+
 
 const Convert = () => {
 
@@ -80,6 +85,12 @@ const Convert = () => {
 			)
 		}
 
+
+	//search bar results
+	const [results, setResults] = useState([])
+
+
+
 return (
 
 	<div>
@@ -87,21 +98,20 @@ return (
 
 			<h1 style={{margin:'2%', padding:'15px', color:'#303978', fontSize:'300%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
 			
-			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '85%',margin: 'auto',margin: '25px 25px',borderRadius: '15px' }}>
+			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px' }}>
 				<p > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			
-			
-				
-			
-			
-			
-			
+
+				<div className='Search' style={{margin:'0px', padding:'0px',fontFamily:'IM Fell Double Pica'}} >
+					<div className='search-bar-container' style={{ PaddingTop:'20vh', width:'100%', display:'flex', flexDirection: 'column', alignItems:'center', minWidth:'200px'}}>
+						<SearchBar setResults={setResults}/>
+						<SearchResultsList results = {results}/>
+					</div>
+
+				</div>
 			</div>
 			
 			
-			
-			
-			<div style={{display:'flex'}}>
+			{/* <div style={{display:'flex'}}>
 				<h2 style={{margin:'inherit', marginRight:'10px',fontSize:'2vmax', color:'#4A4E69'}}>Select Target:</h2>
 				<select style={{margin:'inherit', width:'10vw', minWidth:'60pxl'}} name="speaker" id="speaker-select">
 					<option value=""></option>
@@ -124,9 +134,9 @@ return (
 			{!isRecording &&(<h1 style={{margin:'0%',fontSize: '1.8vmax', color:'#4A4E69', alignSelf:'start', justifySelf:'start'}}>Paused</h1>)}
 			<div style={waveformBar}></div>
 			<audio ref={localAudioRef}></audio>
-			</div>
+			</div> */}
 
-			<Footer></Footer>
+
 		</div>
 	</div>
 );
