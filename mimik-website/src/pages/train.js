@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-
+import Footer from '../components/Footer';
 
 
 const main = {
@@ -88,6 +88,7 @@ From that day on, Luke was known as the greatest hero the kingdom had ever seen.
 			{!isRecording &&(<h1 style={{margin:'0%',fontSize: '1.8vmax', color:'#4A4E69', alignSelf:'start', justifySelf:'start'}}>Paused</h1>)}
 			<div style={waveformBar}></div>
 			</div>
+			<Footer></Footer>
 			</div>
 			{/* <div style={{display:'sticky',marginTop:'10px',marginBottom:'10px',background:'#4A4E69', height:'30px', width:'100%'}}> </div> */}
 
