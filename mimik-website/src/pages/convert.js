@@ -1,6 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
 import Footer from '../components/Footer/index'
+import { SearchBar } from '../components/SearchBar/searchbar';
+import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
+
+
 
 const socket = io('http://localhost:8000')
 // socket.on
@@ -22,6 +26,7 @@ const waveformBar = {
 	width: '100%',
 	height:'40px'
 }
+
 
 const Convert = () => {
 
@@ -80,11 +85,32 @@ const Convert = () => {
 			)
 		}
 
+
+	//search bar results
+	const [results, setResults] = useState([])
+
+
+
 return (
+
 	<div>
 		<div style={main}>
-			<h1 style={{margin:'5%', padding:'20px', color:'#4A4E69'}}>Convert</h1>
-			<div style={{display:'flex'}}>
+
+			<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'375%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
+			
+			<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
+
+				<div className='Search' style={{margin:'5px', padding:'0px',fontFamily:'IM Fell Double Pica', align:'center'}} >
+					<div className='search-bar-container' style={{ PaddingTop:'20vh', width:'100%', display:'flex', flexDirection: 'column', alignItems:'center', minWidth:'200px'}}>
+						<SearchBar setResults={setResults}/>
+						<SearchResultsList results = {results}/>
+					</div>
+
+				</div>
+			</div>
+			
+			
+			{/* <div style={{display:'flex'}}>
 				<h2 style={{margin:'inherit', marginRight:'10px',fontSize:'2vmax', color:'#4A4E69'}}>Select Target:</h2>
 				<select style={{margin:'inherit', width:'10vw', minWidth:'60pxl'}} name="speaker" id="speaker-select">
 					<option value=""></option>
@@ -107,9 +133,9 @@ return (
 			{!isRecording &&(<h1 style={{margin:'0%',fontSize: '1.8vmax', color:'#4A4E69', alignSelf:'start', justifySelf:'start'}}>Paused</h1>)}
 			<div style={waveformBar}></div>
 			<audio ref={localAudioRef}></audio>
-			</div>
+			</div> */}
 
-			<Footer></Footer>
+
 		</div>
 	</div>
 );
