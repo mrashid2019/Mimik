@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../context/userAuthContext'
 import '../App.css'
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+
 
 const Signup = () => {
     const { error, signUp, currentuser } = useAuth()
@@ -9,6 +12,7 @@ const Signup = () => {
     const [user, setUser] = useState({
         firstName: "",
         lastName: "",
+        phoneNumber: "",
         email: "",
         password: "",
         confirmPassword: ""
@@ -35,8 +39,8 @@ const Signup = () => {
 
     const SubmitHandler = async (e) => {
         e.preventDefault()
-        const { email, password, confirmPassword, firstName, lastName } = user
-        if (password == "" || confirmPassword == "" || email == "" || firstName == "" || lastName == "") {
+        const { email, password, confirmPassword, firstName, lastName, phoneNumber } = user
+        if (password == "" || confirmPassword == "" || email == "" || firstName == "" || lastName == "" || phoneNumber == "") {
             setInterval(() => {
                 setError("")
             }, 5000)
@@ -54,18 +58,28 @@ const Signup = () => {
             }, 5000)
             return setError("Password must be greater then 6 character")
         }
+        else if(!phoneNumber.length >= 10) {
+            setInterval(() => {
+                setError("")
+            }, 5000)
+            return setError("Phone number must at least 10 digits")
+        }
         else {
-
-            signUp(email, password, confirmPassword, firstName, lastName)
+            signUp(email, password, confirmPassword, firstName, lastName, phoneNumber)
             {
                 currentuser && setUser({
                     firstName: "",
                     lastName: "",
+                    phoneNumber: "",
                     email: "",
                     password: "",
                     confirmPassword: ""
                 })
             }
+            console.log('email: ', {email});
+            console.log('firstname: ', {firstName});
+            console.log('lastName: ', {lastName});
+            console.log('phoneNumber: ', {phoneNumber});
             alert("Sign up successful");
         }
     }
@@ -119,6 +133,15 @@ const Signup = () => {
                             value={user.confirmPassword} 
                             name='confirmPassword' 
                             onChange={UserHandler} 
+                    />
+                </div>
+                <div className="inputfield">
+                <PhoneInput 
+                            placeholder="+1 (123) 456-7890"
+                            value={user.phoneNumber}
+                            name="phoneNumber"
+                            onChange={(value) => setUser({ ...user, phoneNumber: value })}
+                            // onChange={UserHandler} 
                     />
                 </div>
                 <div> 

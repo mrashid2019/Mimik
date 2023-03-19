@@ -23,11 +23,23 @@ const UserAuthContext = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user ? user : null)
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("user");
+      }
     });
+    // Check local storage for user data
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
+    }
+
     return unsubscribe()
+
   }, []);
 
-  function signUp(email, password, confirmPassword, firstName, lastName) {
+  function signUp(email, password, confirmPassword, firstName, lastName, phoneNumber) {
     setError("");
 
     if (password.length < 6) {
@@ -47,7 +59,8 @@ const UserAuthContext = ({ children }) => {
         setDoc(doc(db, "RegisteredUsers", user.uid), {
           firstName,
           lastName,
-          email,
+          phoneNumber,
+          email
         })
           .then(() => {
             console.log("Document successfully written!");
@@ -58,6 +71,8 @@ const UserAuthContext = ({ children }) => {
           user.updateProfile({
             displayName: `${firstName} ${lastName}`,
           });
+        // Set user data in local storage
+        localStorage.setItem("user", JSON.stringify(user));
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
@@ -78,6 +93,9 @@ const UserAuthContext = ({ children }) => {
         // Signed in
         const user = userCredential.user;
         setCurrentUser(user);
+
+        // Set user data in local storage
+        localStorage.setItem("user", JSON.stringify(user));
       })
       .catch((error) => {
         setError(error.message);
@@ -87,6 +105,8 @@ const UserAuthContext = ({ children }) => {
   function logOut() {
     signOut(auth).then(() => {
       setCurrentUser(null);
+      // Remove user data from local storage
+      localStorage.removeItem("user");
     });
   }
 

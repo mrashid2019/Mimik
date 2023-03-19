@@ -17,7 +17,7 @@ import { UserProvider } from "./context/user";
 
 function App() {
 return (
-    <UserProvider>
+    <UserAuthContext>
     <Router>
     <Navbar />
     <Routes>
@@ -31,7 +31,7 @@ return (
         <Route path="/passwordRecovery" element={<PasswordRecovery />} />
     </Routes>
     </Router>
-    </UserProvider>
+    </UserAuthContext>
 );
 }
 
