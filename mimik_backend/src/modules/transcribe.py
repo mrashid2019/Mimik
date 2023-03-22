@@ -43,9 +43,14 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--audio', type=str, help='The audio file to be processed', required=True)
     parser.add_argument('--test', type=bool, help='Run a test program')
+    parser.add_argument('--model_num',type=int, help='Choose which model to run (recommend 0 or 7)', required=True)
+    parser.add_argument('--speaker',type=str, help='Pass one of the default speakers')
+    parser.add_argument('--ref_wav', type=str, help='If using YourTTS, pass the reference wav file.')
     args = parser.parse_args()
     
-    if args.test:
-        print(os.getcwd())
+    if args.test == True:
+        default_model = TTS.list_models()[0]
+        tts = TTS(default_model)
+        print(tts.is_multi_speaker, tts.speakers)
     elif args.audio:
         main(args.audio)

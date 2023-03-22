@@ -23,6 +23,11 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server,{cors:{origin:'*'}})
 const upload = multer({storage})
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 const AUDIO_DIR = cwd()+'/uploads'
 app.post('/transcribe', upload.single('audio'), async (req,res)=>{
@@ -40,51 +45,31 @@ app.post('/transcribe', upload.single('audio'), async (req,res)=>{
     })
 
     pythonProcess.stdout.on('close',()=>{
-        console.log('Process complete')
-        res.setHeader('Access-Control-Allow-Origin','*')
+        console.log('Process complete. Sending File')
+        // res.setHeader('Access-Control-Allow-Origin','*')
         res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
     })
-    
+    // res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
+
    
 })
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('A user connected');
 
   // Receive audio from the client
   socket.on('audio', (data) => {
-    const audioBuffer = Buffer.from(data, 'base64');
+    // console.log('DATA',data)
+
+    // const audioBuffer = Buffer.from(data, 'base64');
+    socket.send('OKAY!')
   });
 
-  //   // Perform speech-to-text
-  //   stt.transcribe(audioBuffer)
-  //     .then((result) => {
-  //       const text = result.text;
+  socket.on('disconnect',()=>{
+    console.log('A user disconnected')
+  })
 
-  //       console.log('Transcribed text:', text);
-
-  //       // Perform text-to-speech
-  //       const defaultModel = listModels()[9]; //glowTTS model set as default
-  //       console.log('default audio model:', defaultModel);
-  //       const tts = new TTS(defaultModel);
-  //       return tts.tts(text);
-  //     })
-  //     .then((audioBuffer) => {
-  //       // Stream synthesized audio to the client
-  //       const readable = new Readable({
-  //         read() {
-  //           this.push(audioBuffer);
-  //           this.push(null);
-  //         },
-  //       });
-
-  //       socket.emit('synthesized_audio', readable);
-  //       console.log('Synthesized audio sent to client.');
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error transcribing audio:', error);
-  //     });
-  // });
+  
 });
 
 server.listen(8000,()=>{

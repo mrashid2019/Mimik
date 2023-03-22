@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import io from "socket.io-client"
 import Footer from '../components/Footer/index'
 import axios from 'axios'
+
+
 const socket = io('http://localhost:8000')
 // socket.on
 // const audio = new Audio()
@@ -25,8 +27,8 @@ const waveformBar = {
 //ADD PLAY & UPLOAD BUTTONS 
 	const Convert = () => {
 		const [buttonName, setButtonName] = useState("Play")
-		// const [audio, setAudio] = useState();
-		const [socket, setSocket] = useState();
+		const [audio, setAudio] = useState(null);
+		// const [socket, setSocket] = useState();
 		const [audioUrl, setAudioUrl] = useState('');
 
 	  
@@ -38,20 +40,22 @@ const waveformBar = {
 		}, []);
 
 		useEffect(() => {
-			if (audioUrl) {
+			if (audio) {
 			  // Set up audio player
-			  const audioEl = document.getElementById('audio');
-			  audioEl.src = `data:audio/wav;base64,${audioUrl}`;
-			  audioEl.load();
-			  audioEl.onended = () => setButtonName('Play');
-			  setButtonName('Play');
+			  	// const audioEl = document.getElementById('audio');
+			  	// audioEl.src = `data:audio/wav;base64,${audio}`;
+				// // audioEl.src = audio;
+				// console.log(audioEl.src)
+			  	// audioEl.load();
+			  	// audioEl.onended = () => setButtonName('Play');
+			  	// setButtonName('Play');
 			}
-		}, [audioUrl]);
+		}, [audio]);
 	  
 		const handleClick = () => {
-			if (socket && buttonName === 'Play') {
+			if (buttonName === 'Play') {
 				// Send audio data to server over WebSocket connection
-				// socket.emit('audio', audio);
+				socket.emit('audio', audio);
 				setButtonName('Pause');
 			  } else {
 				// Pause audio player
@@ -65,26 +69,25 @@ const waveformBar = {
 				}
 			}
 		};
-
-		const handleFetchAudio = async () => {
-			const response = await fetch('http://localhost:8000/transcribe');
-			const audioBlob = await response.blob();
-			const audioUrl = URL.createObjectURL(audioBlob);
-			setAudioUrl(audioUrl);
-		};
 	  
 		const addFile = (e) => {
 		  if (e.target.files[0]) {
 				const formData = new FormData();
 				formData.append('audio', e.target.files[0]);
 				
-				axios.post('http://localhost:8000/transcribe', formData)
+				// handleFetchAudio()
+
+				axios.post('http://localhost:8000/transcribe', formData, {responseType:'blob'})
 					.then((response) => {
 						console.log(response)
-						// setAudio(response.data);
-						const audioBlob = response.blob();
-						const audioUrl = URL.createObjectURL(audioBlob);
-						setAudioUrl(audioUrl);
+						let data = response.data
+
+						
+						let audioBlob = new Blob([data], {type:'audio/wav'})
+						let newaudioUrl = URL.createObjectURL(audioBlob)
+						setAudio(newaudioUrl)
+						console.log(audio)
+
 					})
 					.catch((error) => {
 						console.log(error);
@@ -95,10 +98,12 @@ const waveformBar = {
 		return (
 		  <div>
 			<button onClick={handleClick}>{buttonName}</button>
-			{audioUrl && (
+			{audio && (
         		<audio id="audio" controls>
-          		<source src={`data:audio/wav;base64,${audioUrl}`} type="audio/wav" />
-       			</audio>
+          		{/* <source src={`data:audio/wav;base64,${audio}`} type="audio/wav" /> */}
+          		<source src={audio} type="audio/wav" />
+       			
+				</audio>
       		)}
 			<input type="file" onChange={addFile} />
 		  </div>
