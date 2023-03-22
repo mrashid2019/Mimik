@@ -74,12 +74,12 @@ def get_featurizer(sample_rate, n_feats=1):
 
 class Data(torch.utils.data.Dataset):
 
-    # this makes it easier to be ovveride in argparse
-    # parameters = {
-    #     "sample_rate": 16000, "n_feats": 1,
-    #     "specaug_rate": 0.5, "specaug_policy": 3,
-    #     "time_mask": 70, "freq_mask": 15 
-    # }
+    #this makes it easier to be ovveride in argparse
+    parameters = {
+        "sample_rate": 16000, "n_feats": 1,
+        "specaug_rate": 0.5, "specaug_policy": 3,
+        "time_mask": 70, "freq_mask": 15 
+    }
 
     def __init__(self, json_path, sample_rate, n_feats, specaug_rate, specaug_policy,
                 time_mask, freq_mask, valid=False, shuffle=True, text_to_int=True, log_ex=True):
@@ -116,21 +116,24 @@ class Data(torch.utils.data.Dataset):
 
         try:
             # print('WITH DATA:',*self.data[idx])
-            data = self.data[idx]
-            file_path = data['Filepath']
+            #data = self.data[idx]
+            #file_path = data['Filepath']
             # print('FILE_PATH:',file_path, idx)
             # audio = librosa.load(file_path, self.data[idx]['sample_rate'])[0]
             # audio_file = AudioSegment.from_file(file_path, format="flac", frame_rate=data['sample_rate'])
             # mono_file = audio_file.set_channels(1)
             # print("FILE CHANNELS", mono_file.channels)
-            waveform,sr = torchaudio.load(file_path)
+            #waveform,sr = torchaudio.load(file_path)
             # print("OK!")
-            label = self.text_process.text_to_int_sequence(data['text'])
+
+            file_path = self.data.key.iloc[idx]
+            waveform, _ = torchaudio.load(file_path)
+            label = self.text_process.text_to_int_sequence(self.data['text'].iloc[idx])
             spectrogram = self.audio_transforms(waveform) # (channel, feature, time)
             spec_len = spectrogram.shape[-1] // 2
             label_len = len(label)
             #print(f"Original data: {self.data[idx]}")
-            #print(f"Label: {label}\nSpectrogram: {spectrogram}\nSpectrogram length: {spec_len}\nSpectrogtam shape: {spectrogram.shape}\nLabel length: {label_len}\n")
+            print(f"Label: {label}\nSpectrogram: {spectrogram}\nSpectrogram length: {spec_len}\nSpectrogtam shape: {spectrogram.shape}\nLabel length: {label_len}\n")
             if spec_len < label_len:
                 raise Exception('spectrogram len is bigger then label len')
             if spectrogram.shape[0] > 1:

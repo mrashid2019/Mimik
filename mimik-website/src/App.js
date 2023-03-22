@@ -11,11 +11,12 @@ import Convert from './pages/convert';
 import Train from './pages/train';
 import SignUp from './pages/signup';
 import Login from './pages/login';
-import { UserAuthContextProvider } from './context/userAuthContext';
+import LogoutPage from './pages/logout';
+import { UserAuthContext } from '../src/context/userAuthContext';
 
 function App() {
 return (
-    <UserAuthContextProvider>
+    <UserAuthContext>
     <Router>
         <Navbar />
         <Routes>
@@ -25,10 +26,12 @@ return (
             <Route path='/convert' element={<Convert/>} />
             <Route path='/train' element={<Train/>} />
             <Route path='/signup' element={<SignUp/>} />
-            <Route path='/login' element={<Login/>} />
+            <Route path='/login/*' element={<Login/>} />
+            <Route path='/logout' element={<LogoutPage/>} />
+
         </Routes>
     </Router>
-    </UserAuthContextProvider>
+    </UserAuthContext>
 );
 }
 
