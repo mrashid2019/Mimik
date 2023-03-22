@@ -5,8 +5,8 @@ from scipy.io.wavfile import write
 import numpy as np
 import whisper
 from argparse import ArgumentParser
-import uuid
-import os
+# import uuid
+# import os
 
 from TTS.tts.configs.glow_tts_config import GlowTTSConfig
 from TTS.tts.models.glow_tts import GlowTTS

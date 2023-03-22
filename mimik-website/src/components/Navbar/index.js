@@ -43,14 +43,12 @@ return (
 			App Tour
 		</NavLink>
 		{user && (
-            <div className="dropdown">
-              <button className="dropbtn">{user.firstName}</button>
-              <div className="dropdown-content">
-                <NavLink to="/profile">Profile</NavLink>
-                <button onClick={handleLogout}>Log Out</button>
-              </div>
-            </div>
-          )}
+			<NavLink to="/profile">Profile </NavLink>	
+
+        )}
+		{user && (
+			<button style={{border:'0px', borderRadius:'10px', width:'fit-content', height:'50px'}} onClick={handleLogout}>Log Out</button>
+        )}
         </NavMenu>
         {!user && (
           <NavBtn>

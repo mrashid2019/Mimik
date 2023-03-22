@@ -25,7 +25,7 @@ return (
 
 	<div style={{textAlign: 'center', fontSize: 30, paddingTop: 50, fontFamily: 'IM Fell Double Pica'}}>
 		<p>Mimik allows you to alter your speech such that it mimics the voice of <br/>another person. Choose to either model your voice or change yours<br/> to sound like someone else!</p>
-		<p style={{color: '#303978'}}>Try it now!</p>
+		<a style={{color: '#303978'}}>Try it now!</a>
 	</div>
 	<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingBottom: 50}}>
 		<Link to="/train"><button className='round-button' style={{marginRight: '30px'}}>Train</button></Link>
