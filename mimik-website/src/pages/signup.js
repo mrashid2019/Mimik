@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/userAuthContext'
 import '../App.css'
 import 'react-phone-number-input/style.css'
@@ -6,9 +7,11 @@ import PhoneInput from 'react-phone-number-input'
 
 
 const Signup = () => {
+    
     const { error, signUp, currentuser } = useAuth()
     const [err, setError] = useState("")
     const [backError, setBackError] = useState("")
+    const navigate = useNavigate();
     const [user, setUser] = useState({
         firstName: "",
         lastName: "",
@@ -26,8 +29,10 @@ const Signup = () => {
             setBackError(error)
         }
     }, [error, currentuser])
+
     const UserHandler = (e) => {
         const { name, value } = e.target;
+        console.log("user state before update", user);
         setUser((pre) => {
             return {
                 ...pre,
@@ -44,7 +49,7 @@ const Signup = () => {
             setInterval(() => {
                 setError("")
             }, 5000)
-            return setError("Please fill all the field ")
+            return setError("Please fill all the fields")
         }
         else if (password !== confirmPassword) {
             setInterval(() => {
@@ -52,7 +57,7 @@ const Signup = () => {
             }, 5000)
             return setError("Password does not match")
         }
-        else if (!password.length >= 6 || !confirmPassword.length >= 6) {
+        else if (password.length < 6) {
             setInterval(() => {
                 setError("")
             }, 5000)
@@ -65,7 +70,7 @@ const Signup = () => {
             return setError("Phone number must at least 10 digits")
         }
         else {
-            signUp(email, password, confirmPassword, firstName, lastName, phoneNumber)
+            signUp(email, password, firstName, lastName, phoneNumber)
             {
                 currentuser && setUser({
                     firstName: "",
@@ -76,11 +81,8 @@ const Signup = () => {
                     confirmPassword: ""
                 })
             }
-            console.log('email: ', {email});
-            console.log('firstname: ', {firstName});
-            console.log('lastName: ', {lastName});
-            console.log('phoneNumber: ', {phoneNumber});
             alert("Sign up successful");
+            return;
         }
     }
     return (
@@ -157,6 +159,7 @@ const Signup = () => {
 
         </div>
     )
+
 }
 
 export default Signup

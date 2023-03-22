@@ -2,21 +2,11 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {getAuth} from "firebase/auth";
-// import { RecaptchaVerifier } from "firebase/auth";
-
-// const recaptchaVerifier = new RecaptchaVerifier("sign-in-button", {
-//     "size": "invisible",
-//     "callback": function(response) {
-//         // reCAPTCHA solved, you can proceed with
-//         // phoneAuthProvider.verifyPhoneNumber(...).
-//         onSolvedRecaptcha();
-//     }
-// }, auth);
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyDKcKsinKxSnE0wcJoDqpGG2U6OCZIEc-w",
   authDomain: "voice-cloning-890fc.firebaseapp.com",
+  databaseURL: "https://voice-cloning-890fc-default-rtdb.firebaseio.com",
   projectId: "voice-cloning-890fc",
   storageBucket: "voice-cloning-890fc.appspot.com",
   messagingSenderId: "331864957414",
@@ -32,6 +22,7 @@ export const PasswordRecovery = async (email) => {
     throw error;
   }
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

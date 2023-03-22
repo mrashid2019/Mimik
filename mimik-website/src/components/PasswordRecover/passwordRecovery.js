@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { useAuth } from "../../context/userAuthContext";
+import { useAuth } from "../../components/context/userAuthContext";
 
 const PasswordRecovery = () => {
     const [email, setEmail] = useState("");

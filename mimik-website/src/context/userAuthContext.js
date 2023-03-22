@@ -16,8 +16,9 @@ const userContext = createContext({});
 export const AuthContext = createContext();
 export const useAuth = () => { return useContext(userContext)};
 
-const UserAuthContext = ({ children }) => {
-  const [error, setError] = useState("")
+const UserAuthContext = ({ children, type}) => {
+  const [signUpError, setSignUpError] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [currentUser, setCurrentUser] = useState(null)
 
   useEffect(() => {
@@ -39,20 +40,10 @@ const UserAuthContext = ({ children }) => {
 
   }, []);
 
-  function signUp(email, password, confirmPassword, firstName, lastName, phoneNumber) {
-    setError("");
+  function signUp(email, password, firstName, lastName, phoneNumber) {
+    setSignUpError("");
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password) 
       .then((userCredential) => {
         const user = userCredential.user;
 
@@ -76,29 +67,33 @@ const UserAuthContext = ({ children }) => {
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
-          setError("Email already in use");
+          setSignUpError("Email already in use");
         } else if (error.code === "auth/invalid-email") {
-          setError("Invalid email address");
+          setSignUpError("Invalid email address");
         } else if (error.code === "auth/weak-password") {
-          setError("Password is too weak");
+          setSignUpError("Password is too weak");
         } else {
-          setError(error.message);
+          setSignUpError(error.message);
         }
       });
   }
 
   function logIn(email, password) {
+    setLoginError("");
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        setCurrentUser(user);
+        const currentUser = userCredential.user;
+        setCurrentUser(currentUser);
+        console.log(currentUser);
 
         // Set user data in local storage
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(currentUser));
       })
       .catch((error) => {
-        setError(error.message);
+        setLoginError(error.message);
+        
       });
   }
 
@@ -123,22 +118,17 @@ const UserAuthContext = ({ children }) => {
         setCurrentUser(user);
       })
       .catch((error) => {
-        setError(error.message);
+        setLoginError(error.message);
       });
       
   }
 
-  // function forgotPassword(email) {
-  //   sendPasswordResetEmail(auth, email)
-  //     .then(() => {
-  //       console.log("Password reset email sent");
-  //     })
-  //     .catch((error) => {
-  //       setError(error.message);
-  //     });
-  // }
-
   function forgotPassword(email) {
+    // Check if the email entered is a Gmail address
+    if (/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+      return Promise.reject(new Error("Password reset is not available for Gmail accounts."));
+    }
+  // If the email is not a Gmail address, send the password reset email
     return sendPasswordResetEmail(auth, email);
   }
 
@@ -149,7 +139,7 @@ const UserAuthContext = ({ children }) => {
     logOut,
     googleSignIn,
     forgotPassword,
-    error,
+    error: type === "signup" ? signUpError : loginError,
   };
 
   return (
@@ -159,4 +149,4 @@ const UserAuthContext = ({ children }) => {
   );
 };
 
-export default UserAuthContext;
+export{ UserAuthContext} ;

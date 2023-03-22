@@ -1,45 +1,57 @@
-import { auth } from "firebase/app";
-import "firebase/auth";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import {
-    multiFactor, 
-    PhoneAuthProvider,
-    PhoneMultiFactorGenerator,
-    RecaptchaVerifier
-} from "firebase/auth";
+const TwoFactorAuth = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const confirmationResult = location.state.confirmationResult;
 
-const recaptchaVerifier = new RecaptchaVerifier(
-    'recaptcha-container-id', 
-    {size: "invisible",
-     callback:(response) => {
-        console.log("Recaptcha solved");
-     }
-    });
-    
-multiFactor(user).getSession()
-    .then(function (multiFactorSession) {
-        // Specify the phone number and pass the MFA session.
-        const phoneInfoOptions = {
-            phoneNumber: phoneNumber,
-            session: multiFactorSession
-        };
+  const [verificationCode, setVerificationCode] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-        const phoneAuthProvider = new PhoneAuthProvider(auth);
+  const handleVerificationSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-        // Send SMS verification code.
-        console.log('verification code sent');
-        return phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier);
-        
+    try {
+      const credential = firebase.auth.PhoneAuthProvider.credential(
+        confirmationResult.verificationId,
+        verificationCode
+      );
+      await currentUser.signInWithCredential(credential);
 
-    }).then(function (verificationId) {
-        // Ask user for the verification code. 
-        const verificationCode = prompt("Enter verification code:");
+      navigate("/");
+    } catch (error) {
+      console.log("Firebase error:", error);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
 
-        
-        const cred = PhoneAuthProvider.credential(verificationId, verificationCode);
-        const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+  return (
+    <div>
+      <h2>Two-Factor Authentication</h2>
+      <p>A verification code has been sent to your phone number.</p>
 
-        // Complete enrollment.
-        return multiFactor(user).enroll(multiFactorAssertion, mfaDisplayName);
-    });
+      <form onSubmit={handleVerificationSubmit}>
+        <label htmlFor="verificationCode">Verification Code:</label>
+        <input
+          type="text"
+          id="verificationCode"
+          value={verificationCode}
+          onChange={(e) => setVerificationCode(e.target.value)}
+        />
 
+        {error && <p>{error}</p>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Verifying..." : "Verify"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default TwoFactorAuth;
