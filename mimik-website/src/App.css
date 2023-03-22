@@ -109,6 +109,7 @@
   background: url(pages/head-background.jpg);
   background-size: cover;
   background-position: center;
+  height: 100vh;
   filter: brightness(80%);
   
   

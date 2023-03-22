@@ -14,6 +14,12 @@ import glass from './/key-feature-icons/magnifying-glass.svg'
 
 import logo from './head-background.jpg'
 
+import adrian_audio1 from './audio/Before_Adrian01.m4a'
+import adrian_audio2 from './audio/After_Adrian01.m4a'
+
+import mahdia_audio1 from './audio/Before_Mahdia01.m4a'
+import mahdia_audio2 from './audio/After_Mahdia01.m4a'
+
 
 const Home = () => {
 return (
@@ -21,7 +27,7 @@ return (
 	<div className='head-image'>
 		<p style={{fontSize: 60, color: '#FFF', fontWeight: 'lighter', textAlign: 'center', paddingRight: 700, paddingTop: 50,fontFamily: 'IM Fell Double Pica'}}>Voice Cloning at the Palm<br/> of Your Hands</p>
 		<p style={{fontSize: 25, color: '#FFF', fontWeight: 'lighter', textAlign: 'center', paddingRight: 700, paddingBottom: 40, fontFamily: 'IM Fell Double Pica'}}>Transform your voice to sound<br/> like your favorite celebrity <br/>or even your friend!</p>
-	</div>
+  </div>
 
 	<div style={{textAlign: 'center', fontSize: 30, paddingTop: 50, fontFamily: 'IM Fell Double Pica'}}>
 		<p>Mimik allows you to alter your speech such that it mimics the voice of <br/>another person. Choose to either model your voice or change yours<br/> to sound like someone else!</p>
@@ -66,29 +72,53 @@ return (
 	<div className='background'>
 	<div style={{fontSize: 30, color: '#303978', textAlign: 'center', paddingTop: 30,fontFamily: 'IM Fell Double Pica'}}>MODEL EXAMPLES</div>
     <Carousel style={{padding: 100}}>
-      <Carousel.Item interval={1000}>
-        <img
-          className="d-block w-100"
-          src= {logo}/*"holder.js/800x400?text=First slide&bg=373940"*/
-          alt="First slide"
-        />
-        <Carousel.Caption>
+      <Carousel.Item interval={3000}>
+      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>ADRIAN'S CLONED VOICE SAMPLES</div>
+      <div style={{paddingLeft: 100, paddingRight: 100}}>
+      <div style={{display: "flex"}}>
+      <div style={{flex: 1, marginRight: 20}}>
+        <audio controls style={{width: "100%"}}>
+          <source src={adrian_audio1} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>Before</p>
+      </div>
+      <div style={{flex: 1}}>
+        <audio controls style={{width: "100%"}}>
+          <source src={adrian_audio2} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>After</p>
+      </div>
+      </div>
+      </div>
+      {/* <Carousel.Caption style={{paddingTop: 700, color: '#fff'}}>
           <h3>First slide label</h3>
           <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
+        </Carousel.Caption> */}
       </Carousel.Item>
-      <Carousel.Item interval={500}>
-        <img
-          className="d-block w-100"
-          src={logo}
-          alt="Second slide"
-        />
-        <Carousel.Caption>
+      <Carousel.Item interval={3000}>
+      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>MAHDIA'S CLONED VOICE SAMPLES</div>
+      <div style={{paddingLeft: 100, paddingRight: 100}}>
+      <div style={{display: "flex"}}>
+      <div style={{flex: 1, marginRight: 20}}>
+        <audio controls style={{width: "100%"}}>
+          <source src={mahdia_audio1} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>Before</p>
+      </div>
+      <div style={{flex: 1}}>
+        <audio controls style={{width: "100%"}}>
+          <source src={mahdia_audio2} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>After</p>
+      </div>
+      </div>
+      </div>
+        {/* <Carousel.Caption>
           <h3>Second slide label</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
+        </Carousel.Caption> */}
       </Carousel.Item>
-      <Carousel.Item>
+      {/* <Carousel.Item>
         <img
           className="d-block w-100"
           src={logo}
@@ -100,7 +130,7 @@ return (
             Praesent commodo cursus magna, vel scelerisque nisl consectetur.
           </p>
         </Carousel.Caption>
-      </Carousel.Item>
+      </Carousel.Item> */}
     </Carousel>
 	</div>
 
