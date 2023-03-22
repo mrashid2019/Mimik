@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Routes, Route}
 import Home from './pages';
 import About from './pages/about';
 import Feature from './pages/#feature';
-import Feature from './pages/#feature';
 import Convert from './pages/convert';
 import Train from './pages/train';
 import SignUp from './pages/signup';

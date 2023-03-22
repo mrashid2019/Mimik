@@ -15,19 +15,19 @@ const TwoFactorAuth = () => {
     setError("");
     setLoading(true);
 
-    try {
-      const credential = firebase.auth.PhoneAuthProvider.credential(
-        confirmationResult.verificationId,
-        verificationCode
-      );
-      await currentUser.signInWithCredential(credential);
+    // try {
+    //   const credential = firebase.auth.PhoneAuthProvider.credential(
+    //     confirmationResult.verificationId,
+    //     verificationCode
+    //   );
+    //   await currentUser.signInWithCredential(credential);
 
-      navigate("/");
-    } catch (error) {
-      console.log("Firebase error:", error);
-      setError(error.message);
-      setLoading(false);
-    }
+    //   navigate("/");
+    // } catch (error) {
+    //   console.log("Firebase error:", error);
+    //   setError(error.message);
+    //   setLoading(false);
+    // }
   };
 
   return (
