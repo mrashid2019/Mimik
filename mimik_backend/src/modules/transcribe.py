@@ -18,4 +18,8 @@ tts = TTS(default_model)
 audio = tts.tts_to_file(output, file_path=AUDIO_DIR+'/output.wav')
 
 audio = np.array(audio)
-write('output.wav', 22500,audio)
+write(AUDIO_DIR+'output.wav', 22500,audio)
+# print('The output is:', output)
+
+response = {'status': 'success'}
+print(json.dumps(response))
