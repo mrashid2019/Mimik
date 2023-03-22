@@ -98,7 +98,7 @@ return (
 	<div>
 		<div style={main}>
 
-			<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'375%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
+			<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'200%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
 
 			<div style={{textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
 
