@@ -25,8 +25,10 @@ const waveformBar = {
 //ADD PLAY & UPLOAD BUTTONS 
 	const Convert = () => {
 		const [buttonName, setButtonName] = useState("Play")
-		const [audio, setAudio] = useState();
+		// const [audio, setAudio] = useState();
 		const [socket, setSocket] = useState();
+		const [audioUrl, setAudioUrl] = useState('');
+
 	  
 		useEffect(() => {
 			// Set up WebSocket connection to server
@@ -36,15 +38,15 @@ const waveformBar = {
 		}, []);
 
 		useEffect(() => {
-			if (audio) {
+			if (audioUrl) {
 			  // Set up audio player
 			  const audioEl = document.getElementById('audio');
-			  audioEl.src = `data:audio/wav;base64,${audio}`;
+			  audioEl.src = `data:audio/wav;base64,${audioUrl}`;
 			  audioEl.load();
 			  audioEl.onended = () => setButtonName('Play');
 			  setButtonName('Play');
 			}
-		}, [audio]);
+		}, [audioUrl]);
 	  
 		const handleClick = () => {
 			if (socket && buttonName === 'Play') {
@@ -63,6 +65,13 @@ const waveformBar = {
 				}
 			}
 		};
+
+		const handleFetchAudio = async () => {
+			const response = await fetch('http://localhost:8000/transcribe');
+			const audioBlob = await response.blob();
+			const audioUrl = URL.createObjectURL(audioBlob);
+			setAudioUrl(audioUrl);
+		};
 	  
 		const addFile = (e) => {
 		  if (e.target.files[0]) {
@@ -72,7 +81,10 @@ const waveformBar = {
 				axios.post('http://localhost:8000/transcribe', formData)
 					.then((response) => {
 						console.log(response)
-						setAudio(response.data);
+						// setAudio(response.data);
+						const audioBlob = response.blob();
+						const audioUrl = URL.createObjectURL(audioBlob);
+						setAudioUrl(audioUrl);
 					})
 					.catch((error) => {
 						console.log(error);
@@ -83,9 +95,9 @@ const waveformBar = {
 		return (
 		  <div>
 			<button onClick={handleClick}>{buttonName}</button>
-			{audio && (
+			{audioUrl && (
         		<audio id="audio" controls>
-          		<source src={`data:audio/wav;base64,${audio}`} type="audio/wav" />
+          		<source src={`data:audio/wav;base64,${audioUrl}`} type="audio/wav" />
        			</audio>
       		)}
 			<input type="file" onChange={addFile} />
