@@ -13,6 +13,8 @@ import clone from './/key-feature-icons/clone.svg'
 import glass from './/key-feature-icons/magnifying-glass.svg'
 
 import logo from './head-background.jpg'
+import audio1 from './audio/After_Adrian01.m4a'
+import audio2 from './audio/Before_Adrian01.m4a'
 
 
 const Home = () => {
@@ -21,7 +23,7 @@ return (
 	<div className='head-image'>
 		<p style={{fontSize: 60, color: '#FFF', fontWeight: 'lighter', textAlign: 'center', paddingRight: 700, paddingTop: 50,fontFamily: 'IM Fell Double Pica'}}>Voice Cloning at the Palm<br/> of Your Hands</p>
 		<p style={{fontSize: 25, color: '#FFF', fontWeight: 'lighter', textAlign: 'center', paddingRight: 700, paddingBottom: 40, fontFamily: 'IM Fell Double Pica'}}>Transform your voice to sound<br/> like your favorite celebrity <br/>or even your friend!</p>
-	</div>
+  </div>
 
 	<div style={{textAlign: 'center', fontSize: 30, paddingTop: 50, fontFamily: 'IM Fell Double Pica'}}>
 		<p>Mimik allows you to alter your speech such that it mimics the voice of <br/>another person. Choose to either model your voice or change yours<br/> to sound like someone else!</p>
@@ -67,15 +69,28 @@ return (
 	<div style={{fontSize: 30, color: '#303978', textAlign: 'center', paddingTop: 30,fontFamily: 'IM Fell Double Pica'}}>MODEL EXAMPLES</div>
     <Carousel style={{padding: 100}}>
       <Carousel.Item interval={1000}>
-        <img
-          className="d-block w-100"
-          src= {logo}/*"holder.js/800x400?text=First slide&bg=373940"*/
-          alt="First slide"
-        />
-        <Carousel.Caption>
+      <div>
+      <div style={{display: "flex"}}>
+      <div style={{flex: 1, marginRight: 20}}>
+        {/* <img className="d-block w-100" src={bolt} alt="First slide" /> */}
+        <audio controls style={{width: "100%"}}>
+          <source src={audio2} type="audio/mp4" />
+        </audio>
+        <p>Before</p>
+      </div>
+      <div style={{flex: 1}}>
+        {/* <img className="d-block w-100" src={coins} alt="First slide" /> */}
+        <audio controls style={{width: "100%"}}>
+          <source src={audio1} type="audio/mp4" />
+        </audio>
+        <p>After</p>
+      </div>
+    </div>
+    </div>
+        {/* <Carousel.Caption>
           <h3>First slide label</h3>
           <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
+        </Carousel.Caption> */}
       </Carousel.Item>
       <Carousel.Item interval={500}>
         <img
