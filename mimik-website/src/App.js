@@ -12,6 +12,8 @@ import Train from './pages/train';
 import SignUp from './pages/signup';
 import Login from './pages/login';
 import LogoutPage from './pages/logout';
+import ProfilePage from '../src/pages/profile';
+
 import { UserAuthContext } from '../src/context/userAuthContext';
 
 function App() {
@@ -28,6 +30,7 @@ return (
             <Route path='/signup' element={<SignUp/>} />
             <Route path='/login/*' element={<Login/>} />
             <Route path='/logout' element={<LogoutPage/>} />
+            <Route path='/profile' element={<ProfilePage/>} />
 
         </Routes>
     </Router>

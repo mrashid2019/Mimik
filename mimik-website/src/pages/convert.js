@@ -89,6 +89,18 @@ const Convert = () => {
 					<FileUploader handleFile={addFile}/>
 				</div>
 
+				<div>
+					{/* <button onClick={handleClick}>{buttonName}</button> */}
+					{audio && (
+						<audio id="audio" controls>
+						{/* <source src={`data:audio/wav;base64,${audio}`} type="audio/wav" /> */}
+						<source src={audio} type="audio/wav" />
+						
+						</audio>
+					)}
+					{/* <input type="file" onChange={addFile} /> */}
+				</div>
+
 				<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
 
 					<div className='Search' style={{margin:'5px', padding:'0px',fontFamily:'IM Fell Double Pica', align:'center'}} >
@@ -100,17 +112,7 @@ const Convert = () => {
 					</div>
 				</div>
 				
-				<div>
-					<button onClick={handleClick}>{buttonName}</button>
-					{audio && (
-						<audio id="audio" controls>
-						{/* <source src={`data:audio/wav;base64,${audio}`} type="audio/wav" /> */}
-						<source src={audio} type="audio/wav" />
-						
-						</audio>
-					)}
-					{/* <input type="file" onChange={addFile} /> */}
-				</div>
+				
 				
 				
 
