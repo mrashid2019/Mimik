@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route}
 import Home from './pages';
 import About from './pages/about';
 import Feature from './pages/#feature';
+import Feature from './pages/#feature';
 import Convert from './pages/convert';
 import Train from './pages/train';
 import SignUp from './pages/signup';
@@ -28,6 +29,7 @@ return (
             <Route path='/signup' element={<SignUp/>} />
             <Route path='/login/*' element={<Login/>} />
             <Route path='/logout' element={<LogoutPage/>} />
+
         </Routes>
     </Router>
     </UserAuthContext>

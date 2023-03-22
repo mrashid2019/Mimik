@@ -1,5 +1,6 @@
 import React from "react";
 import "../Footer/footer.css"
+import logo from "../Navbar/Mimik-logo.svg"
 
 
 function Footer(){
@@ -9,7 +10,7 @@ function Footer(){
             <div className="row">
             <div class="col-sm-8 p-3 text-white">
                 
-                <img className="footer_img" src={require('../Footer/mimik_logo.png')} />
+                <img className="footer_img" src={logo} />
                 
                 </div>
 
