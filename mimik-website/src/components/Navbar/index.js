@@ -39,9 +39,9 @@ return (
 		<NavLink to="/" activeStyle>
 			Home
 		</NavLink>
-		<NavLink to="/apptour" activeStyle>
+		{/* <NavLink to="/apptour" activeStyle>
 			App Tour
-		</NavLink>
+		</NavLink> */}
 		{user && (
 			<NavLink to="/profile">Profile </NavLink>	
 
