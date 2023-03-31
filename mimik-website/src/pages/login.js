@@ -4,16 +4,15 @@ import { Link, useNavigate, Routes, Route} from "react-router-dom";
 import {Button, Form, Alert, Spinner } from "react-bootstrap";
 import GoogleButton from "react-google-button";
 import { useAuth } from "../context/userAuthContext";
-import TwoFactorAuth from "../components/TwoFactor/twoFactorVerification";
-import { db, auth } from "../firebase";
+
 
 const Login = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [loading, setLoading] = useState(false); // new state variable
-  const { logIn, googleSignIn } = useAuth();
-  const [verificationCode, setVerificationCode] = useState("");
+  const { logIn, googleSignIn, error } = useAuth();
+  const [verificationResult, setVerificationResult] = useState(null);
 
 
   const navigate = useNavigate();
@@ -21,22 +20,26 @@ const Login = ({ setIsLoggedIn }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setLoginError("");
     setLoading(true); // set loading to true when the form is submitted
+
+    if (email.trim() === "" || password.trim() === "") {
+      setLoginError("Please enter your email and password.");
+      setLoading(false);
+      return;
+    }
+    
     try {
-     await logIn(email, password);
-     setLoading(false);
-    //  handleTwoFactorAuthentication();
-    //   setTimeout(() => {
-    //     navigate("/");
-    //   }, 3000); // wait for 3 seconds before navigating to home page
-    //   handleLogin();
+      // Log in the user using email and password
+      await logIn(email, password);
+      setLoading(false);
+      //navigate('/');
     } catch (error) {
       console.log("Firebase error:", error);
-      setError(error.message);
-      setLoading(false);        // set loading to false after login attempt
+      setLoginError(error);
+      setLoading(false); // set loading to false after login attempt
+      //navigate('/login'); // Redirect to login page on error
     }
-
   };
 
 
@@ -59,8 +62,8 @@ const Login = ({ setIsLoggedIn }) => {
   return (
     <>
       <div className="p-4 box">
-        <h2 className="mb-3">Welcome</h2>
-        {error && <p>{error}</p>}   
+        <h2 className="mb-3">Welcome!</h2>
+        {loginError && <Alert variant="danger">{loginError}</Alert>}  
 
         <div>
           <GoogleButton
@@ -92,7 +95,7 @@ const Login = ({ setIsLoggedIn }) => {
           </Form.Group>
 
           <div className="d-grid gap-2 p-3">
-            <button type="submit" disabled={loading}>
+            <button className="login-btn" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Log in"}
         </button>
           </div>
@@ -104,9 +107,7 @@ const Login = ({ setIsLoggedIn }) => {
       <div className="mt-3 text-center">
         New to Mimik? <Link to="/signup">Register Today</Link>
       </div>
-      <Routes>
-        <Route path="/twoFactorAuth" element={<TwoFactorAuth />} />
-      </Routes>
+    
       </div>
     </>
   );

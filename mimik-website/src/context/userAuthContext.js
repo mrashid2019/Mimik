@@ -3,14 +3,15 @@ import {
   AuthErrorCodes,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPhoneNumber,
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 const userContext = createContext({});
 export const AuthContext = createContext();
@@ -20,6 +21,14 @@ const UserAuthContext = ({ children, type}) => {
   const [signUpError, setSignUpError] = useState("");
   const [loginError, setLoginError] = useState("");
   const [currentUser, setCurrentUser] = useState(null)
+  const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    isAlert: false,
+    severity: 'info',
+    message: '',
+    timeout: null,
+    location: '',
+  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -44,57 +53,91 @@ const UserAuthContext = ({ children, type}) => {
     setSignUpError("");
 
     createUserWithEmailAndPassword(auth, email, password) 
-      .then((userCredential) => {
-        const user = userCredential.user;
+    .then((userCredential) => {
+      const user = userCredential.user;
 
-        setDoc(doc(db, "RegisteredUsers", user.uid), {
-          firstName,
-          lastName,
-          phoneNumber,
-          email
-        })
-          .then(() => {
-            console.log("Document successfully written!");
-          })
-          .catch((error) => {
-            console.error("Error writing document: ", error);
-          });
-          user.updateProfile({
-            displayName: `${firstName} ${lastName}`,
-          });
-        // Set user data in local storage
-        localStorage.setItem("user", JSON.stringify(user));
+      setDoc(doc(db, "RegisteredUsers", user.uid), {
+        firstName,
+        lastName,
+        phoneNumber,
+        email
       })
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          setSignUpError("Email already in use");
-        } else if (error.code === "auth/invalid-email") {
-          setSignUpError("Invalid email address");
-        } else if (error.code === "auth/weak-password") {
-          setSignUpError("Password is too weak");
-        } else {
-          setSignUpError(error.message);
-        }
-      });
-  }
+       .then(() => {
+         console.log("Document successfully written!");
+
+      //   // Enable multi-factor authentication
+      //   const currentUser = auth.currentUser;
+      //   if (currentUser) {
+      //     currentUser.multiFactor.getSession()
+      //     .then((session) => {
+      //       const phoneInfoOptions = {
+      //         multiFactorHint: session.hints[0],
+      //       };
+      //       return auth.multiFactor.getSession(phoneInfoOptions);
+      //     })
+      //     .then((multiFactorSession) => {
+      //       return currentUser.multiFactor.enroll({
+      //         session: multiFactorSession,
+      //         phoneNumber: phoneNumber,
+      //       }, 'phone');
+      //     })
+      //     .then(() => {
+      //       console.log("Successfully enrolled in multi-factor authentication");
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error enrolling in multi-factor authentication:", error);
+      //     });
+      // }
+    })
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    });
+
+    user.updateProfile({
+      displayName: `${firstName} ${lastName}`,
+    });
+    
+
+
+      // Set user data in local storage
+      localStorage.setItem("user", JSON.stringify(user));
+    })
+    .catch((error) => {
+      if (error.code === "auth/email-already-in-use") {
+        setSignUpError("Email already in use");
+      } else if (error.code === "auth/invalid-email") {
+        setSignUpError("Invalid email address");
+      } else if (error.code === "auth/weak-password") {
+        setSignUpError("Password is too weak");
+      } else {
+        setSignUpError(error.message);
+      }
+    });
+}
 
   function logIn(email, password) {
     setLoginError("");
-
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const currentUser = userCredential.user;
         setCurrentUser(currentUser);
         console.log(currentUser);
+        // callback(currentUser.uid);
 
         // Set user data in local storage
         localStorage.setItem("user", JSON.stringify(currentUser));
       })
       .catch((error) => {
         setLoginError(error.message);
-        
+        console.log(error.message);
+        throw error;
       });
+  }
+
+  function signInWithPhoneNumberAuth(phoneNumber, appVerifier) {
+    console.log("sending code");
+    return signInWithPhoneNumber(auth, phoneNumber, appVerifier);
   }
 
   function logOut() {
@@ -137,9 +180,14 @@ const UserAuthContext = ({ children, type}) => {
     signUp,
     logIn,
     logOut,
+    loading,
+    setLoading,
+    alert,
+    setAlert,
     googleSignIn,
+    signInWithPhoneNumberAuth,
     forgotPassword,
-    error: type === "signup" ? signUpError : loginError,
+    error: loginError,
   };
 
   return (
