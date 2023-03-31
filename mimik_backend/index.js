@@ -1,27 +1,37 @@
 const {spawn} = require("child_process");
-// const bodyparser = require('')
 const fs = require('fs')
+const path = require('path')
+const os = require('os')
 
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination:(req,file,callback)=>{
-        callback(null, 'uploads/');
+        callback(null, 'src/audio/uploads/');
     },
     filename:(req,file,callback)=>{
         callback(null,file.originalname);
     }
 });
 
-if(!fs.existsSync('./uploads')){
-    fs.mkdirSync('./uploads');
+if(!fs.existsSync('src/audio/uploads')){
+    fs.mkdirSync('src/audio/uploads');
+}
+if(!fs.existsSync('src/audio/output')){
+  fs.mkdirSync('src/audio/output');
 }
 
+
 const express = require("express");
-const { cwd, stdout, stderr } = require("process");
+// const { cwd, stdout, stderr } = require("process");
+const { randomUUID } = require("crypto");
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server,{cors:{origin:'*'}})
 const upload = multer({storage})
+
+const INPUT_AUDIO_DIR = path.join(path.dirname(__filename),'src/audio/uploads')
+const OUTPUT_AUDIO_DIR = path.join(path.dirname(__filename),'src/audio/output')
+
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -29,14 +39,16 @@ app.use(function(req, res, next) {
     next();
   });
 
-const AUDIO_DIR = cwd()+'/uploads'
-app.post('/transcribe', upload.single('audio'), async (req,res)=>{
+app.post('/transcribe', upload.any('audio'), async (req,res)=>{
 //   console.log(req)
-    const file = req.file
-
-    console.log('Request received for the following file:',file)
-    
-    let pythonProcess = spawn('python3', ['src/modules/transcribe.py','--audio', AUDIO_DIR+'/'+file.filename])
+    const files = req.files
+    console.log('Request received for the following files:',files)
+    let outFile = randomUUID()+'.wav'
+    let outFilePath = path.join(OUTPUT_AUDIO_DIR, outFile)
+    let pythonProcess = spawn('python3', ['src/modules/transcribe.py','--audio', path.join(INPUT_AUDIO_DIR,files[0].filename), 
+    '--ref_wav',path.join(INPUT_AUDIO_DIR,files[1].filename),
+    '--out_file', outFilePath
+  ])
 
     pythonProcess.stdout.on('data',(data)=>{
         console.log('data: ', `${data}`)
@@ -49,16 +61,14 @@ app.post('/transcribe', upload.single('audio'), async (req,res)=>{
     pythonProcess.stdout.on('close',()=>{
         console.log('Process complete. Sending File')
         // res.setHeader('Access-Control-Allow-Origin','*')
-        res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
+        res.sendFile(outFilePath)
     })
     // res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
-
    
 })
 
 io.on('connection', (socket) => {
   console.log('A user connected');
-
   // Receive audio from the client
   socket.on('audio', (data) => {
     // console.log('DATA',data)
