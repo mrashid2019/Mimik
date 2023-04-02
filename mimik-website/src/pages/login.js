@@ -21,24 +21,23 @@ const Login = ({ setIsLoggedIn }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoginError("");
-    setLoading(true); // set loading to true when the form is submitted
-
+    setLoading(true);
+  
     if (email.trim() === "" || password.trim() === "") {
       setLoginError("Please enter your email and password.");
       setLoading(false);
       return;
     }
-    
+  
     try {
-      // Log in the user using email and password
       await logIn(email, password);
       setLoading(false);
-      //navigate('/');
+      setIsLoggedIn(true);
+      navigate("/");
     } catch (error) {
       console.log("Firebase error:", error);
-      setLoginError(error);
-      setLoading(false); // set loading to false after login attempt
-      //navigate('/login'); // Redirect to login page on error
+      setLoading(false);
+      setLoginError(error.message);
     }
   };
 
@@ -63,7 +62,7 @@ const Login = ({ setIsLoggedIn }) => {
     <>
       <div className="p-4 box">
         <h2 className="mb-3">Welcome!</h2>
-        {loginError && <Alert variant="danger">{loginError}</Alert>}  
+        {error && <Alert variant="danger">{error}</Alert>}
 
         <div>
           <GoogleButton

@@ -17,10 +17,11 @@ const userContext = createContext({});
 export const AuthContext = createContext();
 export const useAuth = () => { return useContext(userContext)};
 
-const UserAuthContext = ({ children, type}) => {
-  const [signUpError, setSignUpError] = useState("");
+const UserAuthContext = ({ children }) => {
+  const [signupError, setSignUpError] = useState("");
   const [loginError, setLoginError] = useState("");
   const [currentUser, setCurrentUser] = useState(null)
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({
     isAlert: false,
@@ -65,32 +66,10 @@ const UserAuthContext = ({ children, type}) => {
        .then(() => {
          console.log("Document successfully written!");
 
-      //   // Enable multi-factor authentication
-      //   const currentUser = auth.currentUser;
-      //   if (currentUser) {
-      //     currentUser.multiFactor.getSession()
-      //     .then((session) => {
-      //       const phoneInfoOptions = {
-      //         multiFactorHint: session.hints[0],
-      //       };
-      //       return auth.multiFactor.getSession(phoneInfoOptions);
-      //     })
-      //     .then((multiFactorSession) => {
-      //       return currentUser.multiFactor.enroll({
-      //         session: multiFactorSession,
-      //         phoneNumber: phoneNumber,
-      //       }, 'phone');
-      //     })
-      //     .then(() => {
-      //       console.log("Successfully enrolled in multi-factor authentication");
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error enrolling in multi-factor authentication:", error);
-      //     });
-      // }
     })
     .catch((error) => {
-      console.error("Error writing document: ", error);
+      setSignUpError(error);
+      throw error;
     });
 
     user.updateProfile({
@@ -188,6 +167,7 @@ const UserAuthContext = ({ children, type}) => {
     signInWithPhoneNumberAuth,
     forgotPassword,
     error: loginError,
+    signupError,
   };
 
   return (

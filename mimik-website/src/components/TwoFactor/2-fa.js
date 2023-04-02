@@ -32,15 +32,19 @@ export default function PhoneAuth() {
     }
   }
 
+  function getPhoneNumberFromUserInput() {
+    return document.getElementById('phone-number').value;
+  }
+
   function onSignup() {
     setLoading(true);
     onCaptchaVerify();
-
+    const phoneNumber = getPhoneNumberFromUserInput();
     const appVerifier = window.recaptchaVerifier;
 
-    const formatPh = "+" + ph;
+    // const formatPh = "+" + ph;
 
-    signInWithPhoneNumber(auth, formatPh, appVerifier)
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setLoading(false);
@@ -123,7 +127,7 @@ export default function PhoneAuth() {
                 >
                   Verify your phone number
                 </label>
-                <PhoneInput country={"us"} value={ph} onChange={setPh} />
+                <PhoneInput id={"phone-number"} country={"us"} value={ph} onChange={setPh} />
                 <button
                   onClick={onSignup} style={{marginTop:'2%'}}
                   className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-black rounded"

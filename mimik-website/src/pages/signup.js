@@ -8,9 +8,10 @@ import { Box, Modal, Typography, } from '@mui/material'
 
 
 const Signup = () => {
-  const { error, signUp, currentUser, setLoading } = useAuth();
+  const { error, signUp, logIn, currentUser, setLoading } = useAuth();
   const [err, setError] = useState('');
   const [backError, setBackError] = useState('');
+  const [signupError, setSignupError] = useState(null);
   const navigate = useNavigate();
   const [user, setUser] = useState({
     firstName: '',
@@ -29,9 +30,9 @@ const Signup = () => {
     console.log('sign up page loaded');
     if (error) {
       setError('');
-      setBackError(error.message);
+      setBackError(signupError.message);
     }
-  }, [error, currentUser]);
+  }, [signupError, currentUser]);
 
   const UserHandler = (e) => {
     const { name, value } = e.target;
@@ -87,6 +88,7 @@ const Signup = () => {
           confirmPassword: ""
         });
         setLoading(false);
+        // await logIn(email, password);
       } catch (error) {
         setIsErrorModalOpen(true);
         setModalMessage(`Error: ${error.message}`);
@@ -131,14 +133,17 @@ const Signup = () => {
 
 return (
   <div className="box">
-    {err ? (
-      err && <p className="error">{err}</p>
-    ) : (
-      backError && <p className="error">{backError}</p>
-    )}
+       <Box>
+      {err ? (
+        <Typography variant="subtitle1">{err}</Typography>
+      ) : (
+        backError && <Typography variant="subtitle1">{backError}</Typography>
+      )}
+    </Box>
 
     <form onSubmit={handleSubmit} className="form">
       <h3 className="sign-title">Registration Form</h3>
+      {error && <div style={{backgroundColor: "red"}}>{error}</div>}
       <div className="inputfield">
         <input
           type="text"
