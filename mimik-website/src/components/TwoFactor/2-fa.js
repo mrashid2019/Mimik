@@ -39,12 +39,12 @@ export default function PhoneAuth() {
   function onSignup() {
     setLoading(true);
     onCaptchaVerify();
-    const phoneNumber = getPhoneNumberFromUserInput();
+    // const phoneNumber = getPhoneNumberFromUserInput();
     const appVerifier = window.recaptchaVerifier;
 
-    // const formatPh = "+" + ph;
+    const formatPh = "+" + ph;
 
-    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+    signInWithPhoneNumber(auth, formatPh, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setLoading(false);
@@ -73,7 +73,7 @@ export default function PhoneAuth() {
   }
 
   return (
-    <section className="bg-emerald-500 flex items-center justify-center h-screen">
+    <section className="flex items-center justify-center h-screen">
       <div>
         <Toaster toastOptions={{ duration: 4000 }} />
         <div id="recaptcha-container"></div>
