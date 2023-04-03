@@ -48,27 +48,7 @@ const Convert =  () => {
 		.catch(err=>{
 			console.log("ERROR:",err)
 		})
-		// getBlob(storageRef)
-		// .then(data=>{
-		// 	if(data)
-		// 		console.log(jsonEval(data))
-		// 	else
-		// 		console.log("EMPTY")
-		// })
-		// .catch(err=>{
-		// 	console.error("TRIED AND FAILED:",err)
-		// })
-
-		// getDownloadURL(storageRef)
-		// .then(val=>{
-		// 	console.log(val)
-		// 	fetch(val)
-		// 	.then((val)=>console.log(val))
-		// 	.catch(err=>console.error(err))
-		// })
-		// .catch(err=>{
-		// 	console.log(err)
-		// })
+		
 	},[])
 	const transcribe = (contentFile, referenceFile) => {
 		console.log({contentFile},{referenceFile})
