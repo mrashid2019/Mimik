@@ -54,22 +54,20 @@ const Convert = () => {
 	  
 	const addFile = (file) => {
 		if (file) {
+			const ref = document.getElementById('reference');
 			const formData = new FormData();
 			formData.append('audio', file);
+			formData.append('ref_wav',ref.files[0]);
+			
 			
 			// handleFetchAudio()
 
-			axios.post('http://localhost:8000/transcribe', formData, {responseType:'blob'})
+			axios.post('http://localhost:8000/transcribe', formData, {responseType:'blob',data:'hello'})
 				.then((response) => {
-					console.log(response)
 					let data = response.data
-
-					
 					let audioBlob = new Blob([data], {type:'audio/wav'})
 					let newaudioUrl = URL.createObjectURL(audioBlob)
 					setAudio(newaudioUrl)
-					console.log(audio)
-
 				})
 				.catch((error) => {
 					console.log(error);
@@ -87,7 +85,9 @@ const Convert = () => {
 				<div style={{ textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica' }}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
 
 				<div>
-					<FileUploader handleFile={addFile} />
+					<FileUploader handleFile={addFile}/>
+					<input id="reference" type="file"/>
+
 				</div>
 
 				<div>
@@ -99,7 +99,6 @@ const Convert = () => {
 
 						</audio>
 					)}
-					{/* <input type="file" onChange={addFile} /> */}
 				</div>
 
 				<div style={{ border: '1px solid #dfdfdf', backgroundColor: ' #fff', textAlign: 'center', width: '75%', margin: 'auto', margin: '25px 25px', borderRadius: '15px', paddingTop: '2rem' }}>
