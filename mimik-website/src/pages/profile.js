@@ -120,59 +120,10 @@ return (
 
 			</div>
 
-			<div class="col-sm-8">
+			{/* <div class="col-sm-8">
 				Models
-			</div>
+			</div> */}
 
-			{/*
-                <div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '95%', height:"95%" ,margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
-                    <div>
-                        <table style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '95%', height:"95%" ,margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
-                            <tr >
-                                <td  style={{ border: '1px solid #dfdfdf',columnSpan:"3" }}>Emil</td>
-                                <td>Tobias</td>
-                            </tr>
-                            <tr>
-                            <div class="container mt-3">
-    <h2>Borderless Table</h2>
-    <p>The .table-borderless class removes borders from the table:</p>
-    
-    
-    
-    
-    
-    <table class="table table-borderless">
-        <thead>
-        <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>John</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-        </tr>
-        <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-            <td>mary@example.com</td>
-        </tr>
-        <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>july@example.com</td>
-        </tr>
-        </tbody>
-    </table>
-    </div>
-                            </tr>
-                        </table>
-
-                    </div>
-                </div> */}
 		</div>
 
 	</div><Footer /></>
