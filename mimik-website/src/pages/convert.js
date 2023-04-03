@@ -54,6 +54,7 @@ const Convert =  () => {
 	},[])
 	const transcribe = (contentFile, referenceFile) => {
 		console.log({contentFile},{referenceFile})
+		setAudio(null)
 		setLoading(true);
 		const formData = new FormData();
 		formData.append('content', contentFile);
