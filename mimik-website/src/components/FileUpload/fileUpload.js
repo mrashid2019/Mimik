@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 
-const Button = styled.button`
+export const Button = styled.button`
 border-radius: 4px;
 background: #6969A8;
 padding: 10px 22px;
@@ -24,30 +24,54 @@ margin-left: 24px;
 `;
 
 export const FileUploader = props => {
-  console.log("PROPS:", props)
 
-  // const {callBack=()=>{console.log('Callback')}} = props
+  const [contentAudio, setContentAudio] = useState(null);
+  const [refAudio, setRefAudio] = useState(null);
 
-  const hiddenFileInput = React.useRef(null);
+  const hiddenFile1Input = React.useRef(null);
+  const hiddenFile2Input = React.useRef(null);
+
   
-  const handleClick = event => {
-    hiddenFileInput.current.click();
+  const handleClickContent = event => {
+    hiddenFile1Input.current.click();
   };
-  const handleChange = event => {
-    const fileUploaded = event.target.files[0];
-    props.handleFile(fileUploaded);
+    
+  const handleClickReference = event => {
+    hiddenFile2Input.current.click();
   };
+  const handleContentChange = event => {
+    setContentAudio(event.target.files[0]);
+    // props.handleFile(fileUploaded);
+  };
+
+  const handleReferenceChange = event => {
+    setRefAudio(event.target.files[0]);
+    // props.handleFile(fileUploaded);
+  };
+
+  const requestCallback = () =>{
+    props.handleFile(contentAudio, refAudio)
+  }
+
   return (
     <>
-      <Button onClick={handleClick}>
-        Upload a file
+      <Button onClick={handleClickContent}>
+        Upload a content file
       </Button>
       <input type="file"
-             ref={hiddenFileInput}
-             onChange={handleChange}
+             ref={hiddenFile1Input}
+             onInput={handleContentChange}
              style={{display:'none'}} 
       />
-      <Button>Convert</Button> 
+      <Button onClick={handleClickReference}>
+        Upload a reference file
+      </Button>
+      <input type="file"
+             ref={hiddenFile2Input}
+             onInput={handleReferenceChange}
+             style={{display:'none'}} 
+      />
+      <Button onClick={requestCallback}>Convert</Button> 
     </>
   );
 };
