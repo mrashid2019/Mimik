@@ -68,7 +68,7 @@ const UserAuthContext = ({ children }) => {
 
     })
     .catch((error) => {
-      setSignUpError(error);
+      setSignUpError(error+"kskk");
       throw error;
     });
 
@@ -108,7 +108,7 @@ const UserAuthContext = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(currentUser));
       })
       .catch((error) => {
-        setLoginError(error.message);
+        setLoginError(error.message+"");
         console.log(error.message);
         throw error;
       });

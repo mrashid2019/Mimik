@@ -104,7 +104,7 @@ return (
 			<div style={{textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
 
 			<div style={{width: '75%'}}>
-				<Dropzone/>
+				{/* <Dropzone/> */}
 			</div>
 
 			<div>
