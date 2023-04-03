@@ -31,7 +31,7 @@ const Navbar = ({navigate}) => {
 return (
 	<>
 	<Nav>
-		<div style={{color: 'white', fontSize: '30px', display: 'flex', alignItems: 'center', justifyContent: 'flex-start'}}> <a href="/" style={{textDecoration: 'none', color:'white'}}>
+		<div style={{color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingRight:'0'}}> <a href="/" style={{textDecoration: 'none', color:'white',fontSize:'30px'}}>
       <img src={logo} alt='logo' height={80} width={100} />
       MIMIK
     </a></div>
@@ -55,28 +55,6 @@ return (
           </NavBtn>
         )}
       </Nav>
-	  {/* <nav class="navbar navbar-expand-sm navbar-custom">
-  		<div class="container-fluid">
-    		<div class="navbar-header">
-			<a class="navbar-brand" href="#">
-      		<img src={logo} alt="Avatar Logo" style={{width:"40px"}} class="rounded-pill"/> 
-    		</a>
-    		</div>
-    	<ul class="nav navbar-nav">
-      		{user && (
-       		<li><a href="/profile">Profile</a></li>
-      	)}
-    	</ul>
-    	<ul class="nav navbar-nav navbar-right">
-      	{!user && (
-        <li><a href="/login">Login</a></li>
-      	)}
-      	{user && (
-        <li><button style={{border:'0px', borderRadius:'10px', width:'fit-content', height:'50px'}} onClick={handleLogout}>Log Out</button></li>
-      	)}
-    	</ul>
-  </div>
-		</nav>*/}
  
     </>
 );
