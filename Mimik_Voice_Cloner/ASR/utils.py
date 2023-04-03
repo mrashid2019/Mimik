@@ -62,7 +62,7 @@ class TextProcess:
 
 textprocess = TextProcess()
 
-#Look deeper into the following
+#Look deeper into the following, is there an issue?
 def GreedyDecoder(output, labels, label_lengths, blank_label=28, collapse_repeated=True):
 	arg_maxes = torch.argmax(output, dim=2)
 	decodes = []

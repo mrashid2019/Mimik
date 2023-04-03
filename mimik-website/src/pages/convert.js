@@ -1,14 +1,16 @@
-import React, {useState, useEffect, useRef} from 'react';
-import io from "socket.io-client"
-import Footer from '../components/Footer/index'
+import React, {useState, useEffect} from 'react';
+// import io from "socket.io-client"
+import { SearchBar } from '../components/SearchBar/searchbar';
+import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
+import { FileUploader } from '../components/FileUpload/fileUpload';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import './Convert/convert.css'
 import axios from 'axios'
+import { storage } from '../firebase';
+// import { ref, getDownloadURL, getBlob } from 'firebase/storage';
 
-
-const socket = io('http://localhost:8000')
-// socket.on
-// const audio = new Audio()
-
-
+import 'firebase/storage'
+// const socket = io('http://localhost:8000')
 
 const main = {
 	height:'100%',
@@ -19,95 +21,120 @@ const main = {
 	alignItems:'center',
 }
 
-const waveformBar = {
-	background: '#d1d1d1',
-	width: '100%',
-	height:'40px'
+const Convert =  () => {
+	// let dbJSON = db.toJSON()
+	// console.log(dbJSON)
+	
+	//search bar results
+	const [isLoading, setLoading] = useState(false)
+	const [results, setResults] = useState([])
+	const [audio, setAudio] = useState(null);
+
+	useEffect(()=>{
+		console.log("Getting data")
+
+		let storageRef = storage.ref()
+		let fileRef = storageRef.child('/VoiceModels/Adrian/config.json')
+		fileRef.getDownloadURL()
+		.then(url=>{
+			console.log(url)
+			fetch(url)
+			.then(response => response.json())
+			.then(data =>{
+				console.log(data)
+			})
+			.catch(err=>console.error("ERROR:",err))
+		})
+		.catch(err=>{
+			console.log("ERROR:",err)
+		})
+		// getBlob(storageRef)
+		// .then(data=>{
+		// 	if(data)
+		// 		console.log(jsonEval(data))
+		// 	else
+		// 		console.log("EMPTY")
+		// })
+		// .catch(err=>{
+		// 	console.error("TRIED AND FAILED:",err)
+		// })
+
+		// getDownloadURL(storageRef)
+		// .then(val=>{
+		// 	console.log(val)
+		// 	fetch(val)
+		// 	.then((val)=>console.log(val))
+		// 	.catch(err=>console.error(err))
+		// })
+		// .catch(err=>{
+		// 	console.log(err)
+		// })
+	},[])
+	const transcribe = (contentFile, referenceFile) => {
+		console.log({contentFile},{referenceFile})
+		setLoading(true);
+		const formData = new FormData();
+		formData.append('content', contentFile);
+			
+		const ref = document.getElementById('reference');
+		if (referenceFile)
+			formData.append('reference',referenceFile);
+		
+		axios.post('http://localhost:8000/transcribe', formData, {responseType:'blob',data:'Sending audio'})
+			.then((response) => {
+				let data = response.data
+				let audioBlob = new Blob([data], {type:'audio/wav'})
+				let newaudioUrl = URL.createObjectURL(audioBlob)
+				setAudio(newaudioUrl)
+				ref.files = []
+				console.log(ref.files)
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.log(error);
+				setLoading(false);
+			});
+	}
+
+
+	return (
+
+		<div>
+			<div style={main}>
+
+				<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'200%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
+
+				<div style={{textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
+
+				<div>
+					<FileUploader handleFile={transcribe}/>
+					{/* <input id="reference" type="file"/> */}
+
+				</div>
+
+				<div>
+					{audio && (
+						<audio id="audio" controls>
+							<source src={audio} type="audio/wav" />
+						</audio>
+					)}
+				</div>
+
+				<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
+
+					<div className='Search' style={{margin:'5px', padding:'0px',fontFamily:'IM Fell Double Pica', align:'center'}} >
+						<div className='search-bar-container' style={{ PaddingTop:'20vh', width:'100%', display:'flex', flexDirection: 'column', alignItems:'center', minWidth:'200px'}}>
+							<SearchBar setResults={setResults}/>
+							<SearchResultsList results = {results}/>
+						</div>
+
+					</div>
+					 <AiOutlineLoading3Quarters className={`icon ${isLoading? 'isAnimated' : 'notAnimated'}`} />
+				</div>
+
+			</div>
+		</div>
+	);
 }
-//ADD PLAY & UPLOAD BUTTONS 
-	const Convert = () => {
-		const [buttonName, setButtonName] = useState("Play")
-		const [audio, setAudio] = useState(null);
-		// const [socket, setSocket] = useState();
-		const [audioUrl, setAudioUrl] = useState('');
 
-	  
-		useEffect(() => {
-			// Set up WebSocket connection to server
-			// const s = socketIOClient('http://localhost:3000');
-			// setSocket(s);
-			// return () => s.disconnect();
-		}, []);
-
-		useEffect(() => {
-			if (audio) {
-			  // Set up audio player
-			  	// const audioEl = document.getElementById('audio');
-			  	// audioEl.src = `data:audio/wav;base64,${audio}`;
-				// // audioEl.src = audio;
-				// console.log(audioEl.src)
-			  	// audioEl.load();
-			  	// audioEl.onended = () => setButtonName('Play');
-			  	// setButtonName('Play');
-			}
-		}, [audio]);
-	  
-		const handleClick = () => {
-			if (buttonName === 'Play') {
-				// Send audio data to server over WebSocket connection
-				socket.emit('audio', audio);
-				setButtonName('Pause');
-			  } else {
-				// Pause audio player
-				const audioEl = document.getElementById('audio');
-				if (audioEl.paused) {
-				  audioEl.play();
-				  setButtonName('Pause');
-				} else {
-				  audioEl.pause();
-				  setButtonName('Play');
-				}
-			}
-		};
-	  
-		const addFile = (e) => {
-		  if (e.target.files[0]) {
-				const formData = new FormData();
-				formData.append('audio', e.target.files[0]);
-				
-				// handleFetchAudio()
-
-				axios.post('http://localhost:8000/transcribe', formData, {responseType:'blob'})
-					.then((response) => {
-						console.log(response)
-						let data = response.data
-
-						
-						let audioBlob = new Blob([data], {type:'audio/wav'})
-						let newaudioUrl = URL.createObjectURL(audioBlob)
-						setAudio(newaudioUrl)
-						console.log(audio)
-
-					})
-					.catch((error) => {
-						console.log(error);
-					});
-			}
-		};
-	  
-		return (
-		  <div>
-			<button onClick={handleClick}>{buttonName}</button>
-			{audio && (
-        		<audio id="audio" controls>
-          		{/* <source src={`data:audio/wav;base64,${audio}`} type="audio/wav" /> */}
-          		<source src={audio} type="audio/wav" />
-       			
-				</audio>
-      		)}
-			<input type="file" onChange={addFile} />
-		  </div>
-		);
-	  };
-	  
-	  export default Convert;	
+export default Convert;
