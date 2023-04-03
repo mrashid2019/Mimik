@@ -1,100 +1,79 @@
-const express = require('express')
-const bodyParser = require('body-parser');
-const app = express();
-const { spawn } = require('child_process');
-app.use((req,res,next)=>{
-  res.header('Access-Control-Allow-Origin','*')
-  next()
-})
-app.use(bodyParser.json())
-const http = require('http');
-const server = http.createServer(app)
-const io = require('socket.io')(server,{
-  cors:{
-    origin:"*",
-    
-  }
+const {spawn} = require("child_process");
+// const bodyparser = require('')
+const fs = require('fs')
+
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination:(req,file,callback)=>{
+        callback(null, 'uploads/');
+    },
+    filename:(req,file,callback)=>{
+        callback(null,file.originalname);
+    }
 });
 
-// const sttClient = require('stt-wasm');
-// const { listModels } = require('@coqui-ai/tts');
-// const { TTS } = require('@coqui-ai/tts-node');
-// const { Readable } = require('stream');
-// const Speaker = require('speaker');
+if(!fs.existsSync('./uploads')){
+    fs.mkdirSync('./uploads');
+}
 
-// const stt = new sttClient({
+const express = require("express");
+const { cwd, stdout, stderr } = require("process");
+const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server,{cors:{origin:'*'}})
+const upload = multer({storage})
 
-// });
-
-// const speaker = new Speaker({
-//   sampleRate: 22050,
-//   channels: 1,
-// });
-
-server.listen(8000, ()=>{console.log("Listening on 8000")});
-
-app.get('/',(req,res)=>{
-  res.send('Connected successfully!')
-})
-
-app.get('/transcribe',(req,res)=>{
-  // res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-  // const audio = req.files.input_file;
-  console.log("REQUEST RECEIVED:", req.headers);
-
-  const pythonProcess = spawn('python3', ['src/modules/transcribe.py']);
-  pythonProcess.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
   });
 
-  pythonProcess.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-  });
+const AUDIO_DIR = cwd()+'/uploads'
+app.post('/transcribe', upload.single('audio'), async (req,res)=>{
+//   console.log(req)
+    const file = req.file
 
-  // res.setHeader('Access-Control-Allow-Origin', '*')
-  res.send("Your message was received...")
+    console.log('Request received for the following file:',file)
+    
+    let pythonProcess = spawn('python3', ['src/modules/transcribe.py','--audio', AUDIO_DIR+'/'+file.filename])
+
+    pythonProcess.stdout.on('data',(data)=>{
+        console.log('data: ', `${data}`)
+    })
+
+    pythonProcess.stderr.on('data',(err)=>{
+        console.error('err: ',`${err}`)
+    })
+
+    pythonProcess.stdout.on('close',()=>{
+        console.log('Process complete. Sending File')
+        // res.setHeader('Access-Control-Allow-Origin','*')
+        res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
+    })
+    // res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
+
+   
 })
 
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.on('disconnect', ()=>{
-    console.log("A user disconnected")
-  })
   // Receive audio from the client
-  // socket.on('audio', (data) => {
-  //   const audioBuffer = Buffer.from(data, 'base64');
-  //   console.log("AUDIO BUFFER:",{audioBuffer});
-  // });
-  //   // Perform speech-to-text
-  //   stt.transcribe(audioBuffer)
-  //     .then((result) => {
-  //       const text = result.text;
+  socket.on('audio', (data) => {
+    // console.log('DATA',data)
 
-  //       console.log('Transcribed text:', text);
+    // const audioBuffer = Buffer.from(data, 'base64');
+    socket.send('OKAY!')
+  });
 
-  //       // Perform text-to-speech
-  //       const defaultModel = listModels()[9]; //glowTTS model set as default
-  //       console.log('default audio model:', defaultModel);
-  //       const tts = new TTS(defaultModel);
-  //       return tts.tts(text);
-  //     })
-  //     .then((audioBuffer) => {
-  //       // Stream synthesized audio to the client
-  //       const readable = new Readable({
-  //         read() {
-  //           this.push(audioBuffer);
-  //           this.push(null);
-  //         },
-  //       });
+  socket.on('disconnect',()=>{
+    console.log('A user disconnected')
+  })
 
-  //       socket.emit('synthesized_audio', readable);
-  //       console.log('Synthesized audio sent to client.');
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error transcribing audio:', error);
-  //     });
-  // });
+  
 });
 
+server.listen(8000,()=>{
+  console.log('Server listening on port 8000')
+})

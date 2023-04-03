@@ -22,7 +22,12 @@ margin-left: 24px;
 	color: #fff;
 }
 `;
+
 export const FileUploader = props => {
+  console.log("PROPS:", props)
+
+  // const {callBack=()=>{console.log('Callback')}} = props
+
   const hiddenFileInput = React.useRef(null);
   
   const handleClick = event => {
