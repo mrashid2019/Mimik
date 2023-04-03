@@ -73,7 +73,7 @@ export default function PhoneAuth() {
   }
 
   return (
-    <section className="flex items-center justify-center h-screen">
+    <section className="flex items-center justify-center h-screen" style={{backgroundColor:'#ffffff'}}>
       <div>
         <Toaster toastOptions={{ duration: 4000 }} />
         <div id="recaptcha-container"></div>

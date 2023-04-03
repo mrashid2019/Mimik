@@ -32,26 +32,6 @@ return (
     <MainNotification />
     <Router>
         <Navbar/>
-    {/* <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
-      <Navbar.Brand href="/">
-            <img
-              alt=""
-              src={logo}
-              width="100"
-              height="100"
-              className="d-inline-block align-top"
-            />
-          </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav>
-            <Nav.Link as={Link} to='/login'>Login</Nav.Link>
-            <Nav.Link as={Link} to='/convert'>Convert</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar> */}
         <Routes>
             <Route exact path='/' element={<Home />} />
             <Route path='/about' element={<About/>} />

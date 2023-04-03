@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/userAuthContext'
 import '../App.css'
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import Footer from "../../src/components/Footer";import { Box, Modal, Typography, } from '@mui/material'
+import { Box, Modal, Typography, } from '@mui/material'
 
 
 const Signup = () => {
-  const { error, signUp, logIn, currentUser, setLoading } = useAuth();
+  const { error, signUp, logIn, setLoading } = useAuth();
   const [err, setError] = useState('');
   const [backError, setBackError] = useState('');
   const [signupError, setSignupError] = useState(null);
@@ -50,7 +50,7 @@ const Signup = () => {
     const { email, password, confirmPassword, firstName, lastName, phoneNumber } = user
     setLoading(true);
 
-    if (password == "" || confirmPassword == "" || email == "" || firstName == "" || lastName == "" || phoneNumber == "") {
+    if (password === "" || confirmPassword === "" || email === "" || firstName === "" || lastName === "" || phoneNumber === "") {
       setLoading(false);
       setInterval(() => {
         setError("");
@@ -104,9 +104,9 @@ const Signup = () => {
     navigate('/');
   };
 
-  const handleCloseErrorModal = () => {
-    setIsErrorModalOpen(false);
-  };
+  // const handleCloseErrorModal = () => {
+  //   setIsErrorModalOpen(false);
+  // };
 
 
   const style = {
