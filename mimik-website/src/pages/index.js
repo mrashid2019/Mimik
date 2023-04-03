@@ -15,11 +15,11 @@ import glass from './/key-feature-icons/magnifying-glass.svg'
 
 import logo from './head-background.jpg'
 
-import adrian_audio1 from './audio/Before_Adrian01.m4a'
-import adrian_audio2 from './audio/After_Adrian01.m4a'
+import adrian_audio1 from './audio/Before_Adrian03.m4a'
+import adrian_audio2 from './audio/AdrianToMahdia.wav'
 
 import mahdia_audio1 from './audio/Before_Mahdia01.m4a'
-import mahdia_audio2 from './audio/After_Mahdia01.m4a'
+import mahdia_audio2 from './audio/MahdiaToAdrian.wav'
 
 
 
@@ -38,7 +38,7 @@ return (
     <div className='right-side'>
     <Carousel style={{padding: 100}}>
       <Carousel.Item interval={3000}>
-      <div style={{textAlign: 'center', color: 'white', paddingBottom: 60, fontSize: 20}}>Listen to Adrian's cloned voice!</div>
+      <div style={{textAlign: 'center', color: 'white', paddingBottom: 60, fontSize: 20}}>Listen to Adrian sound like Mahdia!</div>
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
@@ -57,7 +57,7 @@ return (
       </div>
       </Carousel.Item>
       <Carousel.Item interval={3000}>
-      <div style={{textAlign: 'center', color: 'white', paddingBottom: 60, fontSize: 20}}>Listen to Mahdia's cloned voice!</div>
+      <div style={{textAlign: 'center', color: 'white', paddingBottom: 60, fontSize: 20}}>Listen to Mahdia sound like Adrian!</div>
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
@@ -129,7 +129,7 @@ return (
 	<div style={{fontSize: 30, color: '#303978', textAlign: 'center', paddingTop: 30,fontFamily: 'IM Fell Double Pica'}}>MODEL EXAMPLES</div>
     <Carousel style={{padding: 100}}>
       <Carousel.Item interval={3000}>
-      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>ADRIAN'S CLONED VOICE SAMPLES</div>
+      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>Check out Adrian sounding like Mahdia!</div>
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
@@ -152,7 +152,7 @@ return (
         </Carousel.Caption> */}
       </Carousel.Item>
       <Carousel.Item interval={3000}>
-      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>MAHDIA'S CLONED VOICE SAMPLES</div>
+      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>Check out Mahdia sounding like Adrian!</div>
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
