@@ -26,13 +26,13 @@ const Signup = () => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  useEffect(() => {
-    console.log('sign up page loaded');
-    if (error) {
-      setError('');
-      setBackError(signupError.message);
-    }
-  }, [signupError, currentUser]);
+  // useEffect(() => {
+  //   console.log('sign up page loaded');
+  //   if (error) {
+  //     setError('');
+  //     // setBackError(signupError.message);
+  //   }
+  // }, [signupError, currentUser]);
 
   const UserHandler = (e) => {
     const { name, value } = e.target;
@@ -77,18 +77,20 @@ const Signup = () => {
     } else {
       try {
         await signUp(email, password, firstName, lastName, phoneNumber);
-        setIsSuccessModalOpen(true);
-        setModalMessage("Signup successful.");
-        setUser({
-          firstName: "",
-          lastName: "",
-          phoneNumber: "",
-          email: "",
-          password: "",
-          confirmPassword: ""
-        });
-        setLoading(false);
-        // await logIn(email, password);
+        setTimeout(async () => {
+          await logIn(email, password);
+          setLoading(false);
+          setIsSuccessModalOpen(true);
+          setModalMessage("Signup successful.");
+          setUser({
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
+          });
+        }, 2000);
       } catch (error) {
         setIsErrorModalOpen(true);
         setModalMessage(`Error: ${error.message}`);
@@ -106,17 +108,6 @@ const Signup = () => {
     setIsErrorModalOpen(false);
   };
 
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
 
   const style = {
     position: 'absolute',
@@ -124,18 +115,28 @@ const Signup = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    backgroundColor: 'background.paper',
+    border: '2px solid #6969A8',
     boxShadow: 24,
     p: 4,
   };
+
+  const errorMessageStyle = {
+    backgroundColor: "#f8d7da",
+    color: "#842029",
+    padding: "10px",
+    border: "1px solid ##f8d7da",
+    borderRadius: "5px",
+    marginTop: "10px",
+  };
+  
 
 
 return (
   <div className="box">
        <Box>
       {err ? (
-        <Typography variant="subtitle1">{err}</Typography>
+        <Typography variant="subtitle1" style={errorMessageStyle}>{err}</Typography>
       ) : (
         backError && <Typography variant="subtitle1">{backError}</Typography>
       )}

@@ -19,6 +19,7 @@ const Login = ({ setIsLoggedIn }) => {
 
 
   const handleSubmit = async (e) => {
+    console.log("handleSubmit called");
     e.preventDefault();
     setLoginError("");
     setLoading(true);
@@ -31,13 +32,18 @@ const Login = ({ setIsLoggedIn }) => {
   
     try {
       await logIn(email, password);
-      setLoading(false);
-      setIsLoggedIn(true);
-      navigate("/");
+      // setLoading(false);
+      // navigate("/");
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/");
+      }, 2000);
+      
     } catch (error) {
       console.log("Firebase error:", error);
       setLoading(false);
       setLoginError(error.message);
+      return;
     }
   };
 
@@ -47,9 +53,11 @@ const Login = ({ setIsLoggedIn }) => {
     setLoading(true); // set loading to true when the Google sign-in button is clicked
     try {
       await googleSignIn();
-      setLoading(false);
       setIsLoggedIn(true);
-      navigate("/");
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.log(error.message);
       setLoading(false); // set loading to false after Google sign-in attempt
