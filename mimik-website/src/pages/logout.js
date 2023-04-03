@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 
 function LogoutPage() {
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   function handleReturnToLogin() {
-    history.push("/login"); 
+    navigate("/login"); 
   }
 
   return (
-    <div>
-      <h1>You have successfully logged out.</h1>
+    <div style={{ textAlign: "center", paddingTop: "100px" }}>
+      <h2>You have successfully logged out.</h2>
       <button onClick={handleReturnToLogin}>Return to Login</button>
     </div>
   );

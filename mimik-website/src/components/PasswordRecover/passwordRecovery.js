@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { useAuth } from "../../components/context/userAuthContext";
+import { useAuth } from "../../context/userAuthContext";
 
 const PasswordRecovery = () => {
     const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const PasswordRecovery = () => {
         try {
           await forgotPassword(email); 
           setSuccess(
-            "A password reset email has been sent to your email address. Please check your inbox and follow the instructions to reset your password."
+            "A password reset email has been sent to your email address. Please check your inbox/junk folder and follow the instructions to reset your password."
           );
         } catch (err) {
           setError(err.message);

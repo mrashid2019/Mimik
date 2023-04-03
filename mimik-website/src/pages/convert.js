@@ -1,10 +1,11 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import io from "socket.io-client"
 // import Footer from "../../src/components/";
 import { SearchBar } from '../components/SearchBar/searchbar';
 import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
 import { FileUploader } from '../components/FileUpload/fileUpload';
 // import { Button } from 'bootstrap';
+import Dropzone from '../components/AudioDropzone/dropzone'
 import axios from 'axios'
 import Footer from "../../src/components/Footer";
 
@@ -82,7 +83,11 @@ const Convert = () => {
 
 				<h1 style={{ margin: '2%', padding: '15px', color: '#303978', textAlign: 'center', fontSize: '200%', fontFamily: 'IM Fell Double Pica' }}>Convert</h1>
 
-				<div style={{ textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica' }}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
+			<div style={{ textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica' }}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
+
+			<div style={{width: '75%'}}>
+				{/* <Dropzone/> */}
+			</div>
 
 				<div>
 					<FileUploader handleFile={addFile}/>

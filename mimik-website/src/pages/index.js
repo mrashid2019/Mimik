@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState }from 'react';
 import { Link } from 'react-router-dom';
 import chart from "./home-page-charts-transparent.png"
 import Carousel from 'react-bootstrap/Carousel';

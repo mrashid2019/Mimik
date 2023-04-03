@@ -6,6 +6,7 @@ import { Nav, NavBtn, NavBtnLink, NavLink, NavMenu, Bars }
 import logo from "../Navbar/Mimik-logo.png"
 import { useAuth } from "../../context/userAuthContext"
 
+
 const Navbar = ({navigate}) => {
 	const [user, setUser] = useState(null);
 	const {currentUser , logOut } = useAuth();
@@ -22,11 +23,10 @@ const Navbar = ({navigate}) => {
 	  const handleLogout = async () => {
 		try {
 		  await logOut();
-		  navigate('.../pages/logout');
 		} catch (error) {
 		  console.log(error.message);
 		}
-	  };
+	};
 
 return (
 	<>

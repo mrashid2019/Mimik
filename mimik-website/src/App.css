@@ -32,6 +32,11 @@
   color: #61dafb;
 }
 
+/* Hyper link*/
+a {
+  color: #6969A8;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -45,6 +50,7 @@
 
 .box {
   border: 1px solid #dfdfdf;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #fff;
   text-align: center;
   width: 30%;
@@ -57,11 +63,14 @@
   margin: auto !important;
   margin-bottom: 40px !important;
   margin-top: 30px !important;
-  width: 60% !important;
+  width: 65% !important;
   line-height: 40px !important;
   font-size: 15px !important;
   background-color:transparent !important;
   border-radius: 25px !important;
+  color:black !important;
+  padding-top:5px !important;
+  padding-left:10px;
 }
 .g-btn > div,
 .g-btn > div > svg {
@@ -82,8 +91,10 @@
 .login-btn{
   background-color: #6969A8;
   border: 1px solid #6969A8;
+  color:white;
   height: auto;
   margin: auto;
+  padding:10px;
   width: 70% !important;
   border-radius: 25px;
 }
@@ -156,37 +167,30 @@ margin-left: 24px;
 } */
 
 /* Sign Up page  */
-.signup-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
+.sign-title{
+  padding:20px
 }
 
-.signup-form {
-  width: 420px;
-  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
-  padding-top: 30px;
-  padding-bottom: 20px;
-  border-radius: 8px;
-  background-color: white;
-  margin: auto;
+.inputfield {
+  margin-bottom: 10px;
+  padding:10px;
 }
 
-.signup-form-content {
-  padding-left: 12%;
-  padding-right: 12%;
-  text-align: center;
+.inputfield input {
+  border: 2px solid #6969A8;
+  border-radius: 25px;
+  padding: 8px;
+  width: 60% !important;
 }
 
-.signup-form-title {
-  text-align: center;
-  margin-bottom: 1em;
-  margin-top: 10px;
-  font-size: 35px;
-  color: rgb(34, 34, 34);
-  font-weight: 500;
+.button-signup{
+  margin-top:15px;
+  padding:5px;
+  color: white;
+  background-color: #6969A8;
+  border: 1px solid #6969A8;
+  width: 70%;
+  border-radius: 25px;
 }
 
 /* Footer */
