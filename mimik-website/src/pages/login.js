@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, Routes, Route} from "react-router-dom";
+import Footer from "../../src/components/Footer";
 
 import {Button, Form, Alert, Spinner } from "react-bootstrap";
 import GoogleButton from "react-google-button";
@@ -108,6 +109,7 @@ const Login = ({ setIsLoggedIn }) => {
         <Route path="/twoFactorAuth" element={<TwoFactorAuth />} />
       </Routes>
       </div>
+      <Footer/>
     </>
   );
 

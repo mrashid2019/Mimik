@@ -2,7 +2,7 @@
 
 .App {
   text-align: center;
-  background-color: white;
+  background-color: #ffffff;
   font-family: 'IM Fell Double Pica', serif;
 }
 
@@ -87,7 +87,7 @@
   width: 70% !important;
   border-radius: 25px;
 }
-/* Home page */
+/* CSS FOR HOME PAGE */
 .image-container{
   display: flex;
   flex-direction: column;
@@ -109,7 +109,6 @@
   background: url(pages/head-background.jpg);
   background-size: cover;
   background-position: center;
-  /* height: 100vh; */
   filter: brightness(80%);
   
   
@@ -121,7 +120,7 @@
 }
 
 .background {
-  background-color: #EDEDED;
+  background-color: #ebebeffc;
   padding: 50px;
 }
 
@@ -131,6 +130,30 @@
   font-size: 20px;
 }
 
+/* .navbar-custom {
+  background-color: #6969A8;
+}
+
+.navbar-nav {
+  border-radius: 4px;
+background: #fff;
+padding: 10px 22px;
+color: #4A4E69;
+border: none;
+outline: none;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+text-decoration: none;
+
+margin-left: 24px;
+
+&:hover {
+	transition: all 0.2s ease-in-out;
+	background: #737894;
+	outline-color: #010606;
+	color: #000;
+}
+} */
 
 /* Sign Up page  */
 .signup-form-container {

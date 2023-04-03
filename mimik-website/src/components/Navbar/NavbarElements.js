@@ -10,6 +10,7 @@ display: flex;
 justify-content: space-between;
 padding: 0.2rem calc((100vw - 1000px) / 2);
 z-index: 12;
+filter: drop-shadow(10px);
 `
 
 export const NavLink = styled(Link)`
@@ -24,7 +25,7 @@ cursor: pointer;
  
 
 &:hover {
-	color: darkblue;
+	color: black;
 }
 `
 
