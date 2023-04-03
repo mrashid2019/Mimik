@@ -12,6 +12,20 @@
   pointer-events: none;
 }
 
+.css-smkl36-MuiCollapse-wrapper{
+  background-color: #ffffff;
+}
+
+.css-1qm1lh {
+  margin-bottom: 0 !important;
+}
+
+
+.css-1lan45y-MuiPaper-root-MuiAlert-root {
+  background-color: #ffffff !important;
+  margin-bottom: 0 !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
