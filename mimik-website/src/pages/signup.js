@@ -4,7 +4,7 @@ import { useAuth } from '../context/userAuthContext'
 import '../App.css'
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-
+import Footer from "../../src/components/Footer";
 
 const Signup = () => {
     
@@ -86,68 +86,60 @@ const Signup = () => {
         }
     }
     return (
-        <div className='box'>
-            {
-                err ? (
-                    err && <p className='error'>{err}</p>
-                ) : (
-                    backError && <p className='error'>{backError}</p>
-                )
-            }
+        <><div className='box'>
+            {err ? (
+                err && <p className='error'>{err}</p>
+            ) : (
+                backError && <p className='error'>{backError}</p>
+            )}
 
             <form onSubmit={SubmitHandler} className="form">
                 <h3 className="signup-form-title">Registration Form</h3>
                 <div className="inputfield">
-                    <input type="text" 
-                            placeholder="First Name" 
-                            value={user.firstName} 
-                            name='firstName' 
-                            onChange={UserHandler} />
+                    <input type="text"
+                        placeholder="First Name"
+                        value={user.firstName}
+                        name='firstName'
+                        onChange={UserHandler} />
                 </div>
                 <div className="inputfield">
-                    <input type="text" 
-                            placeholder="Last Name" 
-                            value={user.lastName} 
-                            name='lastName' 
-                            onChange={UserHandler}
-                    />
+                    <input type="text"
+                        placeholder="Last Name"
+                        value={user.lastName}
+                        name='lastName'
+                        onChange={UserHandler} />
                 </div>
                 <div className="inputfield">
-                    <input type="text" 
-                            placeholder="Email" 
-                            value={user.email} 
-                            name='email' 
-                            onChange={UserHandler} 
-                    />
+                    <input type="text"
+                        placeholder="Email"
+                        value={user.email}
+                        name='email'
+                        onChange={UserHandler} />
                 </div>
 
                 <div className="inputfield">
-                    <input type="password" 
-                            placeholder="Password"
-                            value={user.password} 
-                            name='password' 
-                            onChange={UserHandler} 
-                    />
+                    <input type="password"
+                        placeholder="Password"
+                        value={user.password}
+                        name='password'
+                        onChange={UserHandler} />
                 </div>
                 <div className="inputfield">
-                    <input type="password" 
-                            placeholder="Confirm Password" 
-                            value={user.confirmPassword} 
-                            name='confirmPassword' 
-                            onChange={UserHandler} 
-                    />
+                    <input type="password"
+                        placeholder="Confirm Password"
+                        value={user.confirmPassword}
+                        name='confirmPassword'
+                        onChange={UserHandler} />
                 </div>
                 <div className="inputfield">
-                <PhoneInput 
-                            placeholder="+1 (123) 456-7890"
-                            value={user.phoneNumber}
-                            name="phoneNumber"
-                            onChange={(value) => setUser({ ...user, phoneNumber: value })}
-                            // onChange={UserHandler} 
-                    />
+                    <PhoneInput
+                        placeholder="+1 (123) 456-7890"
+                        value={user.phoneNumber}
+                        name="phoneNumber"
+                        onChange={(value) => setUser({ ...user, phoneNumber: value })} />
                 </div>
-                <div> 
-                    <p>By signing up, you accept Mimik's privacy policy and 
+                <div>
+                    <p>By signing up, you accept Mimik's privacy policy and
                         <a href={require('../components/SignUp/terms/MIMIKUserAgreement.pdf')} target="_blank"> terms of service.</a>
                     </p>
                 </div>
@@ -157,7 +149,7 @@ const Signup = () => {
                 <p className="forget">Already have an account? <a href="./login">Login </a></p>
             </form>
 
-        </div>
+        </div><Footer /></>
     )
 
 }

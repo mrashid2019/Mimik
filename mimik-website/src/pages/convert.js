@@ -6,6 +6,7 @@ import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
 import { FileUploader } from '../components/FileUpload/fileUpload';
 // import { Button } from 'bootstrap';
 import axios from 'axios'
+import Footer from "../../src/components/Footer";
 
 
 const socket = io('http://localhost:8000')
@@ -78,46 +79,46 @@ const Convert = () => {
 
 	return (
 
-		<div>
+		<><div>
 			<div style={main}>
 
-				<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'200%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
+				<h1 style={{ margin: '2%', padding: '15px', color: '#303978', textAlign: 'center', fontSize: '200%', fontFamily: 'IM Fell Double Pica' }}>Convert</h1>
 
-				<div style={{textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
+				<div style={{ textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica' }}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
 
 				<div>
-					<FileUploader handleFile={addFile}/>
+					<FileUploader handleFile={addFile} />
 				</div>
 
 				<div>
 					{/* <button onClick={handleClick}>{buttonName}</button> */}
 					{audio && (
 						<audio id="audio" controls>
-						{/* <source src={`data:audio/wav;base64,${audio}`} type="audio/wav" /> */}
-						<source src={audio} type="audio/wav" />
-						
+							{/* <source src={`data:audio/wav;base64,${audio}`} type="audio/wav" /> */}
+							<source src={audio} type="audio/wav" />
+
 						</audio>
 					)}
 					{/* <input type="file" onChange={addFile} /> */}
 				</div>
 
-				<div style={{ border: '1px solid #dfdfdf', backgroundColor:' #fff', textAlign: 'center', width: '75%',margin: 'auto',margin: '25px 25px',borderRadius: '15px', paddingTop:'2rem' }}>
+				<div style={{ border: '1px solid #dfdfdf', backgroundColor: ' #fff', textAlign: 'center', width: '75%', margin: 'auto', margin: '25px 25px', borderRadius: '15px', paddingTop: '2rem' }}>
 
-					<div className='Search' style={{margin:'5px', padding:'0px',fontFamily:'IM Fell Double Pica', align:'center'}} >
-						<div className='search-bar-container' style={{ PaddingTop:'20vh', width:'100%', display:'flex', flexDirection: 'column', alignItems:'center', minWidth:'200px'}}>
-							<SearchBar setResults={setResults}/>
-							<SearchResultsList results = {results}/>
+					<div className='Search' style={{ margin: '5px', padding: '0px', fontFamily: 'IM Fell Double Pica', align: 'center' }}>
+						<div className='search-bar-container' style={{ PaddingTop: '20vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '200px' }}>
+							<SearchBar setResults={setResults} />
+							<SearchResultsList results={results} />
 						</div>
 
 					</div>
 				</div>
-				
-				
-				
-				
+
+
+
+
 
 			</div>
-		</div>
+		</div><Footer /></>
 	);
 }
 

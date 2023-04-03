@@ -2,7 +2,8 @@ import React from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css"
 import Navbar from './components/Navbar';
-import { BrowserRouter as Router, Routes, Route}
+//import {Container, Nav, Navbar, Button} from 'react-bootstrap';
+import { BrowserRouter as Router, Routes, Route, Link}
     from 'react-router-dom';
 import Home from './pages';
 import About from './pages/about';
@@ -14,13 +15,35 @@ import Login from './pages/login';
 import LogoutPage from './pages/logout';
 import ProfilePage from '../src/pages/profile';
 
+import logo from '../src/components/Navbar/Mimik-logo-together.png';
+
 import { UserAuthContext } from '../src/context/userAuthContext';
 
 function App() {
 return (
     <UserAuthContext>
     <Router>
-        <Navbar />
+        <Navbar/>
+    {/* <Navbar bg="dark" variant="dark" expand="lg">
+      <Container>
+      <Navbar.Brand href="/">
+            <img
+              alt=""
+              src={logo}
+              width="100"
+              height="100"
+              className="d-inline-block align-top"
+            />
+          </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav>
+            <Nav.Link as={Link} to='/login'>Login</Nav.Link>
+            <Nav.Link as={Link} to='/convert'>Convert</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar> */}
         <Routes>
             <Route exact path='/' element={<Home />} />
             <Route path='/about' element={<About/>} />
