@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const userContext = createContext({});
 export const AuthContext = createContext();
@@ -109,8 +110,8 @@ const UserAuthContext = ({ children }) => {
       })
       .catch((error) => {
         setLoginError(error.message+"");
-        console.log(error.message);
-        throw error;
+        console.log("ERROR:",error.message);
+        // throw error;
       });
   }
 
@@ -120,28 +121,36 @@ const UserAuthContext = ({ children }) => {
   }
 
   function logOut() {
-    signOut(auth).then(() => {
-      setCurrentUser(null);
-      // Remove user data from local storage
-      localStorage.removeItem("user");
-    });
+    return new Promise((resolve, reject)=>{
+      signOut(auth).then(() => {
+        setCurrentUser(null);
+        // Remove user data from local storage
+        localStorage.removeItem("user");
+        resolve(true)
+      }).catch(e=>{
+        reject(e)
+      });
+    })
   }
 
   function googleSignIn() {
     const googleAuthProvider = new GoogleAuthProvider();
-    signInWithPopup(auth, googleAuthProvider)
+    return new Promise((resolve,reject)=>{
+      signInWithPopup(auth, googleAuthProvider)
       .then((result) => {
         const user = result.user;
         if (user.displayName === null) {
           const firstName = user.displayName.split(" ")[0];
           const lastName = user.displayName.split(" ")[1];
         }
-        
         setCurrentUser(user);
+        resolve(true)
       })
       .catch((error) => {
         setLoginError(error.message);
       });
+    })
+    
       
   }
 

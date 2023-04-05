@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, Routes, Route} from "react-router-dom";
 import Footer from "../../src/components/Footer";
 
@@ -14,10 +14,14 @@ const Login = ({ setIsLoggedIn }) => {
   const [loading, setLoading] = useState(false); // new state variable
   const { logIn, googleSignIn, error } = useAuth();
   const [verificationResult, setVerificationResult] = useState(null);
-
-
   const navigate = useNavigate();
-
+  // console.log("setIsLoggedIn:",{setIsLoggedIn})
+  // useEffect(()=>{
+  //   if(setIsLoggedIn){
+  //     setLoading(false);
+  //     navigate("/");
+  //   }
+  // },[setIsLoggedIn])
 
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
@@ -33,8 +37,8 @@ const Login = ({ setIsLoggedIn }) => {
   
     try {
       await logIn(email, password);
-      // setLoading(false);
-      // navigate("/");
+      setLoading(false);
+      navigate("/");
       setTimeout(() => {
         setLoading(false);
         navigate("/");
@@ -53,19 +57,19 @@ const Login = ({ setIsLoggedIn }) => {
     e.preventDefault();
     setLoading(true); // set loading to true when the Google sign-in button is clicked
     try {
-      await googleSignIn();
-      setIsLoggedIn(true);
-      setTimeout(() => {
+      // console.log("HERE WE GO")
+      let loggedIn = await googleSignIn();
+      // setIsLoggedIn(true);
+      if(loggedIn){
         setLoading(false);
-        navigate("/");
-      }, 2000);
+      }
+      navigate("/");
     } catch (error) {
       console.log(error.message);
+      // console.log("SOMETHING ELSE?")
       setLoading(false); // set loading to false after Google sign-in attempt
     }
   };
-
-
 
   return (
     <>

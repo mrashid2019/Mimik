@@ -7,9 +7,10 @@ import logo from "../Navbar/Mimik-logo.png"
 import { useAuth } from "../../context/userAuthContext"
 
 
-const Navbar = ({navigate}) => {
+const Navbar = ({nav}) => {
 	const [user, setUser] = useState(null);
 	const {currentUser , logOut } = useAuth();
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		if (currentUser) {
@@ -22,7 +23,13 @@ const Navbar = ({navigate}) => {
 	
 	  const handleLogout = async () => {
 		try {
-		  await logOut();
+		  let loggedOut = await logOut();
+		  if(loggedOut === true){
+			console.log("LOGGING OUT")
+			navigate('/')
+		  }else{
+			throw loggedOut
+		  }
 		} catch (error) {
 		  console.log(error.message);
 		}
