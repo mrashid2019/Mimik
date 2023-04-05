@@ -1,12 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=IM Fell Double Pica');
+
 .App {
   text-align: center;
-  background-color: white;
-  font-family: sans-serif;
+  background-color: #ffffff;
+  font-family: 'IM Fell Double Pica', serif;
+  height:100vh;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.css-smkl36-MuiCollapse-wrapper{
+  background-color: #ffffff;
+}
+
+.css-1qm1lh {
+  margin-bottom: 0 !important;
+}
+
+
+.css-1lan45y-MuiPaper-root-MuiAlert-root {
+  background-color: #ffffff !important;
+  margin-bottom: 0 !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -30,6 +47,11 @@
   color: #61dafb;
 }
 
+/* Hyper link*/
+a {
+  color: #6969A8;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -43,11 +65,13 @@
 
 .box {
   border: 1px solid #dfdfdf;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color: #fff;
   text-align: center;
   width: 30%;
   margin: auto;
   margin-top: 25px;
+  margin-bottom: 40px;
   border-radius: 5%;
 }
 
@@ -55,18 +79,20 @@
   margin: auto !important;
   margin-bottom: 40px !important;
   margin-top: 30px !important;
-  width: 60% !important;
-  height: auto !important;
+  width: 65% !important;
   line-height: 40px !important;
   font-size: 15px !important;
   background-color:transparent !important;
-  color:black !important;
   border-radius: 25px !important;
+  color:black !important;
+  padding-top:5px !important;
+  padding-left:10px;
 }
 .g-btn > div,
 .g-btn > div > svg {
   width: 40px !important;
   height: 38px !important;
+  color: black !important;
 }
 
 .info {
@@ -81,14 +107,17 @@
 .login-btn{
   background-color: #6969A8;
   border: 1px solid #6969A8;
+  color:white;
   height: auto;
   margin: auto;
+  padding:10px;
   width: 70% !important;
   border-radius: 25px;
 }
-
+/* CSS FOR HOME PAGE */
 .image-container{
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   /*width: 100vw;
@@ -97,42 +126,87 @@
 
 .round-button {
   border-radius: 50%;
-  padding: 20px 30px;
+  padding: 20px;
   background-color: #6969A8;
   color: #fff;
   border: none;
 }
 
+.head-image {
+  background: url(pages/head-background.jpg);
+  background-size: cover;
+  background-position: center;
+  filter: brightness(80%);
+  
+  
+
+  /*-ms-background-size: cover;   
+  -o-background-size: cover;   
+  -moz-background-size: cover;   
+  -webkit-background-size: cover;*/
+}
+
+.background {
+  background-color: #ebebeffc;
+  padding: 50px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+Double+Pica&display=swap');
+* {
+  font-family: 'IM Fell Double Pica', serif;
+  font-size: 20px;
+}
+
+/* .navbar-custom {
+  background-color: #6969A8;
+}
+
+.navbar-nav {
+  border-radius: 4px;
+background: #fff;
+padding: 10px 22px;
+color: #4A4E69;
+border: none;
+outline: none;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+text-decoration: none;
+
+margin-left: 24px;
+
+&:hover {
+	transition: all 0.2s ease-in-out;
+	background: #737894;
+	outline-color: #010606;
+	color: #000;
+}
+} */
+
 /* Sign Up page  */
-.signup-form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
+.sign-title{
+  padding:20px
 }
 
-.signup-form {
-  width: 420px;
-  box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
-  padding-top: 30px;
-  padding-bottom: 20px;
-  border-radius: 8px;
-  background-color: white;
+.inputfield {
+  margin-bottom: 10px;
+  padding:10px;
 }
 
-.signup-form-content {
-  padding-left: 12%;
-  padding-right: 12%;
-  text-align: center;
+.inputfield input {
+  border: 2px solid #6969A8;
+  border-radius: 25px;
+  padding: 8px;
+  width: 60% !important;
 }
 
-.signup-form-title {
-  text-align: center;
-  margin-bottom: 1em;
-  font-size: 24px;
-  color: rgb(34, 34, 34);
-  font-weight: 800;
+.button-signup{
+  margin-top:15px;
+  padding:5px;
+  color: white;
+  background-color: #6969A8;
+  border: 1px solid #6969A8;
+  width: 70%;
+  border-radius: 25px;
 }
 
 /* Footer */

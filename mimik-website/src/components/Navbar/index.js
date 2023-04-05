@@ -1,60 +1,63 @@
-// import React, {useContext} from "react";
-// import { Nav, NavBtn, NavBtnLink, NavLink, NavMenu, Bars }
-// 	from "./NavbarElements";
-// import logo from "../Navbar/Mimik-logo.png"
+import React from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from 'react-router-dom';
+import { Nav, NavBtn, NavBtnLink, NavLink, NavMenu, Bars }
+	from "./NavbarElements";
+import logo from "../Navbar/Mimik-logo.png"
+import { useAuth } from "../../context/userAuthContext"
 
 
+const Navbar = ({navigate}) => {
+	const [user, setUser] = useState(null);
+	const {currentUser , logOut } = useAuth();
 
-// const Navbar = () => {
-// 	const { currentUser, logOut } = useContext(AuthContext);
-// 	// const navigate = useNavigate();
+	useEffect(() => {
+		if (currentUser) {
+		  // Retrieve the user information from Firebase and store it in the state
+		  setUser({ name: currentUser.firstName});
+		} else {
+		  setUser(null);
+		}
+	  }, [currentUser]);
 	
+	  const handleLogout = async () => {
+		try {
+		  await logOut();
+		} catch (error) {
+		  console.log(error.message);
+		}
+	};
 
-// 	const handleLogout = async () => {
-// 		// try {
-// 		//   await logOut();
-// 		//   navigate("/login");
-// 		//   alert("You have successfully logged out")
-// 		// } catch (error) {
-// 		//   console.log("Failed to log out", error);
-// 		// }
-// 	  };
-	
-// return (
-// 	<>
-// 	<Nav>
-// 		<img src={logo} alt='logo' height={100} width= {150}/>
-// 		<Bars />
-// 		<NavMenu>
-// 		<NavLink to="/" activeStyle>
-// 			Home
-// 		</NavLink>
-// 		<NavLink to="/apptour" activeStyle>
-// 			App Tour
-// 		</NavLink>
-// 		<NavLink to="/signup" activeStyle>
-// 			Sign Up
-// 		</NavLink>
-// 		</NavMenu>
-// 		<NavBtn>
-// 			{currentUser ? (
-// 			<li className="dropdown">
-// 				<button className="dropbtn">
-// 				{currentUser.displayName}
-// 				<i className="fa fa-caret-down"></i>
-// 				</button>
-// 				<div className="dropdown-content">
-// 				<NavLink to="/profile">Profile</NavLink>
-// 				<button onClick={handleLogout}>Sign Out</button>
-// 				</div>
-// 			</li>
-// 			) : (
-//             <NavBtnLink to="/login">Login</NavBtnLink>
-//           )}
-//         </NavBtn>
-// 	</Nav>
-// </>
-// );
-// };
+return (
+	<>
+	<Nav>
+		<div style={{color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingRight:'0'}}> <a href="/" style={{textDecoration: 'none', color:'white',fontSize:'30px'}}>
+      <img src={logo} alt='logo' height={80} width={100} />
+      MIMIK
+    </a></div>
+		<Bars />
+		<NavMenu>
+		{user && (
+			<>
+			<NavLink to="/convert">Convert</NavLink>
+			<NavLink to="/train">Train</NavLink>
+			{/* <NavLink to="/profile">Profile </NavLink> */}
+			</>	
+        )}
+		{user && (
+			<button style={{borderRadius: '4px', background: '#fff', padding: '10px 22px', color: '#4A4E69', border: 'none', outline: 'none', cursor: 'pointer', transition: 'all 0.2s ease-in-out',
+				textDecoration: 'none', marginLeft: '24px'}} onClick={handleLogout}>Log Out</button>
+        )}
+        </NavMenu>
+        {!user && (
+          <NavBtn>
+            <NavBtnLink to="/login">Login</NavBtnLink>
+          </NavBtn>
+        )}
+      </Nav>
+ 
+    </>
+);
+};
 
-// export default Navbar;
+export default Navbar;

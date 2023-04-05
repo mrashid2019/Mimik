@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 
 export const Nav = styled.nav`
-background: #4A4E69;
+background: #6969A8;
 height: 85px;
 display: flex;
 justify-content: space-between;
 padding: 0.2rem calc((100vw - 1000px) / 2);
 z-index: 12;
+filter: drop-shadow(10px);
 `
 
 export const NavLink = styled(Link)`
@@ -21,11 +22,16 @@ padding: 0 1rem;
 height: 100%;
 margin-top: 60px;
 cursor: pointer;
+ 
+
+&:hover {
+	color: black;
+}
 `
 
 export const Bars = styled(FaBars)`
 display: none;
-color: #808080;
+color: #fff;
 @media screen and (max-width: 768px) {
 	display: block;
 	position: absolute;
@@ -40,9 +46,9 @@ color: #808080;
 export const NavMenu = styled.div`
 display: flex;
 align-items: center;
-margin-right: -24px;
+/*margin-right: -24px;*/
 /* Second Nav */
-/* margin-right: 24px; */
+margin-right: 24px; 
 /* Third Nav */
 /* width: 100vw;
 white-space: nowrap; */
@@ -71,10 +77,12 @@ cursor: pointer;
 transition: all 0.2s ease-in-out;
 text-decoration: none;
 
+margin-left: 24px;
+
 &:hover {
 	transition: all 0.2s ease-in-out;
 	background: #737894;
 	outline-color: #010606;
-	color: #fff
+	color: #000;
 }
 `

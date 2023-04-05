@@ -34,10 +34,14 @@ export const FileUploader = props => {
   
   const handleClickContent = event => {
     hiddenFile1Input.current.click();
+    event.target.innerHTML = 'Content ready'
+
   };
     
   const handleClickReference = event => {
     hiddenFile2Input.current.click();
+    event.target.innerHTML = 'Reference ready'
+
   };
   const handleContentChange = event => {
     setContentAudio(event.target.files[0]);

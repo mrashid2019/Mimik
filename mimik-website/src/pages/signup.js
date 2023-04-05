@@ -1,181 +1,244 @@
-import { useState } from "react";
+import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import FormInput from "../components/SignUp/formInput";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+import { useAuth } from '../context/userAuthContext'
+import '../App.css'
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+import { Box, Modal, Typography, } from '@mui/material'
 
-function SignUp() {
 
-  const[values,setValues] = useState({
-    firstname:"",
-    lastname:"",
-    username:"",
-    email:"",
-    password:"",
-    confirmPassword:"",
-  })
+const Signup = () => {
+  const { error, signUp, logIn, setLoading } = useAuth();
+  const [err, setError] = useState('');
+  const [backError, setBackError] = useState('');
+  const [signupError, setSignupError] = useState(null);
+  const navigate = useNavigate();
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
 
-  //Added Firebase config but needs to come from firebase.js
-  const firebaseConfig = {
-    apiKey: "AIzaSyDKcKsinKxSnE0wcJoDqpGG2U6OCZIEc-w",
-    authDomain: "voice-cloning-890fc.firebaseapp.com",
-    projectId: "voice-cloning-890fc",
-    storageBucket: "voice-cloning-890fc.appspot.com",
-    messagingSenderId: "331864957414",
-    appId: "1:331864957414:web:afdcab3b7b97f50d5db627",
-    measurementId: "G-V60ZHHLM4H"
-  };
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = getAuth();
+  // useEffect(() => {
+  //   console.log('sign up page loaded');
+  //   if (error) {
+  //     setError('');
+  //     // setBackError(signupError.message);
+  //   }
+  // }, [signupError, currentUser]);
 
-    const inputs = [
-      {
-      id:1,
-      name:"firstname",
-      type:"text",
-      placeholder:"First Name",
-      errorMessage:"Please enter a valid value",
-      //label:"Firstname",
-      required: true,
-    },
-    {
-      id:2,
-      name:"lastname",
-      type:"text",
-      placeholder:"Last Name",
-      errorMessage:"Please enter a valid value",
-     // label:"Lastname",
-      required: true,
-
-    },
-    {
-      id: 3,
-      name: "username",
-      type: "text",
-      placeholder: "Username",
-      errorMessage:"Username should be 3-16 characters and shouldn't include any special character!",
-      //label: "Username",
-      pattern:"^[A-Za-z0-9]{3,16}$",
-      required: true
-    },
-    {
-      id: 4,
-      name: "email",
-      type: "email",
-      placeholder: "Email",
-      errorMessage:"It should be a valid email addres",
-      //label: "Email",
-      required: true,
-
-    },
-    {
-      id: 5,
-      name: "password",
-      type: "password",
-      placeholder: "Password",
-      errorMessage:
-        "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
-      //label: "Password",
-      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      required: true,
-
-    },
-    {
-      id: 6,
-      name: "confirmPassword",
-      type: "password",
-      placeholder: "Confirm Password",
-      errorMessage:"Passwords don't match",
-      //label: "Confirm Password",
-      pattern:values.password,
-      required: true,
-    },
-  ];
-
-  const navigate = useNavigate()
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    //Not necessary since you cannot submit without matching passwords
-    // if (values.password !== values.confirmPassword) {
-    //   console.log("Passwords do not match");
-    //   return;
-    // }
-
-    try {
-      // Create new user with email and password
-      const { email, password } = values;
-      const userCredential = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
-
-      // Update user's display name with first and last name
-      const { firstname, lastname } = values;
-      await userCredential.user.updateProfile({
-        displayName: `${firstname} ${lastname}`,
-      });
-
-       // Redirect the user to the home page
-      navigate('/');
-
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
+  const UserHandler = (e) => {
+    const { name, value } = e.target;
+    // console.log('user state before update', user);
+    setUser((pre) => {
+      return {
+        ...pre,
+        [name]: value,
+      };
     });
   };
 
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password, confirmPassword, firstName, lastName, phoneNumber } = user
+    setLoading(true);
 
-
-  const onChange = (e) =>{
-    setValues({...values,[e.target.name]: e.target.value});
+    if (password === "" || confirmPassword === "" || email === "" || firstName === "" || lastName === "" || phoneNumber === "") {
+      setLoading(false);
+      setInterval(() => {
+        setError("");
+      }, 5000)
+      return setError("Please fill all the fields")
+    } else if (password !== confirmPassword) {
+      setLoading(false);
+      setInterval(() => {
+       setError("")
+      }, 5000)
+      return setError("Password does not match")
+    } else if (password.length < 6) {
+      setLoading(false);
+      setInterval(() => {
+        setError("")
+      }, 5000)
+      return setError("Password must be greater then 6 character")
+    } else if (!phoneNumber.length >= 10) {
+      setLoading(false);
+      setInterval(() => {
+        setError("")
+      }, 5000)
+      return setError("Phone number must at least 10 digits")
+    } else {
+      try {
+        await signUp(email, password, firstName, lastName, phoneNumber);
+        setTimeout(async () => {
+          await logIn(email, password);
+          setLoading(false);
+          setIsSuccessModalOpen(true);
+          setModalMessage("Signup successful.");
+          setUser({
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
+          });
+        }, 2000);
+      } catch (error) {
+        setIsErrorModalOpen(true);
+        setModalMessage(`Error: ${error.message}`);
+        setLoading(false);
+      }
+    }
   };
 
-  console.log(values);
+  const handleModalClose = () => {
+    setIsSuccessModalOpen(false);
+    navigate('/');
+  };
 
-  return (
-  <div className="signup-form-container">
-
-    <div className="signup-form">
-      <div className="signup-form-content ">  
-        {/* TITLE  */}
-        <h3 className="signup-form-title">Registration</h3>
+  // const handleCloseErrorModal = () => {
+  //   setIsErrorModalOpen(false);
+  // };
 
 
-        <form onSubmit={handleSubmit}>
-        {inputs.map(input =>(
-        <FormInput 
-        key={input.id} 
-        {...input} 
-        value={values[input.name]}
-        onChange={onChange}/>
-        ))}
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    backgroundColor: 'background.paper',
+    border: '2px solid #6969A8',
+    boxShadow: 24,
+    p: 4,
+  };
 
-        {/* <button>SIGN UP</button> */}
+  const errorMessageStyle = {
+    backgroundColor: "#f8d7da",
+    color: "#842029",
+    padding: "10px",
+    border: "1px solid ##f8d7da",
+    borderRadius: "5px",
+    marginTop: "10px",
+  };
+  
 
-        {/* New button with style */}
-        <div className="d-grid gap-2 mt-3 pt-3">
-          <button type="submit" className="btn btn-primary signup-btn">
-          SIGN UP
-          </button>
-        </div>
-        
-        <p>By signing up, you aceept Mimik's privacy policy and <a href={require('../components/SignUp/terms/MIMIKUserAgreement.pdf')} target="_blank">terms of service.</a></p>
-        </form>
+
+return (
+  <div className="box">
+       <Box>
+      {err ? (
+        <Typography variant="subtitle1" style={errorMessageStyle}>{err}</Typography>
+      ) : (
+        backError && <Typography variant="subtitle1">{backError}</Typography>
+      )}
+    </Box>
+
+    <form onSubmit={handleSubmit} className="form">
+      <h3 className="sign-title">Registration Form</h3>
+      {error && <div style={{backgroundColor: "red"}}>{error}</div>}
+      <div className="inputfield">
+        <input
+          type="text"
+          placeholder="First Name"
+          value={user.firstName}
+          name="firstName"
+          onChange={UserHandler}
+        />
       </div>
-    </div>
-  </div>
+      <div className="inputfield">
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={user.lastName}
+          name="lastName"
+          onChange={UserHandler}
+        />
+      </div>
+      <div className="inputfield">
+        <input
+          type="text"
+          placeholder="Email"
+          value={user.email}
+          name="email"
+          onChange={UserHandler}
+        />
+      </div>
 
-  );
+      <div className="inputfield">
+        <input
+          type="password"
+          placeholder="Password"
+          value={user.password}
+          name="password"
+          onChange={UserHandler}
+        />
+      </div>
+      <div className="inputfield">
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={user.confirmPassword}
+          name="confirmPassword"
+          onChange={UserHandler}
+        />
+      </div>
+      <div className="inputfield">
+        <PhoneInput
+          placeholder="+1 (123) 456-7890"
+          value={user.phoneNumber}
+          name="phoneNumber"
+          onChange={(value) =>
+            setUser({ ...user, phoneNumber: value })
+          }
+        />
+      </div>
+      <div>
+        <p>
+          By signing up, you accept Mimik's privacy policy and{" "}
+          <a
+            href={require("../components/SignUp/terms/MIMIKUserAgreement.pdf")}
+            target="_blank"
+          >
+            {" "}
+            terms of service.
+          </a>
+        </p>
+      </div>
+      <div className="inputfield">
+        <input type="submit" class="button-signup" />
+      </div>
+      <p className="forget">
+        Already have an account? <a href="./login">Login </a>
+      </p>
+    </form>
+
+    <Modal
+      open={isSuccessModalOpen}
+      onClose={handleModalClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          Registration Successful
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          Your account has been successfully registered
+        </Typography>
+      </Box>
+    </Modal>
+  </div>
+);
+
 }
 
-export default SignUp;
+export default Signup;

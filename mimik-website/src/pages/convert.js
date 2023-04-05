@@ -5,6 +5,8 @@ import { SearchResultsList } from '../components/SearchBar/SearchResultsList';
 import { FileUploader } from '../components/FileUpload/fileUpload';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import './Convert/convert.css'
+// import { Button } from 'bootstrap';
+//import Dropzone from '../components/AudioDropzone/dropzone'
 import axios from 'axios'
 import { storage } from '../firebase';
 // import { ref, getDownloadURL, getBlob } from 'firebase/storage';
@@ -52,6 +54,7 @@ const Convert =  () => {
 	},[])
 	const transcribe = (contentFile, referenceFile) => {
 		console.log({contentFile},{referenceFile})
+		setAudio(null)
 		setLoading(true);
 		const formData = new FormData();
 		formData.append('content', contentFile);
@@ -84,7 +87,7 @@ const Convert =  () => {
 
 				<h1 style={{margin:'2%', padding:'15px', color:'#303978', textAlign: 'center', fontSize:'200%', fontFamily:'IM Fell Double Pica'}}>Convert</h1>
 
-				<div style={{textAlign: 'center', fontSize: 25, paddingTop: 50, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a file to add your voice and then hit Convert to clone your voice:</div>
+				<div style={{textAlign: 'center', fontSize: 20, paddingBottom: 50, fontFamily: 'IM Fell Double Pica'}}>Please click Upload a Content File to add a sample of your voice<br/> and Upload a Reference File to add a sample of the voice you'd like to sound like. <br/>Hit Convert to clone your voice:</div>
 
 				<div>
 					<FileUploader handleFile={transcribe}/>
@@ -93,10 +96,14 @@ const Convert =  () => {
 				</div>
 
 				<div>
-					{audio && (
-						<audio id="audio" controls>
+					<AiOutlineLoading3Quarters className={`icon ${isLoading? 'isAnimated' : 'notAnimated'}`} />
+
+					{audio && ( 
+						<div style={{marginTop: 50, display: 'flex', alignItems: 'center'}}>Your cloned output is:
+						<audio id="audio" controls style={{marginLeft: 20}}>
 							<source src={audio} type="audio/wav" />
 						</audio>
+						</div>
 					)}
 				</div>
 
@@ -109,7 +116,6 @@ const Convert =  () => {
 						</div>
 
 					</div>
-					 <AiOutlineLoading3Quarters className={`icon ${isLoading? 'isAnimated' : 'notAnimated'}`} />
 				</div>
 
 			</div>
