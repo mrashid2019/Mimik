@@ -97,22 +97,24 @@ const UserAuthContext = ({ children }) => {
 
   function logIn(email, password) {
     setLoginError("");
-    signInWithEmailAndPassword(auth, email, password)
+    return new Promise((resolve, reject)=>{
+      signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const currentUser = userCredential.user;
         setCurrentUser(currentUser);
         console.log(currentUser);
-        // callback(currentUser.uid);
-
         // Set user data in local storage
         localStorage.setItem("user", JSON.stringify(currentUser));
+        resolve(true)
       })
       .catch((error) => {
         setLoginError(error.message+"");
         console.log("ERROR:",error.message);
+        reject(false)
         // throw error;
       });
+    })
   }
 
   function signInWithPhoneNumberAuth(phoneNumber, appVerifier) {
@@ -175,8 +177,8 @@ const UserAuthContext = ({ children }) => {
     googleSignIn,
     signInWithPhoneNumberAuth,
     forgotPassword,
-    error: loginError,
-    signupError,
+    errorLogin: loginError,
+    errorSignup: signupError
   };
 
   return (

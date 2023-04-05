@@ -12,7 +12,7 @@ const Login = ({ setIsLoggedIn }) => {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loading, setLoading] = useState(false); // new state variable
-  const { logIn, googleSignIn, error } = useAuth();
+  const { logIn, googleSignIn, errorLogin } = useAuth();
   const [verificationResult, setVerificationResult] = useState(null);
   const navigate = useNavigate();
   // console.log("setIsLoggedIn:",{setIsLoggedIn})
@@ -36,13 +36,10 @@ const Login = ({ setIsLoggedIn }) => {
     }
   
     try {
-      await logIn(email, password);
+      let loggedIn = await logIn(email, password);
       setLoading(false);
-      navigate("/");
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/");
-      }, 2000);
+      if(loggedIn)
+        navigate('/')
       
     } catch (error) {
       console.log("Firebase error:", error);
@@ -75,7 +72,7 @@ const Login = ({ setIsLoggedIn }) => {
     <>
       <div className="p-4 box">
         <h2 className="mb-3">Welcome!</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
+        {errorLogin && <Alert variant="danger">{errorLogin}</Alert>}
 
         <div>
           <GoogleButton
@@ -114,10 +111,10 @@ const Login = ({ setIsLoggedIn }) => {
         </Form>
         <hr />
         <div className="mt-3 text-center">
-       <Link to="/passwordRecovery">Forgot Password?</Link>
+       <Link style={{textDecoration:'none'}}to="/passwordRecovery">Forgot Password?</Link>
       </div>
       <div className="mt-3 text-center">
-        New to Mimik? <Link to="/signup">Register Today</Link>
+        New to Mimik? <Link style={{textDecoration:'none'}} to="/signup">Register Today</Link>
       </div>
     
       </div>
