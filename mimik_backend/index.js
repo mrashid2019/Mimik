@@ -2,6 +2,7 @@ const {spawn} = require("child_process");
 const fs = require('fs')
 const path = require('path')
 const os = require('os')
+const {performance} = require('perf_hooks')
 
 const multer = require('multer')
 const storage = multer.diskStorage({
@@ -45,13 +46,15 @@ app.post('/transcribe', upload.any('audio'), async (req,res)=>{
     console.log('Request received for the following files:',files)
     let outFile = randomUUID()+'.wav'
     let outFilePath = path.join(OUTPUT_AUDIO_DIR, outFile)
+    let start = performance.now()
     let pythonProcess = spawn('python3', ['src/modules/transcribe.py','--audio', path.join(INPUT_AUDIO_DIR,files[0].filename), 
     '--ref_wav',path.join(INPUT_AUDIO_DIR,files[1].filename),
     '--out_file', outFilePath
   ])
 
-    pythonProcess.stdout.on('data',(data)=>{
-        console.log('data: ', `${data}`)
+    pythonProcess.stdout.on('data',(data)=>{ 
+      let mid = performance.now()
+      console.log(`mid-start = ${mid-start}`)
     })
 
     pythonProcess.stderr.on('data',(err)=>{
@@ -61,6 +64,8 @@ app.post('/transcribe', upload.any('audio'), async (req,res)=>{
     pythonProcess.stdout.on('close',()=>{
         console.log('Process complete. Sending File')
         // res.setHeader('Access-Control-Allow-Origin','*')
+        let end = performance.now()
+        console.log( `Total time: ${end-start}`)
         res.sendFile(outFilePath)
     })
     // res.sendFile('/home/durewil/Mimik/mimik_backend/output.wav')
