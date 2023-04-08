@@ -4,8 +4,8 @@ in Mimik's backend Express server
 '''
 from argparse import ArgumentParser
 from TTS.api import TTS
+# import TTS.utils.audio
 import whisper
-from argparse import ArgumentParser
 
 
 def main(**kwargs):
@@ -13,19 +13,26 @@ def main(**kwargs):
     Run transcription on the passed audio
     '''
     print('ARGS:', args)
-    model = whisper.load_model("base")
-    result = model.transcribe(kwargs.get('audio'))['text']
-    model = TTS.list_models()[kwargs.get('model')] #default model is yourTTS
-    print('default audio model:', model)
-    tts_model = TTS(model_name=model)
-    if kwargs.get('model') == 0:
-        tts_model.tts_to_file(text=result, speaker=kwargs.get('speaker'), speaker_wav=kwargs.get(
-            'ref_wav'), file_path=kwargs.get('out_file'), language='en')
-    elif model == 7:
-        tts_model.tts_to_file(text=result)
+    
+    stt_model = whisper.load_model("base")
+    result = stt_model.transcribe(kwargs.get('audio'))['text']
+    model_name = TTS.list_models()[kwargs.get('model')] #default model is yourTTS
+    print('default audio model:', model_name)
+    # TTS.load_model_by_name(model_name)
+    # TTS.
+    tts_model = TTS(model_name=model_name)
+    
+    try:
+        if kwargs.get('model') == 0:
+            tts_model.tts_to_file(text=result, speaker=kwargs.get('speaker'), speaker_wav=kwargs.get(
+                'ref_wav'), file_path=kwargs.get('out_file'), language='en')
+        elif model == 7:
+            tts_model.tts_to_file(text=result)
+    except RuntimeError as runtime_err:
+        print('Error:', runtime_err)
+        
 
     print('File written to: ', kwargs.get('out_file'))
-
 
 if __name__ == '__main__':
     parser = ArgumentParser()
