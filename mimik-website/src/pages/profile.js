@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
 import Bar from '../components/profile/bar/bar';
 
+
 //Modal
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,9 +15,10 @@ import Modal from '@mui/material/Modal';
 import SubmitButton from '../components/profile/inputs/SubmitButton';
 import {Avatar,DialogActions,DialogContent,DialogContentText,TextField} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 
 
 const main = {
@@ -39,6 +41,15 @@ const style = {
 	boxShadow: 24,
 	p: 4,
   };
+  
+//Style for table grid
+const Item = styled(Paper)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+	...theme.typography.body2,
+	padding: theme.spacing(1),
+	textAlign: 'center',
+	color: theme.palette.text.secondary,
+  }));
 
 
 const Profile = () => {
@@ -118,7 +129,7 @@ return (
 
 	<div class="container" style={{justifyContent:'center',alignItems: 'center', display: 'flex'}}>
 				<div class="row" style={{ backgroundColor:' #fff', textAlign: 'center', width: '130vh', height:"100vh" ,margin: '35px 35px',borderRadius: '1px' }}>
-					<div class="col-sm-4" style={{borderRightStyle: 'solid', borderRightColor:'#dfdfdf'}}>
+					<div class="col-sm-3" style={{borderRightStyle: 'solid', borderRightColor:'#dfdfdf'}}>
 						<div class="container">
 							
 							<div class="row"  style={{borderBottomStyle: 'solid', borderBottomColor:'#dfdfdf',height:'45vh'}}>
@@ -273,18 +284,74 @@ return (
 									</div>
 								</div>
 							</div>
+							<div class="row"   style = {{	height:'35vh', 
+								alignItems:'flex-end', 
+								display: 'flex',
+								}}>
+									<Button style={{height:'10vh', backgroundColor:"#D9D9D9",
+										cursor: 'pointer',
+										fontSize:'75%',
+										color:"black",
+										fontFamily:"IM FELL Double Pica"}}>
+											Sign Out
+									</Button>
+
+							</div>
+							
 						</div>
 						
 					</div>
-					<div class="col-sm-8" style={{padding:"2px"}}>
+					<div class="col-sm-9" style={{padding:"2px"}}>
 						<Bar/>
+						
+						{/* Table box */}
+						<Box sx={{ flexGrow: 1 }} >
+							<Grid container spacing={0.3} >
+								<Grid item xs={5} md={5} >
+									<Item style={{height:"95vh", paddingTop:"20px", border:"none", boxShadow:"none"}}>
+										<div>
+											<Stack
+												direction="column"
+												justifyContent="flex-end"
+												alignItems="stretch"
+												spacing={3}
+											>
+												<Item style={{height:"60vh"}}>
+													Recently Saved Conversions
+												</Item>
+												<Item style={{height:"30vh"}}> 
+													Weekly Activity on Mimik
+												</Item>
+											</Stack>
+										</div>
+									</Item>
+								</Grid>
 
+								<Grid item xs={7} md={7} >
+								<Item style={{height:"95vh", paddingTop:"20px", border:"none", boxShadow:"none"}}>
+								<div>
+											<Stack
+												direction="column"
+												justifyContent="flex-end"
+												alignItems="stretch"
+												spacing={3}
+											>
+												<Item style={{height:"30vh"}}>
+													You’re Trained Voice												</Item>
+												<Item style={{height:"60vh"}}> 
+													
+												</Item>
+											</Stack>
+										</div>									
+								</Item>
+								</Grid>
+							</Grid>
+						</Box>
 					</div>
 				<div>
 			</div>
 		</div>
 	</div>
-	<Footer/>
 
 </>
 
