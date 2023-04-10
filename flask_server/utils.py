@@ -1,4 +1,4 @@
-def construct_element(element:str, inner_html=None)->None:
+def construct_element(element:str, inner_html=None)->str:
     """Construct an HTML element using formatted string
 
     Args:
