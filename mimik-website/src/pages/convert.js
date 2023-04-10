@@ -63,7 +63,7 @@ const Convert =  () => {
 		if (referenceFile)
 			formData.append('reference',referenceFile);
 		
-		axios.post('http://localhost:8000/transcribe', formData, {responseType:'blob',data:'Sending audio'})
+		axios.post('http://localhost:8000/clone', formData, {responseType:'blob',data:'Sending audio'})
 			.then((response) => {
 				let data = response.data
 				let audioBlob = new Blob([data], {type:'audio/wav'})
@@ -72,6 +72,7 @@ const Convert =  () => {
 				ref.files = []
 				console.log(ref.files)
 				setLoading(false);
+				// console.log(data)
 			})
 			.catch((error) => {
 				console.log(error);
