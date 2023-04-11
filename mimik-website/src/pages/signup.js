@@ -8,11 +8,12 @@ import { Box, Modal, Typography, } from '@mui/material'
 
 
 const Signup = () => {
-  const { error, signUp, logIn, setLoading } = useAuth();
+  const { errorSignup, signUp, logIn, setLoading } = useAuth();
   const [err, setError] = useState('');
   const [backError, setBackError] = useState('');
   const [signupError, setSignupError] = useState(null);
   const navigate = useNavigate();
+  
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -144,7 +145,7 @@ return (
 
     <form onSubmit={handleSubmit} className="form">
       <h3 className="sign-title">Registration Form</h3>
-      {error && <div style={{backgroundColor: "red"}}>{error}</div>}
+      {errorSignup && <div style={{backgroundColor: "red"}}>{errorSignup}</div>}
       <div className="inputfield">
         <input
           type="text"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, Routes, Route} from "react-router-dom";
 import Footer from "../../src/components/Footer";
 
@@ -12,12 +12,16 @@ const Login = ({ setIsLoggedIn }) => {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loading, setLoading] = useState(false); // new state variable
-  const { logIn, googleSignIn, error } = useAuth();
+  const { logIn, googleSignIn, errorLogin } = useAuth();
   const [verificationResult, setVerificationResult] = useState(null);
-
-
   const navigate = useNavigate();
-
+  // console.log("setIsLoggedIn:",{setIsLoggedIn})
+  // useEffect(()=>{
+  //   if(setIsLoggedIn){
+  //     setLoading(false);
+  //     navigate("/");
+  //   }
+  // },[setIsLoggedIn])
 
   const handleSubmit = async (e) => {
     console.log("handleSubmit called");
@@ -32,13 +36,10 @@ const Login = ({ setIsLoggedIn }) => {
     }
   
     try {
-      await logIn(email, password);
-      // setLoading(false);
-      // navigate("/");
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/");
-      }, 2000);
+      let loggedIn = await logIn(email, password);
+      setLoading(false);
+      if(loggedIn)
+        navigate('/')
       
     } catch (error) {
       console.log("Firebase error:", error);
@@ -53,25 +54,25 @@ const Login = ({ setIsLoggedIn }) => {
     e.preventDefault();
     setLoading(true); // set loading to true when the Google sign-in button is clicked
     try {
-      await googleSignIn();
-      setIsLoggedIn(true);
-      setTimeout(() => {
+      // console.log("HERE WE GO")
+      let loggedIn = await googleSignIn();
+      // setIsLoggedIn(true);
+      if(loggedIn){
         setLoading(false);
-        navigate("/");
-      }, 2000);
+      }
+      navigate("/");
     } catch (error) {
       console.log(error.message);
+      // console.log("SOMETHING ELSE?")
       setLoading(false); // set loading to false after Google sign-in attempt
     }
   };
-
-
 
   return (
     <>
       <div className="p-4 box">
         <h2 className="mb-3">Welcome!</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
+        {errorLogin && <Alert variant="danger">{errorLogin}</Alert>}
 
         <div>
           <GoogleButton
@@ -110,10 +111,10 @@ const Login = ({ setIsLoggedIn }) => {
         </Form>
         <hr />
         <div className="mt-3 text-center">
-       <Link to="/passwordRecovery">Forgot Password?</Link>
+       <Link style={{textDecoration:'none'}}to="/passwordRecovery">Forgot Password?</Link>
       </div>
       <div className="mt-3 text-center">
-        New to Mimik? <Link to="/signup">Register Today</Link>
+        New to Mimik? <Link style={{textDecoration:'none'}} to="/signup">Register Today</Link>
       </div>
     
       </div>
