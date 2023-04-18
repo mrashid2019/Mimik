@@ -23,7 +23,6 @@ const main = {
 	flexDirection:'column',
 	justifyContent:'space-between',
 	alignItems:'center',
-	background: 'linear-gradient(to right, rgb(0,0,0,0.1) 0%, #ffffff 30%, #ffffff 70%, rgb(105,105,168,0.3) 100%)',
 }
 
 const Convert =  () => {
@@ -89,7 +88,10 @@ const Convert =  () => {
 
 				<h1 style={{ margin: '2%', padding: '15px', color: '#303978', textAlign: 'center', fontSize: '200%', fontFamily: 'IM Fell Double Pica' }}>Convert</h1>
 
-				<div style={{ textAlign: 'center', fontSize: 20, paddingBottom: 50, fontFamily: 'IM Fell Double Pica' }}>Please click Upload a Content File to add a sample of your voice<br /> and Upload a Reference File to add a sample of the voice you'd like to sound like. <br />Hit Convert to clone your voice:</div>
+				<div style={{ textAlign: 'center', fontSize: 20, paddingBottom: 50, color: '#4A4E69' }}>
+				To upload a sample of your voice, please click on Upload a Content File below.<br/>
+				Additionally, to provide a sample of the voice that you want to sound like, please upload a reference file by clicking on Upload a Reference File. <br/>
+				Once both files have been uploaded, hit Convert to clone your voice.</div>
 
 				<div>
 					<FileUploader handleFile={transcribe} />

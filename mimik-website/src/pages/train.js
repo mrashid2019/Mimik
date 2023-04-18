@@ -67,7 +67,7 @@ const Train = () => {
 			<>
 			<div style={{ height: '100vh' }}>
 				<div style={main}>
-					<h1 style={{ color: '#4A4E69', paddingTop: 20 }}>Train</h1>
+					<h1 style={{ margin: '2%', padding: '15px', color: '#303978', paddingTop: 20 }}>Train</h1>
 					<div style={{fontSize: '20', color: '#4A4E69', textAlign: 'center' }}>
 						To get started, simply press the record button and read the prompts provided. <br />Please make sure you're in a quiet environment and speak clearly and naturally.<br /> We recommend using a headset or microphone for the best results.<br />
 						Once you've finished recording, your voice data will be securely uploaded to our servers for processing.</div>
