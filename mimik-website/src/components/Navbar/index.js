@@ -48,7 +48,7 @@ return (
 			<>
 			<NavLink to="/convert">Convert</NavLink>
 			<NavLink to="/train">Train</NavLink>
-			{/* <NavLink to="/profile">Profile </NavLink> */}
+			<NavLink to="/profile">Profile </NavLink>
 			</>	
         )}
 		{user && (
