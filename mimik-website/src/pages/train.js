@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Footer from "../../src/components/Footer";
+import "../pages/train.css"
 
 
 const main = {
@@ -15,14 +16,14 @@ const scriptBox = {
 	display: 'flex',
 	border: '3px solid #4A4E69',
 	width:'30%',
-	maxWidth:'550px',
+	maxWidth:'600px',
 	// maxHeight:'750px',
 	minHeight:'300px',
 	overflowY:'scroll',
 	scrollbarGutter:'stable',
 	scrollbarColor:'#4A4E69',
-	margin:'4%',
-	fontSize:'1.4em',
+	margin:'2%',
+	fontSize:'1.2em',
 	padding:'20px'
 }
 
@@ -63,25 +64,71 @@ const Train = () => {
 		}
 		
 		return (
-			<><div style={{ height: '100vh' }}>
+			<>
+			<div style={{ height: '100vh' }}>
 				<div style={main}>
-					<h1 style={{ margin: '5%', color: '#4A4E69' }}>Train</h1>
-					<h1 style={{ margin: '0%', fontSize: '1.3vmax', color: '#4A4E69' }}>Press record and begin reading the script at your own pace</h1>
+					<h1 style={{ color: '#4A4E69', paddingTop: 20 }}>Train</h1>
+					<div style={{fontSize: '20', color: '#4A4E69', textAlign: 'center' }}>
+						To get started, simply press the record button and read the prompts provided. <br />Please make sure you're in a quiet environment and speak clearly and naturally.<br /> We recommend using a headset or microphone for the best results.<br />
+						Once you've finished recording, your voice data will be securely uploaded to our servers for processing.</div>
+					<div class='animation-container'>
+						<div class='animation-example'>
+							<div class='item'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item -type2'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item -type2'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item -type2'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='item -type2'>
+								<div class='line'></div>
+								<div class='dot'></div>
+								<div class='circle'></div>
+							</div>
+							<div class='center'>
+								<div class='circle'></div>
+								<div class='circle'></div>
+								<div class='circle'></div>
+							</div>
+					</div>
+					</div>
+					
 					<div style={scriptBox}>
 						Once upon a time, in a kingdom far far away, there lived a young boy named Luke. He was weak and often bullied by the other children in his village. Despite this, Luke had a heart full of courage and a determination to prove himself.
 
 						One day, while wandering in the forest, Luke stumbled upon an ancient sword. This was no ordinary sword, it was enchanted and it granted Luke the strength and power he had always wanted. Excited by his newfound abilities, Luke set out on an adventure to defeat the monsters and dragons that terrorized his kingdom.
 
 						Luke soon found that his journey was not going to be easy. He was faced with countless challenges, but he refused to give up. He honed his skills, learned new techniques and grew stronger with each passing day. He battled giant trolls, fire-breathing dragons, and even the evil sorcerer who had cursed his kingdom.
-
-						Despite all the obstacles, Luke's bravery and determination never wavered. He always found a way to overcome the odds, and with each victory, he grew more confident and powerful. The people of the kingdom began to take notice of the young hero and many started to look up to him for inspiration and hope.
-
-						Eventually, Luke found himself standing face to face with the evil sorcerer who had terrorized the kingdom for so many years. It was the battle of his life, but Luke refused to back down. With all his strength and all the skills he had acquired, Luke defeated the sorcerer and lifted the curse that had befallen his kingdom.
-
-						From that day on, Luke was known as the greatest hero the kingdom had ever seen. He had gone from a weak young boy to a strong and powerful warrior, who had defeated the greatest of monsters and dragons. The kingdom flourished and the people lived in peace and prosperity, all thanks to the bravery of the young hero, Luke.
 					</div>
 					<Pause isRecording={isRecording} onPlayerClick={clickPlay} style={{ height: '20px', width: '20px' }} />
-
 
 					<div style={{ display: 'flex', flexDirection: 'column', height: 'auto', width: '50vw', margin: '45px', justifyContent: 'center', alignItems: 'center' }}>
 						{isRecording && (<h1 style={{ margin: '0%', fontSize: '1.8vmax', color: '#4A4E69', alignSelf: 'start', justifySelf: 'start' }}>Recording...</h1>)}
@@ -91,9 +138,18 @@ const Train = () => {
 				</div>
 				{/* <div style={{display:'sticky',marginTop:'10px',marginBottom:'10px',background:'#4A4E69', height:'30px', width:'100%'}}> </div> */}
 
-			</div><Footer /></>
+			</div>
+
+			</>
 			);
 		};
+
+		
+
+
+
+
+
 		
 		export default Train;
 		

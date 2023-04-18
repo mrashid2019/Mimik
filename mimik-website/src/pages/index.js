@@ -47,13 +47,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={adrian_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={adrian_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -66,13 +66,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={mahdia_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={mahdia_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -138,13 +138,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={adrian_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={adrian_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -161,13 +161,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={mahdia_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={mahdia_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -184,13 +184,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={adrian_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={wilmayer_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -203,13 +203,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={wilmayer_audio3} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={wilmayer_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
