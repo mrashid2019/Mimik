@@ -13,7 +13,6 @@ import coins from './/key-feature-icons/coins.svg';
 import clone from './/key-feature-icons/clone.svg'
 import glass from './/key-feature-icons/magnifying-glass.svg'
 
-import logo from './head-background.jpg'
 
 import adrian_audio1 from './audio/Before_Adrian03.m4a'
 import adrian_audio2 from './audio/AdrianToMahdia.wav'
