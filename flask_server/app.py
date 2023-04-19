@@ -29,11 +29,15 @@ def process_audio():
     reference = request.files.get('reference')
     content.save('content.wav') #add reading the audio file to utils.py
     reference.save('reference.wav')
-
-    e2e_model.transcribe_yourtts(original_wav='content.wav',speaker_wav='reference.wav')
-    
-   
+    e2e_model.clone_from_audio(original_wav='content.wav',speaker_wav='reference.wav')   
     return send_file('output.wav', as_attachment=True)
+
+@app.route("/clone_text", methods=["POST"])
+def process_text():
+        text = request.data
+        e2e_model.clone_text(text,speaker_wav='reference.wav')
+        return send_file('output.wav', as_attachment=True)
+
 
 if __name__ == '__main__':
     print("RUNNING ON 8000")
