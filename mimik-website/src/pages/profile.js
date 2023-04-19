@@ -2,6 +2,10 @@ import React, {useState} from 'react';
 import userImg from '../components/profile/images/user.png';
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../context/userAuthContext';
+import uploadFile from '../components/profile/uploadFile';
+import { updateProfile } from 'firebase/auth';
+import WeeklyActivityGraph from '../components/WeeklyActivity/activityGraph'
 
 import Footer from '../components/Footer';
 import Bar from '../components/profile/bar/bar';
@@ -13,6 +17,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import SubmitButton from '../components/profile/inputs/SubmitButton';
+import {v4 as uuidv4} from 'uuid';
 import {Avatar,DialogActions,DialogContent,DialogContentText,TextField} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
@@ -64,10 +69,13 @@ const Profile = () => {
 	const [openDelete, setOpenDelete] = React.useState(false);
 	const handleOpenDelete = () => setOpenDelete(true);
 	const handleCloseDelete = () => setOpenDelete(false);
+
+	const { currentUser, setLoading, setAlert } = useAuth();
 	
-	const [name, setName] = useState("Victoria Robinson");
+	const [name, setName] = useState(currentUser?.displayName);
 	const [file, setFile] = useState(null);
-	const [photoURL, setPhotoURL] = useState(userImg);
+	const [photoURL, setPhotoURL] = useState(currentUser?.photoURL);
+
 	const navigate = useNavigate();
 
 	const handleChange = (e) => {
@@ -76,12 +84,69 @@ const Profile = () => {
 		  setFile(file);
 		  setPhotoURL(URL.createObjectURL(file));
 		}
+		
 	};
 
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		handleClose()
+	const handleSubmit = async (e) => {
+		e.preventDefault()
+		setLoading(true)
+
+		let userObj = {displayName: name}
+		let imagesObj = {uName: name}
+
+		try {
+			if(file){
+				const imageName = uuidv4() + "." + file?.name?.split(".")?.pop()
+				const url = await uploadFile(file, `profile/${currentUser?.uid}/${imageName}`)
+
+
+				userObj = {...userObj, photoURL: url}
+				imagesObj = {...imagesObj, uPhoto: url}
+			}
+
+			await updateProfile(currentUser, userObj)
+			setAlert({isAlert: true, 
+					  severity:"success", 
+					  message:"Your profile has been updated", timeout:3000, 
+					  location:"modal",
+					});
+		} catch (error){
+			setAlert({isAlert: true, 
+				severity:"error", 
+				message:error.message, 
+				timeout:5000, 
+				location:"modal",
+			  });
+			  console.log(error);
+		}
+
+// 		try {
+// 			const currentUser = auth().currentUser;
+// 			if (currentUser) {
+// 			  const userRef = db().ref(`users/${currentUser.uid}`);
+// 			  await userRef.update({
+// 				firstName: firstName,
+// 				lastName: lastName
+// 			  });
+// 			}
+// 			setAlert({isAlert: true, 
+//               severity:"success", 
+//               message:"Your profile has been updated", 
+//               timeout:3000, 
+//               location:"modal",
+//     		});
+//   		} catch (error){
+// 			setAlert({isAlert: true, 
+//               severity:"error", 
+//               message:error.message, 
+//               timeout:5000, 
+//               location:"modal",
+//     });
+//     console.log(error);
+//   }
+
+		setLoading(false);
 	  }
 	const handleSubmitDelete = (event) => {
 		event.preventDefault();
@@ -136,12 +201,11 @@ const Profile = () => {
 						<div class="col-sm-3" style={{borderRightStyle: 'solid', borderRightColor:'#dfdfdf'}}>
 							<div class="container">
 								
-								<div class="row"  style={{borderBottomStyle: 'solid', borderBottomColor:'#dfdfdf',height:'45vh'}}>
+								<div class="row"  style={{borderBottomStyle: 'solid', borderBottomColor:'#dfdfdf',height:'50vh'}}>
 									<div class="col-sm" style={{justifyContent:'center',alignItems: 'center', display: 'flex',flexDirection:'column'}}>
-										<img src={userImg} class="rounded-circle" alt="User Image" style={{width:'65%', padding:'5px 5px'}}/>
+										<img src={photoURL} class="rounded-circle" alt="Profile Image" style={{ width: '80%', height: '60%', padding:'5px 5px'}}/>
 									</div>
 									<div style={{ 
-									
 									display: 'flex',
 									justifyContent: 'center',
 									alignItems: 'center' }}><p>{name}</p></div>
@@ -185,11 +249,10 @@ const Profile = () => {
 																<TextField
 																margin="dense"
 																id="name"
-																label="Full Name"
+																label="First Name"
 																type="text"
 																fullWidth
 																variant="standard"
-																inputProps={{ minLength: 2 }}
 																value={name || ''}
 																required
 																onChange={(e) => setName(e.target.value)}
@@ -199,7 +262,7 @@ const Profile = () => {
 																	autoFocus
 																	margin="dense"
 																	id="name"
-																	label="Username"
+																	label="Last Name"
 																	type="text"
 																	fullWidth
 																	variant="standard"
@@ -325,6 +388,7 @@ const Profile = () => {
 													</Item>
 													<Item style={{height:"30vh"}}> 
 														Weekly Activity on Mimik
+														{currentUser && <WeeklyActivityGraph userId={currentUser.uid} />}
 													</Item>
 												</Stack>
 											</div>

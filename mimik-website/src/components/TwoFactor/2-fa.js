@@ -17,6 +17,27 @@ export default function PhoneAuth() {
   const [showOTP, setShowOTP] = useState(false);
   const [user, setUser] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [userHasMultifactorAuthentication, setUserHasMultifactorAuthentication] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        if (user && user.multiFactor && user.multiFactor.enrolledFactors && user.multiFactor.enrolledFactors.length > 0) {
+          // User has MFA set up, prompt for OTP
+          setUser(user);
+          setUserHasMultifactorAuthentication(true);
+        } else {
+          // User doesn't have MFA set up, prompt to enroll
+          setUser(user);
+          setUserHasMultifactorAuthentication(false);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+
+
 
   function onCaptchaVerify() {
     if (!window.recaptchaVerifier) {
@@ -75,7 +96,7 @@ export default function PhoneAuth() {
   }
 
   return (
-    <>
+  <>
     <section style={{
       display: "flex",
       justifyContent: "center",
@@ -86,74 +107,70 @@ export default function PhoneAuth() {
       <div style={{ border: "1px solid #dfdfdf", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", borderRadius: "5%"}}>
         <Toaster toastOptions={{ duration: 4000 }} />
         <div id="recaptcha-container"></div>
-        {user ? (
-          <h2 className="text-center text-black font-medium text-2xl">
-            Login Success
-          </h2>
+        {userHasMultifactorAuthentication ? (
+          <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
+            <h1 className="text-center leading-normal text-black font-medium mb-6" style={{fontSize:"40px", padding:"20px"}}>
+              Enter your code
+            </h1>
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "2%" }}>
+              <BsFillShieldLockFill size={30} />
+              <label
+                htmlFor="otp"
+                className="font-bold text-xl text-black ml-2 text-center"
+              >
+                Enter the code sent to your phone
+              </label>
+            </div>
+            <OtpInput
+              value={otp}
+              onChange={setOtp}
+              OTPLength={6}
+              otpType="number"
+              disabled={false}
+              autoFocus
+              className="opt-container "
+            ></OtpInput>
+            <button
+              onClick={onOTPVerify}
+              className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn"
+            >
+              {loading && (
+                <CgSpinner size={20} className="mt-1 animate-spin" />
+              )}
+              <span>Verify Code</span>
+            </button>
+          </div>
         ) : (
           <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
             <h1 className="text-center leading-normal text-black font-medium mb-6" style={{fontSize:"40px", padding:"20px"}}>
-              Set up two-factor for <br /> Mimik 
+              Set up two-factor authentication for Mimik
             </h1>
-            {showOTP ? (
-              <>
-                <div style={{ display: "flex", alignItems: "center", marginBottom: "2%" }}>
-                  <BsFillShieldLockFill size={30} />
-                <label
-                  htmlFor="otp"
-                  className="font-bold text-xl text-black ml-2 text-center"
-                >
-                  Enter your OTP
-                </label>
-                </div>
-                <OtpInput
-                  value={otp}
-                  onChange={setOtp}
-                  OTPLength={6}
-                  otpType="number"
-                  disabled={false}
-                  autoFocus
-                  className="opt-container "
-                ></OtpInput>
-                <button
-                  onClick={onOTPVerify}
-                  className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn"
-                >
-                  {loading && (
-                    <CgSpinner size={20} className="mt-1 animate-spin" />
-                  )}
-                  <span>Verify OTP</span>
-                </button>
-              </>
-            ) : (
-              <>
-               <div style={{ display: "flex", alignItems: "center", marginBottom: "2%" }}>
-                <BsTelephoneFill size={30} />
-                  <label
-                  htmlFor=""
-                  className="font-bold text-xl text-black text-center"
-                  style={{ marginLeft: "10px" }}
-                   >
-                    Verify your phone number
-                  </label>
-                </div>
-                <PhoneInput id={"phone-number"} country={"us"} value={ph} onChange={setPh} />
-                <button 
-                  onClick={onSignup} style={{marginTop:'2%'}}
-                  className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn"
-                >
-                  {loading && (
-                    <CgSpinner size={20} className="mt-1 animate-spin" />
-                  )}
-                  <span>Send code via SMS</span>
-                </button>
-              </>
-            )}
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "2%" }}>
+              <BsTelephoneFill size={30} />
+              <label
+                htmlFor=""
+                className="font-bold text-xl text-black text-center"
+                style={{ marginLeft: "10px" }}
+              >
+                Verify your phone number
+              </label>
+            </div>
+            <PhoneInput id={"phone-number"} country={"us"} value={ph} onChange={setPh} />
+            <button 
+              onClick={onSignup} style={{marginTop:'2%'}}
+              className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn"
+            >
+              {loading && (
+                <CgSpinner size={20} className="mt-1 animate-spin" />
+              )}
+              <span>Send Code via SMS</span>
+            </button>
           </div>
         )}
       </div>
     </section>
     <Footer/>
-    </>
-  );
+  </>
+);
 };
+
