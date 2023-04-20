@@ -5,7 +5,7 @@ Our Application will allow users to convert the voice into the voice of someone 
 - Languages: Python, JavaScript 
 - Frameworks: React, Coqui TTS, Whispr
 - Libraries: Bootstrap, Material UI, Firebase
-- Tools: GitHub Pages 
+- Tools: Flask, GitHub Pages 
 - Database: Firestore Database
 
 ## Engineering Design Project 
