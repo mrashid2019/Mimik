@@ -31,7 +31,7 @@ return (
     <Router>
         <Navbar/>
         <Routes>
-            <Route exact path='/' element={<Home />} />
+            <Route path='/' element={<Home />} />
     
             <Route element={<PrivateRoutes />}>
                 <Route path='/convert' element={<Convert/>} />
