@@ -377,7 +377,10 @@ const Profile = () => {
           }}
         >
           {/* Welcome Message and Search */}
-          <Bar />
+          <div class="row" style={{ paddingBottom: "20px" }}>
+            <Bar />
+          </div>
+
           <div
             //fills the whole page
             class="container"
@@ -388,7 +391,6 @@ const Profile = () => {
                 class="col-6"
                 style={{
                   border: "2px solid blue",
-                  paddingRight: "15px",
                   borderRadius: "7px",
                   height: "85vh",
                 }}
@@ -396,13 +398,8 @@ const Profile = () => {
                 Conversations
               </div>
 
-              {/* Col in the middle */}
-              <div
-                class="col-sm-1"
-                style={{
-                  height: "5vh",
-                }}
-              ></div>
+              {/* Col in the middle*/}
+              <div class="col-sm-1"></div>
 
               {/* Column 2 */}
               <div class="col-5" style={{ borderRadius: "7px" }}>
@@ -418,13 +415,15 @@ const Profile = () => {
                   >
                     You're Traned Voice
                   </div>
+
                   {/* Middle Col */}
                   <div
-                    class="col"
+                    class="col-1"
                     style={{
                       height: "5vh",
                     }}
                   ></div>
+
                   {/*Weekly Activity on Mimik*/}
                   <div
                     class="col"
