@@ -20,11 +20,10 @@ import {
   TextField,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import { borderColor } from "@mui/system";
+
+//Upload
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
 
 const main = {
   height: "100%",
@@ -47,15 +46,6 @@ const style = {
   p: 4,
 };
 
-//Style for table grid
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
-
 const Profile = () => {
   //Modal
   //Name and Image
@@ -69,7 +59,9 @@ const Profile = () => {
 
   //Change first and last name
   const [firstname, setFirstName] = useState("Victoria");
-  const [lastname, setLastName] = useState("Robinson");
+  const [lastname, setLastName] = useState("Robinson"); // progress
+
+  const [percent, setPercent] = useState(0);
 
   //Add Image
   const [file, setFile] = useState(null);
@@ -86,8 +78,31 @@ const Profile = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const storageRef = ref(storage, `/profile/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        ); // update progress
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+        });
+      }
+    );
+
     handleClose();
   };
+
   const handleSubmitDelete = (event) => {
     event.preventDefault();
     handleCloseDelete();
@@ -98,6 +113,31 @@ const Profile = () => {
     handleCloseDelete();
   };
 
+  const handleUpload = (event) => {
+    event.preventDefault();
+
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const storageRef = ref(storage, `/profile/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        ); // update progress
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+        });
+      }
+    );
+  };
   class NameForm extends React.Component {
     constructor(props) {
       super(props);
@@ -141,7 +181,6 @@ const Profile = () => {
         style={{
           paddingTop: "3%",
           display: "flex",
-          // border: "1px solid black",
           height: "100vh",
         }}
       >
@@ -151,7 +190,6 @@ const Profile = () => {
             <div
               class="col"
               style={{
-                // border: "1px solid pink",
                 height: "35vh",
                 alignItems: "center",
                 justifyItems: "center",
@@ -183,7 +221,6 @@ const Profile = () => {
             <div
               class="col"
               style={{
-                // border: "1px solid pink",
                 height: "10vh",
                 alignItems: "center",
                 alignContent: "center",
@@ -202,7 +239,6 @@ const Profile = () => {
             <div
               class="col"
               style={{
-                // border: "1px solid blue",
                 height: "5vh",
                 alignItems: "center",
                 alignContent: "center",
@@ -278,24 +314,27 @@ const Profile = () => {
                           variant="standard"
                         />
 
+                        {/* Upload Image */}
                         <label htmlFor="profilePhoto">
+                          <div
+                            style={{
+                              paddingTop: "15px",
+                              paddingBottom: "5px",
+                              fontFamily: "Arial, Helvetica",
+                            }}
+                          >
+                            Upload Image:
+                          </div>
                           <input
                             accept="image/*"
                             id="profilePhoto"
                             type="file"
-                            style={{ display: "none" }}
+                            style={{ fontFamily: "Arial, Helvetica" }}
                             onChange={handleChange}
-                          />
-                          <Avatar
-                            src={photoURL}
-                            sx={{
-                              width: 75,
-                              height: 75,
-                              cursor: "pointer",
-                            }}
                           />
                         </label>
                       </DialogContent>
+
                       <DialogActions>
                         <SubmitButton />
                       </DialogActions>
@@ -309,7 +348,6 @@ const Profile = () => {
             <div
               class="col"
               style={{
-                // border: "1px solid blue",
                 height: "35vh",
                 display: "flex",
                 alignItems: "end",
@@ -371,7 +409,6 @@ const Profile = () => {
         <div
           class="col-9"
           style={{
-            // border: "1px solid red",
             paddingRight: "0px",
             paddingLeft: "0px",
           }}
