@@ -1,6 +1,7 @@
 {
   "name": "mimik-website",
   "version": "0.1.0",
+  "homepage":"https://mrashid2019.github.io/Mimik",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -13,6 +14,7 @@
     "axios": "^1.3.4",
     "bootstrap": "^5.2.3",
     "firebase": "^9.18.0",
+    "lottie": "^0.0.1",
     "mdb-react-ui-kit": "^5.1.0",
     "npm": "^9.6.2",
     "otp-input-react": "^0.3.0",
@@ -34,6 +36,8 @@
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -56,5 +60,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }

@@ -8,7 +8,7 @@ export const Button = styled.button.attrs(props=>({
 border-radius: 4px;
 background: #6969A8;
 padding: 10px 22px;
-color: #000;
+color: #fff;
 border: none;
 outline: none;
 cursor: pointer;
@@ -21,11 +21,11 @@ margin-left: 24px;
 	transition: all 0.2s ease-in-out;
 	background: #6969a8;
 	outline-color: #010606;
-	color: #fff;
+	color: #000;
 }
 
 &:disabled{
-  background: gray;
+  background: #a7a6ba;
   outline-color: #010606;
 	color: #fff;
 }

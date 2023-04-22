@@ -26,7 +26,7 @@ const Navbar = ({nav}) => {
 		  let loggedOut = await logOut();
 		  if(loggedOut === true){
 			console.log("LOGGING OUT")
-			navigate('/')
+			navigate('/Mimik')
 		  }else{
 			throw loggedOut
 		  }
@@ -38,7 +38,7 @@ const Navbar = ({nav}) => {
 return (
 	<>
 	<Nav>
-		<div style={{color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingRight:'0'}}> <a href="/" style={{textDecoration: 'none', color:'white',fontSize:'30px'}}>
+		<div style={{color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingRight:'0'}}> <a href="/Mimik" style={{textDecoration: 'none', color:'white',fontSize:'30px'}}>
       <img src={logo} alt='logo' height={80} width={100} />
       MIMIK
     </a></div>
@@ -48,7 +48,7 @@ return (
 			<>
 			<NavLink to="/convert">Convert</NavLink>
 			<NavLink to="/train">Train</NavLink>
-			{/* <NavLink to="/profile">Profile </NavLink> */}
+			<NavLink to="/profile">Profile </NavLink>
 			</>	
         )}
 		{user && (

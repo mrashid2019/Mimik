@@ -13,13 +13,17 @@ import coins from './/key-feature-icons/coins.svg';
 import clone from './/key-feature-icons/clone.svg'
 import glass from './/key-feature-icons/magnifying-glass.svg'
 
-import logo from './head-background.jpg'
 
 import adrian_audio1 from './audio/Before_Adrian03.m4a'
 import adrian_audio2 from './audio/AdrianToMahdia.wav'
 
 import mahdia_audio1 from './audio/Before_Mahdia01.m4a'
 import mahdia_audio2 from './audio/MahdiaToAdrian.wav'
+
+import wilmayer_audio1 from './audio/AdrianToWilmayer.wav'
+
+import wilmayer_audio2 from './audio/Wilmayer_to_Mahdia.wav'
+import wilmayer_audio3 from './audio/Wilmayer_Before.wav'
 
 
 
@@ -42,13 +46,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={adrian_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={adrian_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -61,13 +65,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={mahdia_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls className="carousel-audio">
+        <audio controls>
           <source src={mahdia_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -121,7 +125,7 @@ return (
 	<Row style={{textAlign: 'center', padding: 150, fontFamily: 'IM Fell Double Pica'}}>
 		<Col><img src={bolt} alt='bolt' style={{height:100, width:150, paddingBottom: 20}}/><h5>FAST & EASY</h5><p>Convert your voice with minimal processing delay</p></Col>
 		<Col><img src={coins} alt='free' style={{height:100, width:150, paddingBottom: 20}}/><h5>FREE</h5><p>Connect on Mimik at no cost</p></Col>
-		<Col><img src={clone} alt='clone' style={{height:100, width:150, paddingBottom: 20}}/><h5>CLONE & SHARE</h5><p>Share your cloned sample with anyone at any time</p></Col>
+		<Col><img src={clone} alt='free' style={{height:100, width:150, paddingBottom: 20}}/><h5>CLONE & SHARE</h5><p>Share your cloned sample with anyone at any time</p></Col>
 		<Col><img src={glass} alt='search' style={{height:100, width:150, paddingBottom: 20}}/><h5>ADVANCE SEARCH</h5>Look for that one voice you really want to sound like</Col>
 	</Row>
 
@@ -133,13 +137,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={adrian_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={adrian_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -156,13 +160,13 @@ return (
       <div style={{paddingLeft: 100, paddingRight: 100}}>
       <div style={{display: "flex"}}>
       <div style={{flex: 1, marginRight: 20}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={mahdia_audio1} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>Before</p>
       </div>
       <div style={{flex: 1}}>
-        <audio controls style={{width: "100%"}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
           <source src={mahdia_audio2} type="audio/mp4" />
         </audio>
         <p style={{textAlign: 'center'}}>After</p>
@@ -174,19 +178,44 @@ return (
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         </Carousel.Caption> */}
       </Carousel.Item>
-      {/* <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src={logo}
-          alt="Third slide"
-        />
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item> */}
+      <Carousel.Item interval={3000}>
+      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>Check out Adrian sounding like Wilmayer!</div>
+      <div style={{paddingLeft: 100, paddingRight: 100}}>
+      <div style={{display: "flex"}}>
+      <div style={{flex: 1, marginRight: 20}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
+          <source src={adrian_audio1} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>Before</p>
+      </div>
+      <div style={{flex: 1}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
+          <source src={wilmayer_audio1} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>After</p>
+      </div>
+      </div>
+      </div>
+      </Carousel.Item>
+      <Carousel.Item interval={3000}>
+      <div style={{textAlign: 'center', color: '#303978', paddingBottom: 60, fontSize: 20}}>Check out Wilmayer sounding like Mahdia!</div>
+      <div style={{paddingLeft: 100, paddingRight: 100}}>
+      <div style={{display: "flex"}}>
+      <div style={{flex: 1, marginRight: 20}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
+          <source src={wilmayer_audio3} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>Before</p>
+      </div>
+      <div style={{flex: 1}}>
+        <audio controls className='carousel-audio' style={{width: "100%"}}>
+          <source src={wilmayer_audio2} type="audio/mp4" />
+        </audio>
+        <p style={{textAlign: 'center'}}>After</p>
+      </div>
+      </div>
+      </div>
+      </Carousel.Item>
     </Carousel>
 	</div>
 
