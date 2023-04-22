@@ -39,7 +39,7 @@ const Login = ({ setIsLoggedIn }) => {
       let loggedIn = await logIn(email, password);
       setLoading(false);
       if(loggedIn)
-        navigate('/')
+        navigate('/Mimik')
       
     } catch (error) {
       console.log("Firebase error:", error);
@@ -60,7 +60,7 @@ const Login = ({ setIsLoggedIn }) => {
       if(loggedIn){
         setLoading(false);
       }
-      navigate("/");
+      navigate("/Mimik");
     } catch (error) {
       console.log(error.message);
       // console.log("SOMETHING ELSE?")

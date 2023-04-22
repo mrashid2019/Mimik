@@ -102,7 +102,7 @@ const Signup = () => {
 
   const handleModalClose = () => {
     setIsSuccessModalOpen(false);
-    navigate('/');
+    navigate('/Mimik');
   };
 
   // const handleCloseErrorModal = () => {

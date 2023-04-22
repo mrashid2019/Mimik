@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css"
 import Navbar from './components/Navbar';
-//import {Container, Nav, Navbar, Button} from 'react-bootstrap';
 import { BrowserRouter as Router, Routes, Route, Link}
     from 'react-router-dom';
 import Loading from './components/Loading';
@@ -18,11 +17,10 @@ import PasswordRecovery from '../src/components/PasswordRecover/passwordRecovery
 import LogoutPage from './pages/logout';
 import ProfilePage from '../src/pages/profile';
 
-import logo from '../src/components/Navbar/Mimik-logo-together.png';
-
 import MainNotification from './components/EmailVerify/MainNotification';
 import PhoneAuth from './components/TwoFactor/2-fa';
 import { UserAuthContext } from '../src/context/userAuthContext';
+import PrivateRoutes from './services/PrivateRoutes';
 
 function App() {
 return (
@@ -33,17 +31,19 @@ return (
     <Router>
         <Navbar/>
         <Routes>
-            <Route exact path='/' element={<Home />} />
-            <Route path='/about' element={<About/>} />
-            <Route path='/#feature' element={<Feature/>} />
-            <Route path='/convert' element={<Convert/>} />
-            <Route path='/train' element={<Train/>} />
+            <Route path='/Mimik' element={<Home />} />
+    
+            <Route element={<PrivateRoutes />}>
+                <Route path='/convert' element={<Convert/>} />
+                <Route path='/train' element={<Train/>} />
+                <Route path='/profile' element={<ProfilePage/>} />
+                <Route path='/logout' element={<LogoutPage/>} />
+            </Route>
+            
             <Route path='/signup' element={<Signup/>} />
             <Route path='/login' element={<Login />} />
             <Route path='/passwordRecovery' element={<PasswordRecovery/>} />
             <Route path='/2-fa' element={<PhoneAuth/>} />
-            <Route path='/logout' element={<LogoutPage/>} />
-            <Route path='/profile' element={<ProfilePage/>} />
 
         </Routes>
     </Router>
