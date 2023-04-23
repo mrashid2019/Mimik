@@ -74,6 +74,10 @@ const Profile = (props) => {
   const [newFirstName, setNewFirstName] = useState("");
   const [newLastName, setNewLastName] = useState(""); // progress
   const [user, setUser] = useState();
+
+  //Image URl
+  const [profileImg, setprofileImg] = useState(userImg);
+
   const user_id = auth.currentUser.uid;
   const docRef = doc(db, "RegisteredUsers", user_id);
 
@@ -117,6 +121,8 @@ const Profile = (props) => {
     if (file) {
       addImgDB(file);
     }
+
+    //Get Image
 
     getUserInfo();
     handleClose();
@@ -170,6 +176,7 @@ const Profile = (props) => {
         // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           console.log(url);
+          setprofileImg(url);
         });
       }
     );
@@ -290,7 +297,7 @@ const Profile = (props) => {
               >
                 <center>
                   <img
-                    src={userImg}
+                    src={profileImg}
                     class="rounded-circle"
                     alt="User Image"
                     style={{ width: "60%" }}
