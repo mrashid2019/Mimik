@@ -30,7 +30,7 @@ import { storage, auth, db } from "../firebase";
 
 //User
 import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
-import { getStorage, listAll } from "firebase/storage";
+import { getMetadata, listAll } from "firebase/storage";
 
 const main = {
   height: "100%",
@@ -161,6 +161,58 @@ const Profile = (props) => {
       });
   }
 
+  function getImg() {
+    // Create a reference under which you want to list
+    const listRef = ref(storage, `profile/${user_id}`);
+
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        });
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+          console.log("ItemRef", itemRef.fullPath);
+          // Get metadata properties
+          const referenceUrl = ref(storage, itemRef.fullPath);
+
+          // Get the download URL
+          getDownloadURL(referenceUrl)
+            .then((url) => {
+              // Insert url into an <img> tag to "download"
+              console.log("Image URL:", url);
+              setprofileImg(url);
+            })
+            .catch((error) => {
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+                case "storage/object-not-found":
+                  // File doesn't exist
+                  break;
+                case "storage/unauthorized":
+                  // User doesn't have permission to access the object
+                  break;
+                case "storage/canceled":
+                  // User canceled the upload
+                  break;
+
+                // ...
+
+                case "storage/unknown":
+                  // Unknown error occurred, inspect the server response
+                  break;
+              }
+            });
+        });
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+  }
+
   function addImgDB(file) {
     const storageRef = ref(storage, `/profile/${user_id}/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -175,6 +227,7 @@ const Profile = (props) => {
       () => {
         // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log("uploadTask.snapshot.ref:", uploadTask.snapshot.ref);
           console.log(url);
           setprofileImg(url);
         });
@@ -185,6 +238,7 @@ const Profile = (props) => {
   useEffect(() => {
     // updateDoc();
     getUserInfo();
+    getImg();
   }, [firstname, lastname]);
 
   const handleChange = (e) => {
