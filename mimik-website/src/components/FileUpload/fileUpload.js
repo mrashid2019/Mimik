@@ -21,61 +21,66 @@ margin-left: 24px;
 	outline-color: #010606;
 	color: #fff;
 }
+
+&:disabled{
+  background: #dfdfdf;
+}
 `;
 
-export const FileUploader = props => {
+export const Button2 = styled.button`
+border-radius: 4px;
+background: #6969A8;
+padding: 10px 22px;
+color: #000;
+border: none;
+outline: none;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+text-decoration: none;
 
-  const [contentAudio, setContentAudio] = useState(null);
-  const [refAudio, setRefAudio] = useState(null);
+&:hover {
+	transition: all 0.2s ease-in-out;
+	background: #6969a8;
+	outline-color: #010606;
+	color: #fff;
+}
+`;
+export const FileUploader = (props) => {
 
-  const hiddenFile1Input = React.useRef(null);
-  const hiddenFile2Input = React.useRef(null);
+  const [audioFile, setAudioFile] = useState(undefined);
+
+  const hiddenFileInput = React.useRef(undefined);
 
   
-  const handleClickContent = event => {
-    hiddenFile1Input.current.click();
-    event.target.innerHTML = 'Content ready'
+  const handleClick = event => {
+    console.log(props)
+    hiddenFileInput.current.click();
+    event.target.innerHTML = 'Ready'
 
   };
     
-  const handleClickReference = event => {
-    hiddenFile2Input.current.click();
-    event.target.innerHTML = 'Reference ready'
 
-  };
-  const handleContentChange = event => {
-    setContentAudio(event.target.files[0]);
-    // props.handleFile(fileUploaded);
+  const handleChange = event => {
+    setAudioFile(event.target.files[0]);
   };
 
-  const handleReferenceChange = event => {
-    setRefAudio(event.target.files[0]);
-    // props.handleFile(fileUploaded);
-  };
+ 
 
   const requestCallback = () =>{
-    props.handleFile(contentAudio, refAudio)
+    props.handleFile(audioFile)
   }
 
   return (
     <>
-      <Button onClick={handleClickContent}>
-        Upload a content file
+      <Button onClick={handleClick}>
+        Upload a file
       </Button>
       <input type="file"
-             ref={hiddenFile1Input}
-             onInput={handleContentChange}
+             ref={hiddenFileInput}
+             onInput={handleChange}
              style={{display:'none'}} 
       />
-      <Button onClick={handleClickReference}>
-        Upload a reference file
-      </Button>
-      <input type="file"
-             ref={hiddenFile2Input}
-             onInput={handleReferenceChange}
-             style={{display:'none'}} 
-      />
-      <Button onClick={requestCallback}>Convert</Button> 
+
     </>
   );
 };
