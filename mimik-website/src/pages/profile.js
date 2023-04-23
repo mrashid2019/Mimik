@@ -51,17 +51,19 @@ const style = {
 
 //User User
 const auth = getAuth();
-let user_id = "Not Set Yet";
+let user_id = "Not Id Set Yet";
+let user_name = "Not Name Set Yet";
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
-    user_id = uid.toString();
-    // ...
-  } else {
-    // User is signed out
+    const email = user.email;
+
+    console.log(user);
+    user_id = uid;
+    user_name = user.email;
     // ...
   }
 });
@@ -85,19 +87,19 @@ const Profile = () => {
 
   //Add Image
   const [file, setFile] = useState(null);
-  const [photoURL, setPhotoURL] = useState(userImg);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFile(file);
-      setPhotoURL(URL.createObjectURL(file));
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    //Get the Image
     if (!file) {
       alert("Please upload an image first!");
     }
@@ -125,11 +127,14 @@ const Profile = () => {
 
   const handleSubmitDelete = (event) => {
     event.preventDefault();
+
     handleCloseDelete();
   };
 
   const handleDeleteAccount = (event) => {
     event.preventDefault();
+    navigate("/Mimik");
+
     handleCloseDelete();
   };
 
@@ -206,8 +211,6 @@ const Profile = () => {
       >
         <div class="col-3" style={{ borderRight: "3px solid gray" }}>
           <div class="row row-cols-1">
-            {user_id}
-
             {/* Edit */}
             <div
               class="col"
@@ -221,7 +224,6 @@ const Profile = () => {
               <div
                 class="col-sm"
                 style={{
-                  // border: "1px solid black",
                   display: "flex",
                   alignItems: "center",
                   alignContent: "center",
@@ -409,9 +411,9 @@ const Profile = () => {
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={handleDeleteAccount}>Cancel</Button>
+                        <Button onClick={handleCloseDelete}>Cancel</Button>
                         <Button
-                          onClick={handleCloseDelete}
+                          onClick={handleDeleteAccount}
                           autoFocus
                           variant="outlined"
                           startIcon={<DeleteIcon />}
