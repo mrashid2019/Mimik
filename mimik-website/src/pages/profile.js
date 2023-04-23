@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import userImg from "../components/profile/images/user.png";
-import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
@@ -9,7 +8,6 @@ import Bar from "../components/profile/bar/bar";
 //Modal
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import SubmitButton from "../components/profile/inputs/SubmitButton";
 import {
@@ -26,8 +24,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage, auth, db } from "../firebase";
 
 //User
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
 
 const main = {
   height: "100%",
@@ -50,24 +47,11 @@ const style = {
   p: 4,
 };
 
-//User User
-let user_id = "Not Id Set Yet";
-let user_name = "Not Name Set Yet";
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-
-    console.log("Current User:", user);
-    user_id = uid;
-  }
-});
-
-const Profile = () => {
+const Profile = (props) => {
   //Modal
   //Name and Image
+  console.log(props);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -77,14 +61,45 @@ const Profile = () => {
   const handleCloseDelete = () => setOpenDelete(false);
 
   //Change first and last name
-  const [firstname, setFirstName] = useState("Victoria");
-  const [lastname, setLastName] = useState("Robinson"); // progress
+  const [firstname, setFirstName] = useState();
+  const [lastname, setLastName] = useState(); // progress
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState(""); // progress
+  const [user, setUser] = useState();
+  const user_id = auth.currentUser.uid;
+  const docRef = doc(db, "RegisteredUsers", user_id);
 
   //Add Image
   const [file, setFile] = useState(null);
-  const navigate = useNavigate();
 
   //User Information
+  const getUserInfo = async () => {
+    console.log("RETRIEVING USER INFO");
+    const user_info = await getDoc(docRef)
+      .then((user_doc) => {
+        // setUser(user_doc);
+        setFirstName(user_doc.get("firstName"));
+        setLastName(user_doc.get("lastName"));
+        setUser(user_doc);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const updateDocument = (event) => {
+    updateDoc(docRef, { firstName: newFirstName, lastName: newLastName })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    getUserInfo();
+  }, [firstname, lastname]);
 
   const handleChange = (e) => {
     const file = e.target.files[0];
@@ -131,7 +146,7 @@ const Profile = () => {
     event.preventDefault();
 
     await deleteDoc(doc(db, "RegisteredUsers", user_id));
-    navigate("/Mimik");
+    // navigate("/Mimik");
 
     handleCloseDelete();
   };
@@ -160,41 +175,6 @@ const Profile = () => {
       }
     );
   };
-
-  class NameForm extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { value: "" };
-
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-      this.setState({ value: event.target.value });
-    }
-
-    handleSubmit(event) {
-      alert("A name was submitted: " + this.state.value);
-      event.preventDefault();
-    }
-
-    render() {
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={this.state.value}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-      );
-    }
-  }
 
   return (
     <>
@@ -290,7 +270,7 @@ const Profile = () => {
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={style}>
-                    <form onSubmit={handleSubmit}>
+                    <form>
                       <DialogContent dividers>
                         <DialogContentText
                           id="modal-modal-title"
@@ -308,9 +288,11 @@ const Profile = () => {
                           fullWidth
                           variant="standard"
                           inputProps={{ minLength: 2 }}
-                          value={firstname || ""}
                           required
-                          onChange={(e) => setFirstName(e.target.value)}
+                          onChange={(e) => {
+                            setNewFirstName(e.target.value);
+                            console.log(newFirstName);
+                          }}
                         />
 
                         <TextField
@@ -322,9 +304,11 @@ const Profile = () => {
                           fullWidth
                           variant="standard"
                           inputProps={{ minLength: 2 }}
-                          value={lastname || ""}
                           required
-                          onChange={(e) => setLastName(e.target.value)}
+                          onChange={(e) => {
+                            setNewLastName(e.target.value);
+                            console.log(newLastName);
+                          }}
                         />
 
                         <TextField
@@ -359,7 +343,13 @@ const Profile = () => {
                       </DialogContent>
 
                       <DialogActions>
-                        <SubmitButton />
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          onClick={updateDocument}
+                        >
+                          Submit
+                        </Button>
                       </DialogActions>
                     </form>
                   </Box>
@@ -438,7 +428,7 @@ const Profile = () => {
         >
           {/* Welcome Message and Search */}
           <div class="row" style={{ paddingBottom: "20px" }}>
-            <Bar />
+            <Bar firstName={firstname} />
           </div>
 
           <div
