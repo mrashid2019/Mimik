@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import userImg from "../components/profile/images/user.png";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import Bar from "../components/profile/bar/bar";
@@ -48,6 +48,8 @@ const style = {
 };
 
 const Profile = (props) => {
+  const navigate = useNavigate();
+
   //Modal
   //Name and Image
   console.log(props);
@@ -88,6 +90,9 @@ const Profile = (props) => {
   };
 
   const updateDocument = (event) => {
+    console.log("In Update");
+    console.log("Out Update");
+    event.preventDefault();
     updateDoc(docRef, { firstName: newFirstName, lastName: newLastName })
       .then((result) => {
         console.log(result);
@@ -95,9 +100,13 @@ const Profile = (props) => {
       .catch((err) => {
         console.error(err);
       });
+    navigate("/profile");
+    getUserInfo();
+    handleClose();
   };
 
   useEffect(() => {
+    // updateDoc();
     getUserInfo();
   }, [firstname, lastname]);
 
@@ -270,7 +279,7 @@ const Profile = (props) => {
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={style}>
-                    <form>
+                    <form onSubmit={updateDocument}>
                       <DialogContent dividers>
                         <DialogContentText
                           id="modal-modal-title"
@@ -346,7 +355,7 @@ const Profile = (props) => {
                         <Button
                           variant="contained"
                           type="submit"
-                          onClick={updateDocument}
+                          // onClick={updateDocument}
                         >
                           Submit
                         </Button>
