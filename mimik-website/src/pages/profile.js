@@ -25,6 +25,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
 
+//User
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 const main = {
   height: "100%",
   width: "100%",
@@ -45,6 +48,23 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+//User User
+const auth = getAuth();
+let user_id = "Not Set Yet";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/firebase.User
+    const uid = user.uid;
+    user_id = uid.toString();
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
 
 const Profile = () => {
   //Modal
@@ -81,7 +101,7 @@ const Profile = () => {
     if (!file) {
       alert("Please upload an image first!");
     }
-    const storageRef = ref(storage, `/profile/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const storageRef = ref(storage, `/profile/${user_id}/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state_changed",
@@ -186,6 +206,8 @@ const Profile = () => {
       >
         <div class="col-3" style={{ borderRight: "3px solid gray" }}>
           <div class="row row-cols-1">
+            {user_id}
+
             {/* Edit */}
             <div
               class="col"
