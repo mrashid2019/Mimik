@@ -20,11 +20,17 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 
 //Upload
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { storage, auth, db } from "../firebase";
 
 //User
 import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getStorage, listAll } from "firebase/storage";
 
 const main = {
   height: "100%",
@@ -102,30 +108,72 @@ const Profile = (props) => {
       });
     navigate("/profile");
 
+    //Delete Previous Imges
+    // Create a reference under which you want to list
+    const listRef = ref(storage, `profile/${user_id}`);
+    deleteDocument(listRef);
+
     //Add Profile Image
     if (file) {
-      const storageRef = ref(storage, `/profile/${user_id}/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          ); // update progress
-        },
-        (err) => console.log(err),
-        () => {
-          // download url
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            console.log(url);
-          });
-        }
-      );
+      addImgDB(file);
     }
 
     getUserInfo();
     handleClose();
   };
+
+  function deleteDocument(listRef) {
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+          console.log("ForderRef", folderRef);
+        });
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+          console.log("ItemRef", itemRef.fullPath);
+          const fileRef = itemRef.fullPath.toString();
+          const desertRef = ref(storage, fileRef);
+
+          // Delete the file
+          deleteObject(desertRef)
+            .then(() => {
+              // File deleted successfully
+              console.log(" File deleted successfully");
+            })
+            .catch((error) => {
+              // Uh-oh, an error occurred!
+              console.log(error);
+            });
+        });
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+        console.log(error);
+      });
+  }
+
+  function addImgDB(file) {
+    const storageRef = ref(storage, `/profile/${user_id}/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        ); // update progress
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+        });
+      }
+    );
+  }
 
   useEffect(() => {
     // updateDoc();
