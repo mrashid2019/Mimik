@@ -31,6 +31,7 @@ import { storage, auth, db } from "../firebase";
 //User
 import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { getMetadata, listAll } from "firebase/storage";
+import { getAuth, deleteUser } from "firebase/auth";
 
 const main = {
   height: "100%",
@@ -286,9 +287,21 @@ const Profile = (props) => {
     event.preventDefault();
 
     await deleteDoc(doc(db, "RegisteredUsers", user_id));
-    // navigate("/Mimik");
 
+    const user = auth.currentUser;
+
+    deleteUser(user)
+      .then(() => {
+        // User deleted.
+        console.log("User Deleted");
+      })
+      .catch((error) => {
+        // An error ocurred
+        // ...
+        console.log("Error:", error);
+      });
     handleCloseDelete();
+    navigate("/Mimik");
   };
 
   const handleUpload = (event) => {
