@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import userImg from "../components/profile/images/user.png";
 import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +23,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 //Upload
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebase";
+import { storage, auth, db } from "../firebase";
 
 //User
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 
 const main = {
   height: "100%",
@@ -50,7 +51,6 @@ const style = {
 };
 
 //User User
-const auth = getAuth();
 let user_id = "Not Id Set Yet";
 let user_name = "Not Name Set Yet";
 
@@ -59,12 +59,9 @@ onAuthStateChanged(auth, (user) => {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
-    const email = user.email;
 
-    console.log(user);
+    console.log("Current User:", user);
     user_id = uid;
-    user_name = user.email;
-    // ...
   }
 });
 
@@ -83,11 +80,11 @@ const Profile = () => {
   const [firstname, setFirstName] = useState("Victoria");
   const [lastname, setLastName] = useState("Robinson"); // progress
 
-  const [percent, setPercent] = useState(0);
-
   //Add Image
   const [file, setFile] = useState(null);
   const navigate = useNavigate();
+
+  //User Information
 
   const handleChange = (e) => {
     const file = e.target.files[0];
@@ -111,7 +108,6 @@ const Profile = () => {
         const percent = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         ); // update progress
-        setPercent(percent);
       },
       (err) => console.log(err),
       () => {
@@ -131,8 +127,10 @@ const Profile = () => {
     handleCloseDelete();
   };
 
-  const handleDeleteAccount = (event) => {
+  const handleDeleteAccount = async (event) => {
     event.preventDefault();
+
+    await deleteDoc(doc(db, "RegisteredUsers", user_id));
     navigate("/Mimik");
 
     handleCloseDelete();
@@ -151,8 +149,7 @@ const Profile = () => {
       (snapshot) => {
         const percent = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        ); // update progress
-        setPercent(percent);
+        );
       },
       (err) => console.log(err),
       () => {
@@ -163,6 +160,7 @@ const Profile = () => {
       }
     );
   };
+
   class NameForm extends React.Component {
     constructor(props) {
       super(props);
@@ -212,6 +210,7 @@ const Profile = () => {
         <div class="col-3" style={{ borderRight: "3px solid gray" }}>
           <div class="row row-cols-1">
             {/* Edit */}
+
             <div
               class="col"
               style={{
@@ -446,10 +445,11 @@ const Profile = () => {
             //fills the whole page
             class="container"
           >
-            <div class="row row-cols-3">
+            {/* <div class="row row-cols-3"> */}
+            <div class="row">
               {/* Column 1 */}
               <div
-                class="col-6"
+                class="col"
                 style={{
                   border: "2px solid blue",
                   borderRadius: "7px",
@@ -459,13 +459,12 @@ const Profile = () => {
                 Conversations
               </div>
 
-              {/* Col in the middle*/}
-              <div class="col-sm-1"></div>
+              {/* Col in the middle
+              <div class="col-sm-1"></div>*/}
 
-              {/* Column 2 */}
+              {/* Column 2 
               <div class="col-5" style={{ borderRadius: "7px" }}>
                 <div class="row row-cols-1">
-                  {/* You're Traned Voice */}
                   <div
                     class="col"
                     style={{
@@ -477,7 +476,6 @@ const Profile = () => {
                     You're Traned Voice
                   </div>
 
-                  {/* Middle Col */}
                   <div
                     class="col-1"
                     style={{
@@ -485,7 +483,6 @@ const Profile = () => {
                     }}
                   ></div>
 
-                  {/*Weekly Activity on Mimik*/}
                   <div
                     class="col"
                     style={{
@@ -497,7 +494,7 @@ const Profile = () => {
                     Weekly Activity on Mimik
                   </div>
                 </div>
-              </div>
+              </div>*/}
             </div>
           </div>
         </div>
