@@ -293,16 +293,23 @@ const Profile = (props) => {
                   alignItems: "center",
                   alignContent: "center",
                   height: "25vh",
+                  position: "absolute",
+                  width: "100%",
+                  height: "100",
                 }}
               >
-                <center>
-                  <img
-                    src={profileImg}
-                    class="rounded-circle"
-                    alt="User Image"
-                    style={{ width: "60%" }}
-                  />
-                </center>
+                <img
+                  src={profileImg}
+                  class="rounded-circle"
+                  alt="User Image"
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    display: "block",
+                  }}
+                />
               </div>
             </div>
 
