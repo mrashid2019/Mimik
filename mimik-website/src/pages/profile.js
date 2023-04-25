@@ -32,6 +32,7 @@ import { storage, auth, db } from "../firebase";
 import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { getMetadata, listAll } from "firebase/storage";
 import { getAuth, deleteUser } from "firebase/auth";
+import * as ReactDOM from "react-dom";
 
 const main = {
   height: "100%",
@@ -84,6 +85,32 @@ const Profile = (props) => {
 
   //Add Image
   const [file, setFile] = useState(null);
+
+  //Models
+  const [models, setModels] = useState("Not Set");
+  var m = [];
+  var b = ["n", "eee"];
+  var modelo = "notsetvet";
+  const renderModels = b.map((v) => {
+    v = "<tr><td>" + v + "<tr><td>";
+    console.log("V:", v);
+  });
+  const numbers = [1, 2, 3, 4, 5];
+  const listItems = m.map((number) => (
+    <tr>
+      <td>{number}</td>
+    </tr>
+  ));
+
+  function getItems() {
+    var items = m.map((number) => (
+      <tr>
+        <td>{number}</td>
+      </tr>
+    ));
+
+    return items;
+  }
 
   //User Information
   const getUserInfo = async () => {
@@ -236,6 +263,8 @@ const Profile = (props) => {
   useEffect(() => {
     getUserInfo();
     getImg();
+    getModels();
+    getItems("004");
   }, [firstname, lastname]);
 
   const handleChange = (e) => {
@@ -270,6 +299,92 @@ const Profile = (props) => {
     handleCloseDelete();
     navigate("/Mimik");
   };
+
+  //Get Models
+  function getModels() {
+    // Create a reference under which you want to list
+    const listRef = ref(storage, `AudioSamples/${user_id}`);
+
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        });
+        var urls = "";
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+          console.log("ItemRef", itemRef.fullPath);
+          // Get metadata properties
+          const referenceUrl = ref(storage, itemRef.fullPath);
+          // Get the download URL
+          getDownloadURL(referenceUrl)
+            .then((url) => {
+              // Insert url into an <img> tag to "download"
+              console.log("Audio URL:", url);
+
+              urls =
+                urls +
+                (
+                  <tr>
+                    <td>{url}</td>
+                  </tr>
+                );
+              console.log("urls:", urls);
+
+              console.log("Modelo:", url);
+              m.push(
+                <tr height="35">
+                  <td>
+                    <audio controls>
+                      <source src={url} type="audio/wav"></source>
+                    </audio>
+                  </td>
+                </tr>
+              );
+              console.log("M:", m);
+
+              try {
+                var myDiv = document.querySelector("#myDiv");
+                const trTag = (
+                  <tr>
+                    <td>{m}</td>
+                  </tr>
+                );
+                ReactDOM.render(trTag, myDiv);
+              } catch (err) {
+                console.log(err);
+              }
+            })
+            .catch((error) => {
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+                case "storage/object-not-found":
+                  // File doesn't exist
+                  break;
+                case "storage/unauthorized":
+                  // User doesn't have permission to access the object
+                  break;
+                case "storage/canceled":
+                  // User canceled the upload
+                  break;
+
+                // ...
+
+                case "storage/unknown":
+                  // Unknown error occurred, inspect the server response
+                  break;
+              }
+            });
+        });
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+    setModels(modelo);
+  }
 
   return (
     <>
@@ -535,12 +650,18 @@ const Profile = (props) => {
               <div
                 class="col"
                 style={{
-                  border: "2px solid blue",
                   borderRadius: "7px",
                   height: "85vh",
                 }}
               >
-                Conversations
+                <p class="text-capitalize" style={{ padding: "5px" }}>
+                  Recently Saved Conversions
+                </p>
+
+                <table>
+                  {getItems()}
+                  <div id="myDiv"></div>
+                </table>
               </div>
 
               {/* Col in the middle
