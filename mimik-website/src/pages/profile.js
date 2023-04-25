@@ -71,9 +71,9 @@ const Profile = (props) => {
 
   //Change first and last name
   const [firstname, setFirstName] = useState();
-  const [lastname, setLastName] = useState(); // progress
+  const [lastname, setLastName] = useState();
   const [newFirstName, setNewFirstName] = useState("");
-  const [newLastName, setNewLastName] = useState(""); // progress
+  const [newLastName, setNewLastName] = useState("");
   const [user, setUser] = useState();
 
   //Image URl
@@ -122,9 +122,6 @@ const Profile = (props) => {
     if (file) {
       addImgDB(file);
     }
-
-    //Get Image
-
     getUserInfo();
     handleClose();
   };
@@ -237,7 +234,6 @@ const Profile = (props) => {
   }
 
   useEffect(() => {
-    // updateDoc();
     getUserInfo();
     getImg();
   }, [firstname, lastname]);
@@ -297,7 +293,6 @@ const Profile = (props) => {
       })
       .catch((error) => {
         // An error ocurred
-        // ...
         console.log("Error:", error);
       });
     handleCloseDelete();
@@ -440,6 +435,7 @@ const Profile = (props) => {
                         >
                           You can update your profile by updating these fields:
                         </DialogContentText>
+                        {/* First Name */}
                         <TextField
                           margin="dense"
                           id="firstName"
@@ -455,6 +451,7 @@ const Profile = (props) => {
                           }}
                         />
 
+                        {/* Last Name */}
                         <TextField
                           autoFocus
                           margin="dense"
@@ -469,16 +466,6 @@ const Profile = (props) => {
                             setNewLastName(e.target.value);
                             console.log(newLastName);
                           }}
-                        />
-
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="name"
-                          label="Password"
-                          type="text"
-                          fullWidth
-                          variant="standard"
                         />
 
                         {/* Upload Image */}

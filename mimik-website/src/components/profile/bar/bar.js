@@ -56,7 +56,7 @@ export default function SearchAppBar({ firstName }) {
     <Box sx={{ flexGrow: 1 }} style={{}}>
       <AppBar
         position="static"
-        style={{ boxShadow: "none", backgroundColor: "#757575" }}
+        style={{ boxShadow: "none", backgroundColor: "#6969A8" }}
       >
         <Toolbar>
           <Typography
@@ -73,15 +73,6 @@ export default function SearchAppBar({ firstName }) {
             {/* Later we should pass the user's name then add it here instad of Victoria */}
             Hello {firstName}, Welcome Back!
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
         </Toolbar>
       </AppBar>
     </Box>
