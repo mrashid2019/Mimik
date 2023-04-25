@@ -245,34 +245,6 @@ const Profile = (props) => {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    //Get the Image
-    if (!file) {
-      alert("Please upload an image first!");
-    }
-    const storageRef = ref(storage, `/profile/${user_id}/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        ); // update progress
-      },
-      (err) => console.log(err),
-      () => {
-        // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-        });
-      }
-    );
-
-    handleClose();
-  };
-
   const handleSubmitDelete = (event) => {
     event.preventDefault();
 
@@ -297,31 +269,6 @@ const Profile = (props) => {
       });
     handleCloseDelete();
     navigate("/Mimik");
-  };
-
-  const handleUpload = (event) => {
-    event.preventDefault();
-
-    if (!file) {
-      alert("Please upload an image first!");
-    }
-    const storageRef = ref(storage, `/profile/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-      },
-      (err) => console.log(err),
-      () => {
-        // download url
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-        });
-      }
-    );
   };
 
   return (
