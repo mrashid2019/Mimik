@@ -6,28 +6,37 @@ import { Line } from 'react-chartjs-2';
 const WeeklyActivityGraph = ({ userId }) => {
   // console.log('userId:', userId);
   const [activityData, setActivityData] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  // firebase.auth().onAuthStateChanged((user) => {
+  // if (user) {
+  //   setCurrentUserId(user.uid);
+  // }
+  // });
 
   useEffect(() => {
     const fetchWeeklyActivity = async () => {
-      const analytics = getAnalytics();
-      console.log(analytics);
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - 7);
-      const query = await analytics.getEvents({
-        userProperties: [{ name: 'userId', value: userId }],
-      });
-      const formattedData = query.results
-        .filter(result => result.dimensions[1] === userId)
-        .map(result => ({
-          date: result.dimensions[0],
-          totalEvents: result.metrics[0],
-        }));
-      setActivityData(formattedData);
-      console.log(formattedData);
+      if (currentUserId) {
+        const analytics = getAnalytics();
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+        const query = await analytics.getEvents({
+          userProperties: [{ name: 'userId', value: currentUserId }],
+          startDate: startDate.toISOString(),
+          endDate: new Date().toISOString(),
+        });
+        const formattedData = query.results
+          .filter(result => result.dimensions[1] === currentUserId)
+          .map(result => ({
+            date: result.dimensions[0],
+            totalEvents: result.metrics[0],
+          }));
+        setActivityData(formattedData);
+      }
     };
-
+  
     fetchWeeklyActivity();
-  }, [userId]);
+  }, [currentUserId]);
 
   const graphData = {
     labels: activityData?.map(data => data.date),
@@ -44,12 +53,16 @@ const WeeklyActivityGraph = ({ userId }) => {
 
   return (
     <div>
-      {activityData ? (
+    {currentUserId ? (
+      activityData ? (
         <Line data={graphData} />
       ) : (
         <p>Loading graph data...</p>
-      )}
-    </div>
+      )
+    ) : (
+      <p>Please log in to see your activity graph.</p>
+    )}
+  </div>
   );
 };
 

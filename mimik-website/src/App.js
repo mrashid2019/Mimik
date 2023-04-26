@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Routes, Route, Link}
     from 'react-router-dom';
 import Loading from './components/Loading';
 import Home from './pages';
-import About from './pages/about';
-import Feature from './pages/#feature';
 import Convert from './pages/convert';
 import Train from './pages/train';
 import Signup from './pages/signup';

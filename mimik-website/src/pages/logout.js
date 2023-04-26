@@ -6,7 +6,7 @@ function LogoutPage() {
   const navigate = useNavigate();
 
   function handleReturnToLogin() {
-    navigate("/login"); 
+    navigate("/Mimik"); 
   }
 
   return (
