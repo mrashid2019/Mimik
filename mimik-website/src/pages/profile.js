@@ -390,11 +390,11 @@ const Profile = (props) => {
     <>
       <div
         //fills the whole page
-        class="container-fluid"
+        class="container"
         style={{
           paddingTop: "3%",
           display: "flex",
-          height: "100vh",
+          height: "95vh",
         }}
       >
         <div class="col-3" style={{ borderRight: "3px solid gray" }}>
@@ -404,10 +404,11 @@ const Profile = (props) => {
             <div
               class="col"
               style={{
-                height: "35vh",
+                height: "25vh",
                 alignItems: "center",
                 justifyItems: "center",
                 paddingTop: "5%",
+                paddingLeft: "1%",
               }}
             >
               <div
@@ -416,7 +417,7 @@ const Profile = (props) => {
                   display: "flex",
                   alignItems: "center",
                   alignContent: "center",
-                  height: "25vh",
+                  height: "15vh",
                   position: "absolute",
                   width: "100%",
                   height: "100",
@@ -570,7 +571,7 @@ const Profile = (props) => {
             <div
               class="col"
               style={{
-                height: "35vh",
+                height: "45vh",
                 display: "flex",
                 alignItems: "end",
               }}
