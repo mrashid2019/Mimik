@@ -30,7 +30,8 @@ def hello_world():
 
 @app.route("/clone", methods=["POST"])
 def process_audio():
-    print(request.files)
+    print(request.values)
+    print(len(request.files))
     content = request.files.get('content')
     reference = request.files.get('reference')
     content_file_name = generate_random_wav_name()

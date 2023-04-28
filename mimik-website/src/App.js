@@ -9,7 +9,7 @@ import Loading from './components/Loading';
 import Home from './pages';
 import About from './pages/about';
 import Feature from './pages/#feature';
-import Convert from './pages/convert';
+// import Convert from './pages/convert';
 import Train from './pages/train';
 import Signup from './pages/signup';
 import Login from './pages/login';
@@ -17,6 +17,7 @@ import Verification from "./components/EmailVerify/verification"
 import PasswordRecovery from '../src/components/PasswordRecover/passwordRecovery'
 import LogoutPage from './pages/logout';
 import ProfilePage from '../src/pages/profile';
+import { Convert_Revamped } from './pages/convert_revamped';
 
 import logo from '../src/components/Navbar/Mimik-logo-together.png';
 
@@ -36,7 +37,7 @@ return (
             <Route exact path='/' element={<Home />} />
             <Route path='/about' element={<About/>} />
             <Route path='/#feature' element={<Feature/>} />
-            <Route path='/convert' element={<Convert/>} />
+            <Route path='/convert' element={<Convert_Revamped/>} />
             <Route path='/train' element={<Train/>} />
             <Route path='/signup' element={<Signup/>} />
             <Route path='/login' element={<Login />} />

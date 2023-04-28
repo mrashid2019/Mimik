@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 
-export const Button = styled.button`
+export const Button = styled.button.attrs(props=>({
+  disabled: props.disabled
+}))`
 border-radius: 4px;
 background: #6969A8;
 padding: 10px 22px;
@@ -12,7 +14,6 @@ outline: none;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
 text-decoration: none;
-
 margin-left: 24px;
 
 &:hover {
@@ -24,6 +25,9 @@ margin-left: 24px;
 
 &:disabled{
   background: #dfdfdf;
+  outline-color: #010606;
+	color: #fff;
+
 }
 `;
 
@@ -45,31 +49,18 @@ text-decoration: none;
 	color: #fff;
 }
 `;
+
 export const FileUploader = (props) => {
+  const hiddenFileInput = useRef();
 
-  const [audioFile, setAudioFile] = useState(undefined);
-
-  const hiddenFileInput = React.useRef(undefined);
-
-  
-  const handleClick = event => {
-    console.log(props)
+  const handleClick = (e)=>{
     hiddenFileInput.current.click();
-    event.target.innerHTML = 'Ready'
-
-  };
-    
-
-  const handleChange = event => {
-    setAudioFile(event.target.files[0]);
-  };
-
- 
-
-  const requestCallback = () =>{
-    props.handleFile(audioFile)
   }
 
+  const handleChange = (e)=>{
+    // console.log(e.target, hiddenFileInput.current);
+    props.handler(e, props.id)
+  }
   return (
     <>
       <Button onClick={handleClick}>
@@ -77,7 +68,7 @@ export const FileUploader = (props) => {
       </Button>
       <input type="file"
              ref={hiddenFileInput}
-             onInput={handleChange}
+             onInput={e=>handleChange(e)}
              style={{display:'none'}} 
       />
 

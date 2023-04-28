@@ -214,15 +214,15 @@ const Convert = () => {
 						<h4>Content</h4>
 						<div id="contentSection" style={{ display: 'flex' }}>
 							<div style={{ margin: '20px' }}>
-								<label for='audioFileInput'>File</label>
+								<label htmlFor='audioFileInput'>File</label>
 								<input type='radio' id='audioFileInput' name='contentInputType' value={0} defaultChecked={contentMode === 0} onClick={(e) => { setContentMode(0) }} ></input>
 							</div>
 							<div style={{ margin: '20px' }}>
-								<label for='textInput'>Text</label>
+								<label htmlFor='textInput'>Text</label>
 								<input type='radio' id='textInput' name='contentInputType' value={1} onClick={(e) => { setContentMode(1) }} ></input>
 							</div>
 							<div style={{ margin: '20px' }}>
-								<label for='audioRecordingInput'>Record</label>
+								<label htmlFor='audioRecordingInput'>Record</label>
 								<input type='radio' id='audioRecordingInput' name='contentInputType' value={2} onClick={(e) => { setContentMode(2) }} ></input>
 							</div>
 						</div>
@@ -251,11 +251,11 @@ const Convert = () => {
 
 						<div id="refSection" style={{ display: 'flex' }}>
 							<div style={{ margin: '20px' }}>
-								<label for='audioRefFileInput'>File</label>
+								<label htmlFor='audioRefFileInput'>File</label>
 								<input type='radio' id='audioRefFileInput' name='referenceInputType' value={0} defaultChecked={referenceMode === 0} onClick={(e) => { setReferenceMode(0) }} ></input>
 							</div>
 							<div style={{ margin: '20px' }}>
-								<label for='audioRefRecordingInput'>Record</label>
+								<label htmlFor='audioRefRecordingInput'>Record</label>
 								<input type='radio' id='audioRefRecordingInput' name='referenceInputType' value={1} onClick={(e) => { setReferenceMode(1) }} ></input>
 							</div>
 							<div style={{ margin: '20px' }}>
@@ -361,4 +361,4 @@ const Convert = () => {
 	);
 }
 
-export default Convert;
+// export default Convert;
