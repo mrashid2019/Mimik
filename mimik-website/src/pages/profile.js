@@ -394,281 +394,288 @@ const Profile = (props) => {
         style={{
           paddingTop: "3%",
           display: "flex",
-          height: "95vh",
+          height: "90vh",
+          width: "70%",
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <div class="col-3" style={{ borderRight: "3px solid gray" }}>
-          <div class="row row-cols-1">
-            {/* Edit */}
+        {/* Welcome Message and Search */}
+        <div class="row container-fluid" style={{ paddingBottom: "20px" }}>
+          <Bar firstName={firstname} />
 
-            <div
-              class="col"
-              style={{
-                height: "25vh",
-                alignItems: "center",
-                justifyItems: "center",
-                paddingTop: "5%",
-                paddingLeft: "1%",
-              }}
-            >
-              <div
-                class="col-sm"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  alignContent: "center",
-                  height: "15vh",
-                  position: "absolute",
-                  width: "100%",
-                  height: "100",
-                }}
-              >
-                <img
-                  src={profileImg}
-                  class="rounded-circle"
-                  alt="User Image"
-                  style={{
-                    width: "120px",
-                    height: "120px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    display: "block",
-                  }}
-                />
-              </div>
-            </div>
+          <div class="col-3" style={{ borderRight: "3px solid gray" }}>
+            <div class="row row-cols-1">
+              {/* Edit */}
 
-            {/* Name */}
-            <div
-              class="col"
-              style={{
-                height: "10vh",
-                alignItems: "center",
-                alignContent: "center",
-                display: "flex",
-                alignItems: "start",
-              }}
-            >
-              <div class="col-sm">
-                <p>
-                  {firstname} {lastname}
-                </p>
-              </div>
-            </div>
-
-            {/* Modal: Edit Account */}
-            <div
-              class="col"
-              style={{
-                height: "5vh",
-                alignItems: "center",
-                alignContent: "center",
-                display: "flex",
-              }}
-            >
-              <div class="col-sm">
-                <Button
-                  onClick={handleOpen}
-                  style={{
-                    background: "none",
-                    margin: "0",
-                    padding: "0",
-                    cursor: "pointer",
-                    fontSize: "65%",
-                    color: "#2b2c2f",
-                  }}
-                >
-                  Settings
-                </Button>
-
-                <Modal
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box sx={style}>
-                    <form onSubmit={updateDocument}>
-                      <DialogContent dividers>
-                        <DialogContentText
-                          id="modal-modal-title"
-                          variant="h6"
-                          component="h3"
-                          style={{ padding: "10px 0px 20px 0px" }}
-                        >
-                          You can update your profile by updating these fields:
-                        </DialogContentText>
-                        {/* First Name */}
-                        <TextField
-                          margin="dense"
-                          id="firstName"
-                          label="First Name"
-                          type="text"
-                          fullWidth
-                          variant="standard"
-                          inputProps={{ minLength: 2 }}
-                          required
-                          onChange={(e) => {
-                            setNewFirstName(e.target.value);
-                            console.log(newFirstName);
-                          }}
-                        />
-
-                        {/* Last Name */}
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="lastName"
-                          label="Last Name"
-                          type="text"
-                          fullWidth
-                          variant="standard"
-                          inputProps={{ minLength: 2 }}
-                          required
-                          onChange={(e) => {
-                            setNewLastName(e.target.value);
-                            console.log(newLastName);
-                          }}
-                        />
-
-                        {/* Upload Image */}
-                        <label htmlFor="profilePhoto">
-                          <div
-                            style={{
-                              paddingTop: "15px",
-                              paddingBottom: "5px",
-                              fontFamily: "Arial, Helvetica",
-                            }}
-                          >
-                            Upload Image:
-                          </div>
-                          <input
-                            accept="image/*"
-                            id="profilePhoto"
-                            type="file"
-                            style={{ fontFamily: "Arial, Helvetica" }}
-                            onChange={handleChange}
-                          />
-                        </label>
-                      </DialogContent>
-
-                      <DialogActions>
-                        <Button
-                          variant="contained"
-                          type="submit"
-                          // onClick={updateDocument}
-                        >
-                          Submit
-                        </Button>
-                      </DialogActions>
-                    </form>
-                  </Box>
-                </Modal>
-              </div>
-            </div>
-
-            {/* Delete */}
-            <div
-              class="col"
-              style={{
-                height: "45vh",
-                display: "flex",
-                alignItems: "end",
-              }}
-            >
-              <div class="col-sm">
-                <Button
-                  onClick={handleOpenDelete}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    margin: "0",
-                    padding: "0",
-                    fontSize: "65%",
-                    color: "red",
-                  }}
-                >
-                  Delete Account
-                </Button>
-
-                <Modal
-                  open={openDelete}
-                  onClose={handleCloseDelete}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box sx={style}>
-                    <form onSubmit={handleSubmitDelete}>
-                      <DialogContent dividers>
-                        <DialogContentText
-                          id="modal-modal-title"
-                          variant="h6"
-                          component="h3"
-                          style={{ padding: "10px 0px 20px 0px" }}
-                        >
-                          Are you sure you want to delete your account?
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleCloseDelete}>Cancel</Button>
-                        <Button
-                          onClick={handleDeleteAccount}
-                          autoFocus
-                          variant="outlined"
-                          startIcon={<DeleteIcon />}
-                        >
-                          Delete
-                        </Button>
-                      </DialogActions>
-                    </form>
-                  </Box>
-                </Modal>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Models */}
-        <div
-          class="col-9"
-          style={{
-            paddingRight: "0px",
-            paddingLeft: "0px",
-          }}
-        >
-          {/* Welcome Message and Search */}
-          <div class="row" style={{ paddingBottom: "20px" }}>
-            <Bar firstName={firstname} />
-          </div>
-
-          <div
-            //fills the whole page
-            class="container"
-          >
-            {/* <div class="row row-cols-3"> */}
-            <div class="row">
-              {/* Column 1 */}
               <div
                 class="col"
                 style={{
-                  borderRadius: "7px",
-                  height: "85vh",
+                  height: "25vh",
+                  alignItems: "center",
+                  justifyItems: "center",
+                  paddingTop: "5%",
+                  paddingLeft: "1%",
                 }}
               >
-                <p class="text-capitalize" style={{ padding: "5px" }}>
-                  Recently Saved Conversions
-                </p>
-
-                <table>
-                  {getItems()}
-                  <div id="myDiv"></div>
-                </table>
+                <div
+                  class="col-sm"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    alignContent: "center",
+                    height: "30vh",
+                    position: "absolute",
+                    width: "100%",
+                    height: "100",
+                  }}
+                >
+                  <img
+                    src={profileImg}
+                    class="rounded-circle"
+                    alt="User Image"
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      display: "block",
+                    }}
+                  />
+                </div>
               </div>
 
-              {/* Col in the middle
+              {/* Name */}
+              <div
+                class="col"
+                style={{
+                  height: "15vh",
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  alignItems: "end",
+                }}
+              >
+                <div class="col-sm" style={{ fontSize: "150%" }}>
+                  {firstname} {lastname}
+                </div>
+              </div>
+
+              {/* Modal: Edit Account */}
+              <div
+                class="col"
+                style={{
+                  height: "15vh",
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                }}
+              >
+                <div class="col-sm">
+                  <Button
+                    onClick={handleOpen}
+                    style={{
+                      background: "none",
+                      margin: "0",
+                      padding: "0",
+                      cursor: "pointer",
+                      fontSize: "65%",
+                      color: "#2b2c2f",
+                      fontSize: "85%",
+                    }}
+                  >
+                    Settings
+                  </Button>
+
+                  <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <form onSubmit={updateDocument}>
+                        <DialogContent dividers>
+                          <DialogContentText
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h3"
+                            style={{ padding: "10px 0px 20px 0px" }}
+                          >
+                            You can update your profile by updating these
+                            fields:
+                          </DialogContentText>
+                          {/* First Name */}
+                          <TextField
+                            margin="dense"
+                            id="firstName"
+                            label="First Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            inputProps={{ minLength: 2 }}
+                            required
+                            onChange={(e) => {
+                              setNewFirstName(e.target.value);
+                              console.log(newFirstName);
+                            }}
+                          />
+
+                          {/* Last Name */}
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="lastName"
+                            label="Last Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            inputProps={{ minLength: 2 }}
+                            required
+                            onChange={(e) => {
+                              setNewLastName(e.target.value);
+                              console.log(newLastName);
+                            }}
+                          />
+
+                          {/* Upload Image */}
+                          <label htmlFor="profilePhoto">
+                            <div
+                              style={{
+                                paddingTop: "15px",
+                                paddingBottom: "5px",
+                                fontFamily: "Arial, Helvetica",
+                              }}
+                            >
+                              Upload Image:
+                            </div>
+                            <input
+                              accept="image/*"
+                              id="profilePhoto"
+                              type="file"
+                              style={{ fontFamily: "Arial, Helvetica" }}
+                              onChange={handleChange}
+                            />
+                          </label>
+                        </DialogContent>
+
+                        <DialogActions>
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            // onClick={updateDocument}
+                          >
+                            Submit
+                          </Button>
+                        </DialogActions>
+                      </form>
+                    </Box>
+                  </Modal>
+                </div>
+              </div>
+
+              {/* Delete */}
+              <div
+                class="col"
+                style={{
+                  height: "20vh",
+                  display: "flex",
+                  alignItems: "end",
+                }}
+              >
+                <div class="col-sm">
+                  <Button
+                    onClick={handleOpenDelete}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      margin: "0",
+                      padding: "0",
+                      fontSize: "65%",
+                      color: "red",
+                      fontSize: "85%",
+                    }}
+                  >
+                    Delete Account
+                  </Button>
+
+                  <Modal
+                    open={openDelete}
+                    onClose={handleCloseDelete}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <form onSubmit={handleSubmitDelete}>
+                        <DialogContent dividers>
+                          <DialogContentText
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h3"
+                            style={{ padding: "10px 0px 20px 0px" }}
+                          >
+                            Are you sure you want to delete your account?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloseDelete}>Cancel</Button>
+                          <Button
+                            onClick={handleDeleteAccount}
+                            autoFocus
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                          >
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </form>
+                    </Box>
+                  </Modal>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Models */}
+          <div
+            class="col-9"
+            style={{
+              paddingRight: "0px",
+              paddingLeft: "0px",
+            }}
+          >
+            <div
+              //fills the whole page
+              class="container"
+            >
+              {/* <div class="row row-cols-3"> */}
+              <div class="row">
+                {/* Column 1 */}
+                <div
+                  class="col"
+                  style={{
+                    borderRadius: "7px",
+                    height: "75vh",
+                  }}
+                >
+                  <p
+                    class="text-capitalize"
+                    style={{ padding: "5px", fontSize: "35px" }}
+                  >
+                    Recently Saved Conversions
+                  </p>
+
+                  <table>
+                    {getItems()}
+                    <div id="myDiv"></div>
+                  </table>
+                </div>
+
+                {/* Col in the middle
               <div class="col-sm-1"></div>*/}
 
-              {/* Column 2 
+                {/* Column 2 
               <div class="col-5" style={{ borderRadius: "7px" }}>
                 <div class="row row-cols-1">
                   <div
@@ -700,7 +707,9 @@ const Profile = (props) => {
                     Weekly Activity on Mimik
                   </div>
                 </div>
+
               </div>*/}
+              </div>
             </div>
           </div>
         </div>

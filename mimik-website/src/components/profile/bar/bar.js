@@ -53,28 +53,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchAppBar({ firstName }) {
   return (
-    <Box sx={{ flexGrow: 1 }} style={{}}>
-      <AppBar
-        position="static"
-        style={{ boxShadow: "none", backgroundColor: "#6969A8" }}
+    <>
+      <Box
+        sx={{
+          flexGrow: 1,
+          paddingRight: "0px",
+        }}
       >
-        <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-            style={{
-              textAlign: "left",
-              fontFamily: "IM FELL Double Pica",
-              fontSize: "1.7rem",
-            }}
-          >
-            {/* Later we should pass the user's name then add it here instad of Victoria */}
-            Hello {firstName}, Welcome Back!
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
+        <AppBar
+          position="static"
+          style={{
+            boxShadow: "none",
+            backgroundColor: "#6969A8",
+          }}
+        >
+          <Toolbar>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                flexGrow: 1,
+
+                display: {
+                  xs: "none",
+                  sm: "block",
+                },
+              }}
+              style={{
+                textAlign: "left",
+                fontFamily: "IM FELL Double Pica",
+                fontSize: "1.7rem",
+                textAlign: "start", // aligns the text to the left
+                paddingLeft: "25%",
+                paddingRight: "0px",
+              }}
+            >
+              Hello {firstName}, Welcome Back!
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </>
   );
 }
