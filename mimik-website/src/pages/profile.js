@@ -402,7 +402,7 @@ const Profile = (props) => {
         }}
       >
         {/* Welcome Message and Search */}
-        <div class="row container-fluid" style={{ paddingBottom: "20px" }}>
+        <div class="row container-fluid" style={{ paddingBottom: "20px", border: "solid 1px #dfdfdf", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
           <Bar firstName={firstname} />
 
           <div class="col-3" style={{ borderRight: "3px solid gray" }}>
@@ -661,7 +661,7 @@ const Profile = (props) => {
                 >
                   <p
                     class="text-capitalize"
-                    style={{ padding: "5px", fontSize: "35px" }}
+                    style={{ padding: "25px", fontSize: "35px" }}
                   >
                     Recently Saved Conversions
                   </p>
