@@ -19,7 +19,7 @@ async function createFileFromAudioElement(source) {
         })
 }
 
-export default function Convert() {
+export function Convert_Revamped() {
 
     const [contentMode, setContentMode] = useState(0);
     const [referenceMode, setReferenceMode] = useState(0);
@@ -81,21 +81,14 @@ export default function Convert() {
             console.log(entry);
             formData.append(entry[0], entry[1]);
         })
-        // let formValues = formData.entries();
-        // for (const value of formValues) {
-        //     console.log({ value })
-        // }
 
-        axios.post('http://localhost:8000/clone', formData, { responseType: 'blob', data: 'HEY', headers: { "Content-Encoding": 'multipart/form-data' } })
+        axios.post('http://localhost:8000/clone', formData, { responseType: 'blob', data: 'HEY'})
             .then((response) => {
                 let data = response.data
                 let audioBlob = new Blob([data], { type: 'audio/wav' })
                 let newaudioUrl = URL.createObjectURL(audioBlob)
                 setAudio(newaudioUrl)
-                // ref.files = []
-                // console.log(ref.files)
                 setIsLoading(false);
-                // console.log(data)
             })
             .catch((error) => {
                 console.log(error);

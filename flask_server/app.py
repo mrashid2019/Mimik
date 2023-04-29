@@ -7,6 +7,7 @@ from scipy.io import wavfile
 import numpy as np
 from uuid import uuid4
 from random import randint
+import os
 
 stt_model = whisper.load_model("base")
 model_name = TTS.list_models()[0] #default model is yourTTS
@@ -18,6 +19,14 @@ CORS(app)
 
 def generate_random_wav_name():
     return str(uuid4())[randint(0,5):randint(6,15)]+'.wav'
+
+def delete_file(filename):
+    path = os.getcwd() + '/'+filename
+    if os.path.exists(path):
+        os.remove(path)
+        print(f'Cleaned up file @ {path}')
+    else:
+        print(f'File {path} does not exist')
 
 @app.route("/",)
 def hello_world():
@@ -38,6 +47,9 @@ def process_audio():
     content.save(content_file_name) #add reading the audio file to utils.py
     reference.save(ref_file_name)
     e2e_model.clone_from_audio(original_wav=content_file_name,speaker_wav=ref_file_name)   
+    delete_file(content_file_name)
+    delete_file(ref_file_name)
+    
     return send_file('output.wav', as_attachment=True)
 
 @app.route("/clone_text", methods=["POST"])
