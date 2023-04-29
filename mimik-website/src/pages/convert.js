@@ -63,7 +63,7 @@ export default function Convert() {
         let ls = [];
         for (const child of iterator) {
 
-           let entry = await createFileFromAudioElement(child.src)
+            let entry = await createFileFromAudioElement(child.src)
                 .then(file => {
                     console.log({ file })
                     if (child.id === 'contentAudio') {
@@ -74,10 +74,10 @@ export default function Convert() {
                     }
                 })
                 .catch(err => { console.error(err) })
-            console.log("ENTRY:",entry);
+            console.log("ENTRY:", entry);
             ls.push(entry);
         }
-        ls.forEach((entry)=>{
+        ls.forEach((entry) => {
             console.log(entry);
             formData.append(entry[0], entry[1]);
         })
@@ -175,8 +175,10 @@ export default function Convert() {
 
             </div>
 
-            <Button disabled={isDisabled} onClick={processAudioFiles}>Convert</Button>
+            <div style={{display:'flex', justifyContent:'center'}}>
+                <Button disabled={isDisabled} onClick={processAudioFiles}>Convert</Button>
 
+            </div>
 
             <div style={{ backgroundColor: ' #fff', textAlign: 'center', width: '75%', margin: '25px 25px', borderRadius: '15px', paddingTop: '2rem' }}>
 

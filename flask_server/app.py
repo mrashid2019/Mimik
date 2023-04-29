@@ -39,15 +39,26 @@ def hello_world():
 
 @app.route("/clone", methods=["POST"])
 def process_audio():
-    print(request.files)
-    content = request.files.get('content')
+    # content = None
+    # request = None
+    # text = None
+    if(request.form.get('text')):
+        text = request.form.get('text')
+    else:
+        content = request.files.get('content')
+    
     reference = request.files.get('reference')
-    content_file_name = generate_random_wav_name()
     ref_file_name = generate_random_wav_name()
-    content.save(content_file_name) #add reading the audio file to utils.py
     reference.save(ref_file_name)
-    e2e_model.clone_from_audio(original_wav=content_file_name,speaker_wav=ref_file_name)   
-    delete_file(content_file_name)
+
+    if(text):
+        e2e_model.clone_text(text,ref_file_name)
+    else:
+        content_file_name = generate_random_wav_name()
+        content.save(content_file_name) #add reading the audio file to utils.py
+        e2e_model.clone_from_audio(original_wav=content_file_name,speaker_wav=ref_file_name)   
+        delete_file(content_file_name)
+    
     delete_file(ref_file_name)
     
     return send_file('output.wav', as_attachment=True)
