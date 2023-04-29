@@ -53,6 +53,15 @@ export default function Convert() {
         }).catch(err => (console.error(err)))
 
     }
+
+    function handleText(e) {
+        let textEl = document.createElement('p');
+        textEl.id = 'desiredContent';
+        textEl.innerText = e.target.value;
+        utils.addElementToContainer(textEl, 'audioContainer');
+
+    }
+
     const processAudioFiles = async () => {
         setAudio(null)
         setIsLoading(true);
@@ -63,28 +72,42 @@ export default function Convert() {
         let ls = [];
         for (const child of iterator) {
 
-            let entry = await createFileFromAudioElement(child.src)
-                .then(file => {
-                    console.log({ file })
-                    if (child.id === 'contentAudio') {
-                        return ['content', file];
+            if (child.id != 'desiredContent') {
+                let entry = await createFileFromAudioElement(child.src)
+                    .then(file => {
+                        console.log({ file })
+                        if (child.id === 'contentAudio') {
+                            return ['content', file];
 
-                    } else {
-                        return ['reference', file];
-                    }
-                })
-                .catch(err => { console.error(err) })
-            console.log("ENTRY:", entry);
-            ls.push(entry);
+                        } else if (child.id === 'refAudio') {
+                            return ['reference', file];
+                        } else if (child.id === 'desiredContent') {
+                            console.log({ child })
+                        }
+                    })
+                    .catch(err => { console.error(err) })
+                console.log("ENTRY:", entry);
+                ls.push(entry);
+            } else {
+                ls.push({ 'text': child.innerText });
+            }
+
+
+
         }
+        console.log({ ls })
         ls.forEach((entry) => {
             console.log(entry);
-            formData.append(entry[0], entry[1]);
+            if (entry.text) {
+                formData.append('text', entry.text);
+            } else {
+                formData.append(entry[0], entry[1]);
+            }
         })
-        // let formValues = formData.entries();
-        // for (const value of formValues) {
-        //     console.log({ value })
-        // }
+        let formValues = formData.entries();
+        for (const value of formValues) {
+            console.log({ value })
+        }
 
         axios.post('http://209.51.170.170:8000/clone', formData, { responseType: 'blob', data: 'HEY', headers: { "Content-Encoding": 'multipart/form-data' } })
             .then((response) => {
@@ -128,7 +151,7 @@ export default function Convert() {
                         {contentMode === 0 && <FileUploader id={'contentAudio'} handler={handleFile} />}
 
                         {contentMode === 1 &&
-                            <input id='textEl' type='text' placeholder='Type the text to convert' ></input>
+                            <input id='textEl' type='text' placeholder='Type the text to convert' onInput={handleText}></input>
                         }{
                             contentMode === 2 &&
                             <div>
@@ -175,7 +198,7 @@ export default function Convert() {
 
             </div>
 
-            <div style={{display:'flex', justifyContent:'center'}}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Button disabled={isDisabled} onClick={processAudioFiles}>Convert</Button>
 
             </div>
