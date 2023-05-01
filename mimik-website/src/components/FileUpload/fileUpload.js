@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 
@@ -14,7 +14,6 @@ outline: none;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
 text-decoration: none;
-
 margin-left: 24px;
 
 &:hover {
@@ -29,69 +28,56 @@ margin-left: 24px;
   outline-color: #010606;
 	color: #fff;
 }
+
+&:disabled{
+  background: #dfdfdf;
+  outline-color: #010606;
+	color: #fff;
+
+}
 `;
 
-export const FileUploader = props => {
+export const Button2 = styled.button`
+border-radius: 4px;
+background: #6969A8;
+padding: 10px 22px;
+color: #000;
+border: none;
+outline: none;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+text-decoration: none;
 
-  const [contentAudio, setContentAudio] = useState(null);
-  const [refAudio, setRefAudio] = useState(null);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+&:hover {
+	transition: all 0.2s ease-in-out;
+	background: #6969a8;
+	outline-color: #010606;
+	color: #fff;
+}
+`;
 
-  const hiddenFile1Input = React.useRef(null);
-  const hiddenFile2Input = React.useRef(null);
+export const FileUploader = (props) => {
+  const hiddenFileInput = useRef();
 
-  useEffect(()=>{
-    setButtonDisabled(!(contentAudio && refAudio))
-  },[contentAudio, refAudio])
-  
-  const handleClickContent = async (event) => {
-    hiddenFile1Input.current.click();
-    // event.target.innerHTML = 'Content ready'
-
-  };
-    
-  const handleClickReference = async (event) => {
-    hiddenFile2Input.current.click();
-    // event.target.innerHTML = 'Reference ready'
-
-  };
-
-  const handleContentChange = event => {
-    setContentAudio(event.target.files[0]);
-    document.getElementById('content_btn').innerHTML = 'Content ready'
-    // props.handleFile(fileUploaded);
-  };
-
-  const handleReferenceChange = event => {
-    setRefAudio(event.target.files[0]);
-    document.getElementById('reference_btn').innerHTML = 'Reference ready'
-
-    // props.handleFile(fileUploaded);
-  };
-
-  const requestCallback = () =>{
-    props.handleFile(contentAudio, refAudio)
+  const handleClick = (e)=>{
+    hiddenFileInput.current.click();
   }
 
+  const handleChange = (e)=>{
+    // console.log(e.target, hiddenFileInput.current);
+    props.handler(e, props.id)
+  }
   return (
     <>
-      <Button id="content_btn" onClick={handleClickContent}>
-        Upload a content file
+      <Button onClick={handleClick}>
+        Upload a file
       </Button>
       <input type="file"
-             ref={hiddenFile1Input}
-             onInput={handleContentChange}
+             ref={hiddenFileInput}
+             onInput={e=>handleChange(e)}
              style={{display:'none'}} 
       />
-      <Button id="reference_btn" onClick={handleClickReference}>
-        Upload a reference file
-      </Button>
-      <input type="file"
-             ref={hiddenFile2Input}
-             onInput={handleReferenceChange}
-             style={{display:'none'}} 
-      />
-      <Button onClick={requestCallback} disabled={buttonDisabled} >Convert</Button> 
+
     </>
   );
 };
