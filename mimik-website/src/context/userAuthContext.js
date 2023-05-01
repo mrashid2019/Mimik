@@ -74,9 +74,9 @@ const UserAuthContext = ({ children }) => {
       throw error;
     });
 
-    user.updateProfile({
-      displayName: `${firstName} ${lastName}`,
-    });
+    // user.updateProfile({
+    //   displayName: `${firstName} ${lastName}`,
+    // });
     
 
 
