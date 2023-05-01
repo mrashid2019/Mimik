@@ -76,7 +76,7 @@ export default function PhoneAuth() {
         console.log(res);
         setUser(res.user);
         setLoading(false);
-        navigate('./')
+        navigate('/Mimik')
       })
       .catch((err) => {
         console.log(err);
@@ -101,7 +101,7 @@ export default function PhoneAuth() {
         ) : (
           <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
             <h1 className="text-center leading-normal text-black font-medium mb-6" style={{fontSize:"40px", padding:"20px"}}>
-              Set up two-factor for <br /> Mimik 
+              Two-factor for <br /> Mimik 
             </h1>
             {showOTP ? (
               <>
@@ -157,8 +157,6 @@ export default function PhoneAuth() {
                   <span>Send code via SMS</span>
                 </button>
 
-                <button onClick={() => navigate('../Mimik')} style={{marginTop:'2%'}}
-                  className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn">Skip Verification</button>
 
               </>
             )}

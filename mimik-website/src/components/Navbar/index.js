@@ -49,7 +49,6 @@ return (
 			<NavLink to="/convert">Convert</NavLink>
 			<NavLink to="/train">Train</NavLink>
 			<NavLink to="/profile">Profile </NavLink>
-			<NavLink to="/2-fa">Two Factor </NavLink>
 			</>	
         )}
 		{user && (

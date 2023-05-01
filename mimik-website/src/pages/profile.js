@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../context/userAuthContext';
 import uploadFile from '../components/profile/uploadFile';
 import { updateProfile } from 'firebase/auth';
-import WeeklyActivityGraph from '../components/WeeklyActivity/activityGraph'
 
 import Footer from '../components/Footer';
 import Bar from '../components/profile/bar/bar';
@@ -385,10 +384,6 @@ const Profile = () => {
 												>
 													<Item style={{height:"60vh"}}>
 														Recently Saved Conversions
-													</Item>
-													<Item style={{height:"30vh"}}> 
-														Weekly Activity on Mimik
-														{currentUser && <WeeklyActivityGraph userId={currentUser.uid} />}
 													</Item>
 												</Stack>
 											</div>
