@@ -7,6 +7,15 @@ import { Button } from "../components/FileUpload/fileUpload";
 import './Convert/convert.css';
 import axios from "axios";
 
+const main = {
+	height: '0vh',
+	width: '100vw',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'space-between',
+	alignItems: 'center',
+}
+
 async function createFileFromAudioElement(source) {
 	return fetch(source)
 		.then((response) => response.blob())
@@ -130,6 +139,61 @@ export default function Convert() {
 	return (
 		<>
 			{/* <div style={{display:'flex',flexDirection:'column', alignItems:'center'}}> */}
+			<div style={main}>
+				<h1 style={{ margin: '2%', padding: '15px', color: '#303978', paddingTop: 20 }}>Convert</h1>
+				<div style={{ fontSize: '20', color: '#4A4E69', textAlign: 'center' }}>
+				<div>To upload a sample of your voice, please click on Upload a Content File below.<br/>
+				Additionally, to provide a sample of the voice that you want to sound like, please upload a reference file by clicking on Upload a Reference File. <br/>
+				Once both files have been uploaded, hit Convert to clone your voice.</div></div>
+				<div class='animation-container'>
+					<div class='animation-example'>
+						<div class='item'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item -type2'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item -type2'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item -type2'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='item -type2'>
+							<div class='line'></div>
+							<div class='dot'></div>
+							<div class='circle'></div>
+						</div>
+						<div class='center'>
+							<div class='circle'></div>
+							<div class='circle'></div>
+							<div class='circle'></div>
+						</div>
+					</div>
+				</div>
 				<div className='inputSection'>
 					<div className='inputBox'>
 						<h4>Content</h4>
@@ -215,6 +279,7 @@ export default function Convert() {
 						</div>
 					)}
 				</div>
+			</div>
 			{/* </div> */}
 		</>
 	)
