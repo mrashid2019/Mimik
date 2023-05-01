@@ -69,7 +69,7 @@ const storeAudio = (audio) => {
 }
 
 const Train = () => {
-	const [audio, setAudio] = useState()
+	const [audio_, setAudio] = useState()
 	return (
 		<>
 			<div style={main}>
@@ -136,7 +136,7 @@ const Train = () => {
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '40px' }}>
 					<AudioRecorder onRecordingComplete={blob=>setAudio(blob)}></AudioRecorder>
-					<Button2 onClick={storeAudio(audio)}>Store</Button2>
+					<Button2 onClick={(e)=>storeAudio(audio_)}>Store</Button2>
 				</div>
 				<Footer />
 

@@ -6,6 +6,7 @@ import * as utils from '../utils'
 import { Button } from "../components/FileUpload/fileUpload";
 import './Convert/convert.css';
 import axios from "axios";
+import Footer from "../components/Footer";
 
 const main = {
 	height: '0vh',
@@ -142,9 +143,9 @@ export default function Convert() {
 			<div style={main}>
 				<h1 style={{ margin: '2%', padding: '15px', color: '#303978', paddingTop: 20 }}>Convert</h1>
 				<div style={{ fontSize: '20', color: '#4A4E69', textAlign: 'center' }}>
-				<div>To upload a sample of your voice, please click on Upload a Content File below.<br/>
-				Additionally, to provide a sample of the voice that you want to sound like, please upload a reference file by clicking on Upload a Reference File. <br/>
-				Once both files have been uploaded, hit Convert to clone your voice.</div></div>
+					<div>To upload a sample of your voice, please click on Upload a Content File below.<br />
+						Additionally, to provide a sample of the voice that you want to sound like, please upload a reference file by clicking on Upload a Reference File. <br />
+						Once both files have been uploaded, hit Convert to clone your voice.</div></div>
 				<div class='animation-container'>
 					<div class='animation-example'>
 						<div class='item'>
@@ -197,7 +198,7 @@ export default function Convert() {
 				<div className='inputSection'>
 					<div className='inputBox'>
 						<h4>Content</h4>
-						<div id="contentSection" style={{ display: 'flex' }}>
+						<div id="contentSection" style={{ display: 'flex', width: '500px', justifyContent: 'center' }}>
 							<div style={{ margin: '20px' }}>
 								<label htmlFor='audioFileInput'>File</label>
 								<input type='radio' id='audioFileInput' name='contentInputType' value={0} defaultChecked={true} onClick={(e) => handleChangeInputMode(e, setContentMode)} ></input>
@@ -229,7 +230,7 @@ export default function Convert() {
 					<div className='inputBox'>
 						<h4>Reference</h4>
 
-						<div id="refSection" style={{ display: 'flex' }}>
+						<div id="refSection" style={{ display: 'flex', width: '500px', justifyContent: 'center' }}>
 							<div style={{ margin: '20px' }}>
 								<label htmlFor='audioRefFileInput'>File</label>
 								<input type='radio' id='audioRefFileInput' name='referenceInputType' value={0} defaultChecked={referenceMode === 0} onClick={(e) => handleChangeInputMode(e, setReferenceMode)} ></input>
@@ -260,13 +261,13 @@ export default function Convert() {
 
 				</div>
 
-				<div style={{ display: 'flex', flexDirection:'column',justifyContent: 'space-between', alignItems:'center' }}>
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
 					<Button disabled={isDisabled} onClick={processAudioFiles}>Convert</Button>
 					<AiOutlineLoading3Quarters className={`icon ${isLoading ? 'isAnimated' : 'notAnimated'}`} />
 
 				</div>
 
-				<div style={{ position: 'relative', left:'40%', backgroundColor:'fff'}}>
+				<div style={{ position: 'relative', backgroundColor: 'fff' }}>
 
 
 					{audio && (
@@ -279,8 +280,11 @@ export default function Convert() {
 						</div>
 					)}
 				</div>
+				<Footer />
+
 			</div>
-			{/* </div> */}
+			{/* <Footer /> */}
+
 		</>
 	)
 }
