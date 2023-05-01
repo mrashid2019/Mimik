@@ -1,13 +1,15 @@
 import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
+import Footer from "../../components/Footer";
 
 import OtpInput from "otp-input-react";
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { auth } from "../../firebase";
+import { auth} from "../../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { toast, Toaster } from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
 
 export default function PhoneAuth() {
   const [otp, setOtp] = useState("");
@@ -15,6 +17,8 @@ export default function PhoneAuth() {
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [user, setUser] = useState(null);
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  const navigate = useNavigate();
 
   function onCaptchaVerify() {
     if (!window.recaptchaVerifier) {
@@ -32,9 +36,9 @@ export default function PhoneAuth() {
     }
   }
 
-  function getPhoneNumberFromUserInput() {
-    return document.getElementById('phone-number').value;
-  }
+  // function getPhoneNumberFromUserInput() {
+  //   return document.getElementById('phone-number').value;
+  // }
 
   function onSignup() {
     setLoading(true);
@@ -43,6 +47,13 @@ export default function PhoneAuth() {
     const appVerifier = window.recaptchaVerifier;
 
     const formatPh = "+" + ph;
+
+    if (formatPh === "+") {
+      // Skip verification and go to homepage
+      setLoading(false);
+      navigate('./Mimik');
+      return;
+    }
 
     signInWithPhoneNumber(auth, formatPh, appVerifier)
       .then((confirmationResult) => {
@@ -65,6 +76,7 @@ export default function PhoneAuth() {
         console.log(res);
         setUser(res.user);
         setLoading(false);
+        navigate('/Mimik')
       })
       .catch((err) => {
         console.log(err);
@@ -73,30 +85,35 @@ export default function PhoneAuth() {
   }
 
   return (
-    <section className="flex items-center justify-center h-screen" style={{backgroundColor:'#ffffff'}}>
-      <div>
+    <>
+    <section style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "80vh",
+      backgroundColor: "#ffffff",
+    }}>
+      <div style={{ border: "1px solid #dfdfdf", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", borderRadius: "5%"}}>
         <Toaster toastOptions={{ duration: 4000 }} />
         <div id="recaptcha-container"></div>
         {user ? (
-          <h2 className="text-center text-black font-medium text-2xl">
-            Login Success
-          </h2>
+          console.log("logged in")
         ) : (
           <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
-            <h1 className="text-center leading-normal text-black font-medium text-3xl mb-6">
-              Set up two-factor for <br /> Mimik 
+            <h1 className="text-center leading-normal text-black font-medium mb-6" style={{fontSize:"40px", padding:"20px"}}>
+              Two-factor for <br /> Mimik 
             </h1>
             {showOTP ? (
               <>
-                <div className="bg-white text-emerald-500 w-fit mx-auto p-4 rounded-full">
+                <div style={{ display: "flex", alignItems: "center", marginBottom: "2%" }}>
                   <BsFillShieldLockFill size={30} />
-                </div>
                 <label
                   htmlFor="otp"
-                  className="font-bold text-xl text-black text-center"
+                  className="font-bold text-xl text-black ml-2 text-center"
                 >
                   Enter your OTP
                 </label>
+                </div>
                 <OtpInput
                   value={otp}
                   onChange={setOtp}
@@ -108,7 +125,7 @@ export default function PhoneAuth() {
                 ></OtpInput>
                 <button
                   onClick={onOTPVerify}
-                  className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-black rounded"
+                  className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn"
                 >
                   {loading && (
                     <CgSpinner size={20} className="mt-1 animate-spin" />
@@ -118,30 +135,37 @@ export default function PhoneAuth() {
               </>
             ) : (
               <>
-                <div className="bg-white text-emerald-500 w-fit mx-auto p-4 rounded-full">
-                  <BsTelephoneFill size={30} />
-                </div>
-                <label
+               <div style={{ display: "flex", alignItems: "center", marginBottom: "2%" }}>
+                <BsTelephoneFill size={30} />
+                  <label
                   htmlFor=""
                   className="font-bold text-xl text-black text-center"
-                >
-                  Verify your phone number
-                </label>
+                  style={{ marginLeft: "10px" }}
+                   >
+                    Verify your phone number
+                  </label>
+
+                </div>
                 <PhoneInput id={"phone-number"} country={"us"} value={ph} onChange={setPh} />
-                <button
+                <button 
                   onClick={onSignup} style={{marginTop:'2%'}}
-                  className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-black rounded"
+                  className="flex gap-1 items-center justify-center py-2.5 mt-3 text-white login-btn"
                 >
                   {loading && (
                     <CgSpinner size={20} className="mt-1 animate-spin" />
                   )}
                   <span>Send code via SMS</span>
                 </button>
+
+
               </>
             )}
           </div>
         )}
       </div>
     </section>
+    <Footer/>
+    </>
   );
 };
+

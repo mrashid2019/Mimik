@@ -267,7 +267,7 @@ export default function Convert() {
 
 				</div>
 
-				<div style={{ position: 'relative', backgroundColor: 'fff' }}>
+				<div style={{ position: 'relative', paddingBottom: '5%', marginBottom: '5%',backgroundColor:'fff'}}>
 
 
 					{audio && (

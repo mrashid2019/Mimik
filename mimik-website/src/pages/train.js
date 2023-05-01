@@ -59,12 +59,15 @@ const storeAudio = (audio) => {
 	const uid = auth.currentUser.uid
 	console.log(uid)
 	const storageRef = ref(storage, `AudioSamples/${uid}/${file}`)
+	const message = document.getElementById('message')
 	uploadBytes(storageRef, audioFile)
 		.then((snapshot) => {
 			console.log('Uploaded a file!')
+			message.textContent = 'File uploaded successfully!'
 		})
 		.catch((err) => {
 			console.error(err)
+			message.textContent = 'Failed to upload file.'
 		})
 }
 
@@ -136,7 +139,8 @@ const Train = () => {
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '40px' }}>
 					<AudioRecorder onRecordingComplete={blob=>setAudio(blob)}></AudioRecorder>
-					<Button2 onClick={(e)=>storeAudio(audio_)}>Store</Button2>
+					<Button2 onClick={(e)=>storeAudio(audio_)} style={{marginTop:"20px"}}>Store</Button2>
+					<p id="message" style={{marginTop:"20px"}}></p>
 				</div>
 				<Footer />
 

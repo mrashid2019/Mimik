@@ -14,6 +14,7 @@ import { auth, db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
+
 const userContext = createContext({});
 export const AuthContext = createContext();
 export const useAuth = () => { return useContext(userContext)};
@@ -69,13 +70,13 @@ const UserAuthContext = ({ children }) => {
 
     })
     .catch((error) => {
-      setSignUpError(error+"kskk");
+      setSignUpError(error);
       throw error;
     });
 
-    user.updateProfile({
-      displayName: `${firstName} ${lastName}`,
-    });
+    // user.updateProfile({
+    //   displayName: `${firstName} ${lastName}`,
+    // });
     
 
 

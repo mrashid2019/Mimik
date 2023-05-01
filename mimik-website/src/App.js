@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
@@ -22,6 +22,16 @@ import { UserAuthContext } from "../src/context/userAuthContext";
 import PrivateRoutes from "./services/PrivateRoutes";
 
 function App() {
+
+  const [authState, setAuthState] = useState(null)
+
+  useEffect(() => {
+    const storedAuthState = localStorage.getItem('authState')
+    if (storedAuthState) {
+      setAuthState(JSON.parse(storedAuthState))
+    }
+  }, [])
+
   return (
     <UserAuthContext>
       <Loading />
