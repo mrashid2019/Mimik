@@ -1,426 +1,721 @@
-import React, {useState} from 'react';
-import userImg from '../components/profile/images/user.png';
-import { Outlet, Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from '../context/userAuthContext';
-import uploadFile from '../components/profile/uploadFile';
-import { updateProfile } from 'firebase/auth';
+import React, { useState, useEffect, useRef } from "react";
+import userImg from "../components/profile/images/user.png";
+import { Navigate, useNavigate } from "react-router-dom";
 
-import Footer from '../components/Footer';
-import Bar from '../components/profile/bar/bar';
-
+import Footer from "../components/Footer";
+import Bar from "../components/profile/bar/bar";
 
 //Modal
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import SubmitButton from '../components/profile/inputs/SubmitButton';
-import {v4 as uuidv4} from 'uuid';
-import {Avatar,DialogActions,DialogContent,DialogContentText,TextField} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import SubmitButton from "../components/profile/inputs/SubmitButton";
+import {
+  Avatar,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  TextField,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
+//Upload
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { storage, auth, db } from "../firebase";
+
+//User
+import { doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { getMetadata, listAll } from "firebase/storage";
+import { getAuth, deleteUser } from "firebase/auth";
+import * as ReactDOM from "react-dom";
 
 const main = {
-	height:'100%',
-	width:'100%',
-	display:'flex',
-	flexDirection:'column',
-	justifyContent:'space-between',
-	alignItems:'center',
-}
-
+  height: "100%",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  alignItems: "center",
+};
 
 const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: "50%",
-	bgcolor: 'background.paper',
-	border: '2px solid #000',
-	boxShadow: 24,
-	p: 4,
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
+const Profile = (props) => {
+  const navigate = useNavigate();
+
+  //Modal
+  //Name and Image
+  console.log(props);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  //Username
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const handleOpenDelete = () => setOpenDelete(true);
+  const handleCloseDelete = () => setOpenDelete(false);
+
+  //Change first and last name
+  const [firstname, setFirstName] = useState();
+  const [lastname, setLastName] = useState();
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
+  const [user, setUser] = useState();
+
+  //Image URl
+  const [profileImg, setprofileImg] = useState(userImg);
+
+  const user_id = auth.currentUser.uid;
+  const docRef = doc(db, "RegisteredUsers", user_id);
+
+  //Add Image
+  const [file, setFile] = useState(null);
+
+  //Models
+  const [models, setModels] = useState("Not Set");
+  var m = [];
+  var b = ["n", "eee"];
+  var modelo = "notsetvet";
+  const renderModels = b.map((v) => {
+    v = "<tr><td>" + v + "<tr><td>";
+    console.log("V:", v);
+  });
+  const numbers = [1, 2, 3, 4, 5];
+  const listItems = m.map((number) => (
+    <tr>
+      <td>{number}</td>
+    </tr>
+  ));
+
+  function getItems() {
+    var items = m.map((number) => (
+      <tr>
+        <td>{number}</td>
+      </tr>
+    ));
+
+    return items;
+  }
+
+  //User Information
+  const getUserInfo = async () => {
+    console.log("RETRIEVING USER INFO");
+    const user_info = await getDoc(docRef)
+      .then((user_doc) => {
+        // setUser(user_doc);
+        setFirstName(user_doc.get("firstName"));
+        setLastName(user_doc.get("lastName"));
+        setUser(user_doc);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  
-//Style for table grid
-const Item = styled(Paper)(({ theme }) => ({
-	backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-	...theme.typography.body2,
-	padding: theme.spacing(1),
-	textAlign: 'center',
-	color: theme.palette.text.secondary,
-  }));
 
+  const updateDocument = (event) => {
+    console.log("In Update");
+    console.log("Out Update");
+    event.preventDefault();
+    updateDoc(docRef, { firstName: newFirstName, lastName: newLastName })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    navigate("/profile");
 
-const Profile = () => {
+    //Delete Previous Imges
+    // Create a reference under which you want to list
+    const listRef = ref(storage, `profile/${user_id}`);
+    deleteDocument(listRef);
 
-	//Modal
-	//Name and Image
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
-	//Username
-	const [openDelete, setOpenDelete] = React.useState(false);
-	const handleOpenDelete = () => setOpenDelete(true);
-	const handleCloseDelete = () => setOpenDelete(false);
+    //Add Profile Image
+    if (file) {
+      addImgDB(file);
+    }
+    getUserInfo();
+    handleClose();
+  };
 
-	const { currentUser, setLoading, setAlert } = useAuth();
-	
-	const [name, setName] = useState(currentUser?.displayName);
-	const [file, setFile] = useState(null);
-	const [photoURL, setPhotoURL] = useState(currentUser?.photoURL);
+  function deleteDocument(listRef) {
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+          console.log("ForderRef", folderRef);
+        });
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+          console.log("ItemRef", itemRef.fullPath);
+          const fileRef = itemRef.fullPath.toString();
+          const desertRef = ref(storage, fileRef);
 
-	const navigate = useNavigate();
+          // Delete the file
+          deleteObject(desertRef)
+            .then(() => {
+              // File deleted successfully
+              console.log(" File deleted successfully");
+            })
+            .catch((error) => {
+              // Uh-oh, an error occurred!
+              console.log(error);
+            });
+        });
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+        console.log(error);
+      });
+  }
 
-	const handleChange = (e) => {
-		const file = e.target.files[0];
-		if (file) {
-		  setFile(file);
-		  setPhotoURL(URL.createObjectURL(file));
-		}
-		
-	};
+  function getImg() {
+    // Create a reference under which you want to list
+    const listRef = ref(storage, `profile/${user_id}`);
 
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        });
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+          console.log("ItemRef", itemRef.fullPath);
+          // Get metadata properties
+          const referenceUrl = ref(storage, itemRef.fullPath);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault()
-		setLoading(true)
+          // Get the download URL
+          getDownloadURL(referenceUrl)
+            .then((url) => {
+              // Insert url into an <img> tag to "download"
+              console.log("Image URL:", url);
+              setprofileImg(url);
+            })
+            .catch((error) => {
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+                case "storage/object-not-found":
+                  // File doesn't exist
+                  break;
+                case "storage/unauthorized":
+                  // User doesn't have permission to access the object
+                  break;
+                case "storage/canceled":
+                  // User canceled the upload
+                  break;
 
-		let userObj = {displayName: name}
-		let imagesObj = {uName: name}
+                // ...
 
-		try {
-			if(file){
-				const imageName = uuidv4() + "." + file?.name?.split(".")?.pop()
-				const url = await uploadFile(file, `profile/${currentUser?.uid}/${imageName}`)
+                case "storage/unknown":
+                  // Unknown error occurred, inspect the server response
+                  break;
+              }
+            });
+        });
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+  }
 
+  function addImgDB(file) {
+    const storageRef = ref(storage, `/profile/${user_id}/${file.name}`); // progress can be paused and resumed. It also exposes progress updates. // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        ); // update progress
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log("uploadTask.snapshot.ref:", uploadTask.snapshot.ref);
+          console.log(url);
+          setprofileImg(url);
+        });
+      }
+    );
+  }
 
-				userObj = {...userObj, photoURL: url}
-				imagesObj = {...imagesObj, uPhoto: url}
-			}
+  useEffect(() => {
+    getUserInfo();
+    getImg();
+    getModels();
+    getItems("004");
+  }, [firstname, lastname]);
 
-			await updateProfile(currentUser, userObj)
-			setAlert({isAlert: true, 
-					  severity:"success", 
-					  message:"Your profile has been updated", timeout:3000, 
-					  location:"modal",
-					});
-		} catch (error){
-			setAlert({isAlert: true, 
-				severity:"error", 
-				message:error.message, 
-				timeout:5000, 
-				location:"modal",
-			  });
-			  console.log(error);
-		}
+  const handleChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFile(file);
+    }
+  };
 
-// 		try {
-// 			const currentUser = auth().currentUser;
-// 			if (currentUser) {
-// 			  const userRef = db().ref(`users/${currentUser.uid}`);
-// 			  await userRef.update({
-// 				firstName: firstName,
-// 				lastName: lastName
-// 			  });
-// 			}
-// 			setAlert({isAlert: true, 
-//               severity:"success", 
-//               message:"Your profile has been updated", 
-//               timeout:3000, 
-//               location:"modal",
-//     		});
-//   		} catch (error){
-// 			setAlert({isAlert: true, 
-//               severity:"error", 
-//               message:error.message, 
-//               timeout:5000, 
-//               location:"modal",
-//     });
-//     console.log(error);
-//   }
+  const handleSubmitDelete = (event) => {
+    event.preventDefault();
 
-		setLoading(false);
-	  }
-	const handleSubmitDelete = (event) => {
-		event.preventDefault();
-		handleCloseDelete()
-	}
-	
-	const handleDeleteAccount = (event) => {
-		event.preventDefault();
-		handleCloseDelete()
-	}
+    handleCloseDelete();
+  };
 
+  const handleDeleteAccount = async (event) => {
+    event.preventDefault();
 
+    await deleteDoc(doc(db, "RegisteredUsers", user_id));
 
+    const user = auth.currentUser;
 
-	class NameForm extends React.Component {
-		constructor(props) {
-			super(props);
-			this.state = {value: ''};
+    deleteUser(user)
+      .then(() => {
+        // User deleted.
+        console.log("User Deleted");
+      })
+      .catch((error) => {
+        // An error ocurred
+        console.log("Error:", error);
+      });
+    handleCloseDelete();
+    navigate("/Mimik");
+  };
 
-			this.handleChange = this.handleChange.bind(this);
-			this.handleSubmit = this.handleSubmit.bind(this);
-		}
+  //Get Models
+  function getModels() {
+    // Create a reference under which you want to list
+    const listRef = ref(storage, `AudioSamples/${user_id}`);
 
-		handleChange(event) {
-			this.setState({value: event.target.value});
-		}
+    // Find all the prefixes and items.
+    listAll(listRef)
+      .then((res) => {
+        res.prefixes.forEach((folderRef) => {
+          // All the prefixes under listRef.
+          // You may call listAll() recursively on them.
+        });
+        var urls = "";
+        res.items.forEach((itemRef) => {
+          // All the items under listRef.
+          console.log("ItemRef", itemRef.fullPath);
+          // Get metadata properties
+          const referenceUrl = ref(storage, itemRef.fullPath);
+          // Get the download URL
+          getDownloadURL(referenceUrl)
+            .then((url) => {
+              // Insert url into an <img> tag to "download"
+              console.log("Audio URL:", url);
 
-		handleSubmit(event) {
-			alert('A name was submitted: ' + this.state.value);
-			event.preventDefault();
-		}
+              urls =
+                urls +
+                (
+                  <tr>
+                    <td>{url}</td>
+                  </tr>
+                );
+              console.log("urls:", urls);
 
-		render() {
-			return (
-			<form onSubmit={this.handleSubmit}>
-				<label>
-				Name:
-				<input type="text" value={this.state.value} onChange={this.handleChange} />
-				</label>
-				<input type="submit" value="Submit" />
-			</form>
-			);
-		}
-	}
-	 
-	return (
+              console.log("Modelo:", url);
+              m.push(
+                <tr height="35">
+                  <td>
+                    <audio controls>
+                      <source src={url} type="audio/wav"></source>
+                    </audio>
+                  </td>
+                </tr>
+              );
+              console.log("M:", m);
 
-		<>
-	
-		<div class="container" style={{justifyContent:'center',alignItems: 'center', display: 'flex'}}>
-					<div class="row" style={{ backgroundColor:' #fff', textAlign: 'center', width: '130vh', height:"100vh" ,margin: '35px 35px',borderRadius: '1px' }}>
-						<div class="col-sm-3" style={{borderRightStyle: 'solid', borderRightColor:'#dfdfdf'}}>
-							<div class="container">
-								
-								<div class="row"  style={{borderBottomStyle: 'solid', borderBottomColor:'#dfdfdf',height:'50vh'}}>
-									<div class="col-sm" style={{justifyContent:'center',alignItems: 'center', display: 'flex',flexDirection:'column'}}>
-										<img src={photoURL} class="rounded-circle" alt="Profile Image" style={{ width: '80%', height: '60%', padding:'5px 5px'}}/>
-									</div>
-									<div style={{ 
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center' }}><p>{name}</p></div>
-	
-								</div>
-	
-								<div class="row"   style = {{	height:'10vh', 
-									alignItems:'center', 
-									justifyContent:"center",
-									borderBottomStyle: 'solid',
-									borderBottomColor:'#dfdfdf',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center'}}>
-	
-									<div class="col-sm" style={{}}>
-										<div className="Profile">
-											<Button onClick={handleOpen} style={{background:"none",
-												margin:'0',
-												padding:'0',
-												cursor: 'pointer',
-												fontSize:'65%',
-												color: '#2b2c2f'
-												
-												}}>
-													Settings
-											</Button>
-	
-											<Modal
-													open={open}
-													onClose={handleClose}
-													aria-labelledby="modal-modal-title"
-													aria-describedby="modal-modal-description"
-												>
-													<Box sx={style}>
-														<form onSubmit={handleSubmit}>
-															<DialogContent dividers>
-																<DialogContentText id="modal-modal-title" variant="h6" component="h3" style={{padding:"10px 0px 20px 0px"}}>
-																You can update your profile by updating these fields:
-																</DialogContentText>
-																<TextField
-																margin="dense"
-																id="name"
-																label="First Name"
-																type="text"
-																fullWidth
-																variant="standard"
-																value={name || ''}
-																required
-																onChange={(e) => setName(e.target.value)}
-																/>
-																
-																<TextField
-																	autoFocus
-																	margin="dense"
-																	id="name"
-																	label="Last Name"
-																	type="text"
-																	fullWidth
-																	variant="standard"
-																/>
-	
-																<TextField
-																	autoFocus
-																	margin="dense"
-																	id="name"
-																	label="Password"
-																	type="text"
-																	fullWidth
-																	variant="standard"
-																/>
-	
-																
-																<label htmlFor="profilePhoto">
-																<input
-																	accept="image/*"
-																	id="profilePhoto"
-																	type="file"
-																	style={{ display: 'none' }}
-																	onChange={handleChange}
-																/>
-																<Avatar
-																	src={photoURL}
-																	sx={{ width: 75, height: 75, cursor: 'pointer' }}
-																/>
-																</label>
-															</DialogContent>
-															<DialogActions>
-																<SubmitButton/>
-															</DialogActions>
-														</form>
-													</Box>
-											</Modal>
-										</div>
-									</div>
-								</div>
-	
-								<div class="row"   style={{	height:'10vh', 
-									alignItems:'center', 
-									justifyContent:"center",
-									borderBottomStyle: 'solid',
-									borderBottomColor:'#dfdfdf',
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-									}}>
-	
-									<div class="col-sm" style={{}}>
-	
-										<div className="Profile" style={{ }}>
-												<Button onClick={handleOpenDelete} style={{background:"none",
-													border:'none',
-													margin:'0',
-													padding:'0',
-													fontSize:'65%',
-													color: 'red'
-												}}>
-													Delete Account
-												</Button>
-	
-												<Modal
-														open={openDelete}
-														onClose={handleCloseDelete}
-														aria-labelledby="modal-modal-title"
-														aria-describedby="modal-modal-description"
-													>
-														<Box sx={style}>
-															<form onSubmit={handleSubmitDelete}>
-																<DialogContent dividers>
-																	<DialogContentText id="modal-modal-title" variant="h6" component="h3" style={{padding:"10px 0px 20px 0px"}}>
-																	Are you sure you want to delete your account?
-																	</DialogContentText>
-																</DialogContent>
-																<DialogActions>
-																<Button onClick={handleDeleteAccount} >Cancel</Button>
-																<Button onClick={handleCloseDelete} autoFocus variant="outlined" startIcon={<DeleteIcon /> }>
-																	Delete
-																</Button>
-																</DialogActions>
-															</form>
-														</Box>
-												</Modal>
-										</div>
-									</div>
-								</div>
-								<div class="row"   style = {{	height:'35vh', 
-									alignItems:'flex-end', 
-									display: 'flex',
-									}}>
-										<Button style={{height:'10vh', backgroundColor:"#D9D9D9",
-											cursor: 'pointer',
-											fontSize:'75%',
-											color:"black",
-											fontFamily:"IM FELL Double Pica"}}>
-												Sign Out
-										</Button>
-	
-								</div>
-								
-							</div>
-							
-						</div>
-						<div class="col-sm-9" style={{padding:"2px"}}>
-							<Bar/>
-							
-							{/* Table box */}
-							<Box sx={{ flexGrow: 1 }} >
-								<Grid container spacing={0.3} >
-									<Grid item xs={5} md={5} >
-										<Item style={{height:"95vh", paddingTop:"20px", border:"none", boxShadow:"none"}}>
-											<div>
-												<Stack
-													direction="column"
-													justifyContent="flex-end"
-													alignItems="stretch"
-													spacing={3}
-												>
-													<Item style={{height:"60vh"}}>
-														Recently Saved Conversions
-													</Item>
-												</Stack>
-											</div>
-										</Item>
-									</Grid>
-	
-									<Grid item xs={7} md={7} >
-									<Item style={{height:"95vh", paddingTop:"20px", border:"none", boxShadow:"none"}}>
-									<div>
-												<Stack
-													direction="column"
-													justifyContent="flex-end"
-													alignItems="stretch"
-													spacing={3}
-												>
-													<Item style={{height:"30vh"}}>
-														You’re Trained Voice												</Item>
-													<Item style={{height:"60vh"}}> 
-														
-													</Item>
-												</Stack>
-											</div>									
-									</Item>
-									</Grid>
-								</Grid>
-							</Box>
-						</div>
-					<div>
-				</div>
-			</div>
-		</div>
-	
-	</>
-	
-	
-	);
-	
-	};
-	
-	export default Profile;
+              try {
+                var myDiv = document.querySelector("#myDiv");
+                const trTag = (
+                  <tr>
+                    <td>{m}</td>
+                  </tr>
+                );
+                ReactDOM.render(trTag, myDiv);
+              } catch (err) {
+                console.log(err);
+              }
+            })
+            .catch((error) => {
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+                case "storage/object-not-found":
+                  // File doesn't exist
+                  break;
+                case "storage/unauthorized":
+                  // User doesn't have permission to access the object
+                  break;
+                case "storage/canceled":
+                  // User canceled the upload
+                  break;
+
+                // ...
+
+                case "storage/unknown":
+                  // Unknown error occurred, inspect the server response
+                  break;
+              }
+            });
+        });
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+    setModels(modelo);
+  }
+
+  return (
+    <>
+      <div
+        //fills the whole page
+        class="container"
+        style={{
+          paddingTop: "3%",
+          display: "flex",
+          height: "90vh",
+          width: "70%",
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {/* Welcome Message and Search */}
+        <div class="row container-fluid" style={{ paddingBottom: "20px", border: "solid 1px #dfdfdf", boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
+          <Bar firstName={firstname} />
+
+          <div class="col-3" style={{ borderRight: "3px solid gray" }}>
+            <div class="row row-cols-1">
+              {/* Edit */}
+
+              <div
+                class="col"
+                style={{
+                  height: "25vh",
+                  alignItems: "center",
+                  justifyItems: "center",
+                  paddingTop: "5%",
+                  paddingLeft: "1%",
+                }}
+              >
+                <div
+                  class="col-sm"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    alignContent: "center",
+                    height: "30vh",
+                    position: "absolute",
+                    width: "100%",
+                    height: "100",
+                  }}
+                >
+                  <img
+                    src={profileImg}
+                    class="rounded-circle"
+                    alt="User Image"
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      display: "block",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Name */}
+              <div
+                class="col"
+                style={{
+                  height: "15vh",
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                  alignItems: "end",
+                }}
+              >
+                <div class="col-sm" style={{ fontSize: "150%" }}>
+                  {firstname} {lastname}
+                </div>
+              </div>
+
+              {/* Modal: Edit Account */}
+              <div
+                class="col"
+                style={{
+                  height: "15vh",
+                  alignItems: "center",
+                  alignContent: "center",
+                  display: "flex",
+                }}
+              >
+                <div class="col-sm">
+                  <Button
+                    onClick={handleOpen}
+                    style={{
+                      background: "none",
+                      margin: "0",
+                      padding: "0",
+                      cursor: "pointer",
+                      fontSize: "65%",
+                      color: "#2b2c2f",
+                      fontSize: "85%",
+                    }}
+                  >
+                    Settings
+                  </Button>
+
+                  <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <form onSubmit={updateDocument}>
+                        <DialogContent dividers>
+                          <DialogContentText
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h3"
+                            style={{ padding: "10px 0px 20px 0px" }}
+                          >
+                            You can update your profile by updating these
+                            fields:
+                          </DialogContentText>
+                          {/* First Name */}
+                          <TextField
+                            margin="dense"
+                            id="firstName"
+                            label="First Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            inputProps={{ minLength: 2 }}
+                            required
+                            onChange={(e) => {
+                              setNewFirstName(e.target.value);
+                              console.log(newFirstName);
+                            }}
+                          />
+
+                          {/* Last Name */}
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="lastName"
+                            label="Last Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            inputProps={{ minLength: 2 }}
+                            required
+                            onChange={(e) => {
+                              setNewLastName(e.target.value);
+                              console.log(newLastName);
+                            }}
+                          />
+
+                          {/* Upload Image */}
+                          <label htmlFor="profilePhoto">
+                            <div
+                              style={{
+                                paddingTop: "15px",
+                                paddingBottom: "5px",
+                                fontFamily: "Arial, Helvetica",
+                              }}
+                            >
+                              Upload Image:
+                            </div>
+                            <input
+                              accept="image/*"
+                              id="profilePhoto"
+                              type="file"
+                              style={{ fontFamily: "Arial, Helvetica" }}
+                              onChange={handleChange}
+                            />
+                          </label>
+                        </DialogContent>
+
+                        <DialogActions>
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            // onClick={updateDocument}
+                          >
+                            Submit
+                          </Button>
+                        </DialogActions>
+                      </form>
+                    </Box>
+                  </Modal>
+                </div>
+              </div>
+
+              {/* Delete */}
+              <div
+                class="col"
+                style={{
+                  height: "20vh",
+                  display: "flex",
+                  alignItems: "end",
+                }}
+              >
+                <div class="col-sm">
+                  <Button
+                    onClick={handleOpenDelete}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      margin: "0",
+                      padding: "0",
+                      fontSize: "65%",
+                      color: "red",
+                      fontSize: "85%",
+                    }}
+                  >
+                    Delete Account
+                  </Button>
+
+                  <Modal
+                    open={openDelete}
+                    onClose={handleCloseDelete}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <form onSubmit={handleSubmitDelete}>
+                        <DialogContent dividers>
+                          <DialogContentText
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h3"
+                            style={{ padding: "10px 0px 20px 0px" }}
+                          >
+                            Are you sure you want to delete your account?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloseDelete}>Cancel</Button>
+                          <Button
+                            onClick={handleDeleteAccount}
+                            autoFocus
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                          >
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </form>
+                    </Box>
+                  </Modal>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Models */}
+          <div
+            class="col-9"
+            style={{
+              paddingRight: "0px",
+              paddingLeft: "0px",
+            }}
+          >
+            <div
+              //fills the whole page
+              class="container"
+            >
+              {/* <div class="row row-cols-3"> */}
+              <div class="row">
+                {/* Column 1 */}
+                <div
+                  class="col"
+                  style={{
+                    borderRadius: "7px",
+                    height: "75vh",
+                  }}
+                >
+                  <p
+                    class="text-capitalize"
+                    style={{ padding: "25px", fontSize: "35px" }}
+                  >
+                    Recently Saved Conversions
+                  </p>
+
+                  <table>
+                    {getItems()}
+                    <div id="myDiv"></div>
+                  </table>
+                </div>
+
+                {/* Col in the middle
+              <div class="col-sm-1"></div>*/}
+
+                {/* Column 2 
+              <div class="col-5" style={{ borderRadius: "7px" }}>
+                <div class="row row-cols-1">
+                  <div
+                    class="col"
+                    style={{
+                      height: "40vh",
+                      border: "2px solid green",
+                      borderRadius: "7px",
+                    }}
+                  >
+                    You're Traned Voice
+                  </div>
+
+                  <div
+                    class="col-1"
+                    style={{
+                      height: "5vh",
+                    }}
+                  ></div>
+
+                  <div
+                    class="col"
+                    style={{
+                      height: "40vh",
+                      border: "2px solid green",
+                      borderRadius: "7px",
+                    }}
+                  >
+                    Weekly Activity on Mimik
+                  </div>
+                </div>
+
+              </div>*/}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Profile;

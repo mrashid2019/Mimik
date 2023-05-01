@@ -1,13 +1,9 @@
 // Import the functions you need from the SDKs you need
-import firebase from "firebase/compat/app";
+import {initializeApp} from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 // import {getStorage} from "firebase/storage"
-import {getAuth} from "firebase/auth";
-import {getStorage} from 'firebase/storage';
-import { getAnalytics } from "firebase/analytics";
-
-
-
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDKcKsinKxSnE0wcJoDqpGG2U6OCZIEc-w",
@@ -17,17 +13,14 @@ const firebaseConfig = {
   storageBucket: "voice-cloning-890fc.appspot.com",
   messagingSenderId: "331864957414",
   appId: "1:331864957414:web:afdcab3b7b97f50d5db627",
-  measurementId: "G-V60ZHHLM4H"
+  measurementId: "G-V60ZHHLM4H",
 };
 
-
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-const auth = getAuth(app);
-const storage = getStorage(app);
-
-export { app, db, auth, storage, analytics };
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
 export default app;
+export { app, db, auth, storage, analytics };
 export { firebaseConfig };
