@@ -69,7 +69,7 @@ const storeAudio = (audio) => {
 }
 
 const Train = () => {
-
+	const [audio, setAudio] = useState()
 	return (
 		<>
 			<div style={main}>
@@ -135,8 +135,8 @@ const Train = () => {
 					Luke soon found that his journey was not going to be easy. He was faced with countless challenges, but he refused to give up. He honed his skills, learned new techniques and grew stronger with each passing day. He battled giant trolls, fire-breathing dragons, and even the evil sorcerer who had cursed his kingdom.
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '40px' }}>
-					<AudioRecorder></AudioRecorder>
-					<Button2 onClick={storeAudio}>Store</Button2>
+					<AudioRecorder onRecordingComplete={blob=>setAudio(blob)}></AudioRecorder>
+					<Button2 onClick={storeAudio(audio)}>Store</Button2>
 				</div>
 				<Footer />
 
