@@ -119,7 +119,7 @@ export default function Convert() {
 			console.log({ value })
 		}
 
-		axios.post('mimik-api.com/clone', formData, { responseType: 'blob', data: 'HEY', headers: { "Content-Encoding": 'multipart/form-data' } })
+		axios.post('https://mimik-api.com/clone', formData, { responseType: 'blob', data: 'HEY', headers: { "Content-Encoding": 'multipart/form-data' } })
 			.then((response) => {
 				let data = response.data
 				let audioBlob = new Blob([data], { type: 'audio/wav' })
