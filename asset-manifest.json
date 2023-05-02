@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Mimik/static/css/main.f635936f.css",
-    "main.js": "/Mimik/static/js/main.a07cbcd5.js",
+    "main.js": "/Mimik/static/js/main.fd14097d.js",
     "static/media/Wilmayer_Before.wav": "/Mimik/static/media/Wilmayer_Before.3ffb58f23594eae3781b.wav",
     "static/media/Wilmayer_to_Mahdia.wav": "/Mimik/static/media/Wilmayer_to_Mahdia.4eecc5b932871b2cac40.wav",
     "static/media/AI17A_generated.jpg": "/Mimik/static/media/AI17A_generated.ace5f4dce933121ce883.jpg",
@@ -23,10 +23,10 @@
     "static/media/magnifying-glass.svg": "/Mimik/static/media/magnifying-glass.bf7c00a4cf3b50288170bca48fe9fd9a.svg",
     "static/media/clone.svg": "/Mimik/static/media/clone.40a3b43bfd3fa0ede5887e8cd3b0eaf2.svg",
     "main.f635936f.css.map": "/Mimik/static/css/main.f635936f.css.map",
-    "main.a07cbcd5.js.map": "/Mimik/static/js/main.a07cbcd5.js.map"
+    "main.fd14097d.js.map": "/Mimik/static/js/main.fd14097d.js.map"
   },
   "entrypoints": [
     "static/css/main.f635936f.css",
-    "static/js/main.a07cbcd5.js"
+    "static/js/main.fd14097d.js"
   ]
 }
