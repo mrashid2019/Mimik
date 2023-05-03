@@ -53,18 +53,61 @@ return (
 			<NavLink to="/convert">Convert</NavLink>
 			<NavLink to="/train">Train</NavLink>
 			<NavLink to="/profile">Profile </NavLink>
-			</>	
+			<button
+                style={{
+                  borderRadius: "4px",
+                  background: "#fff",
+                  padding: "10px 22px",
+                  color: "#4A4E69",
+                  border: "none",
+                  outline: "none",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease-in-out",
+                  textDecoration: "none",
+                  marginLeft: "24px",
+                }}
+                onClick={handleLogout}
+              >
+                Log Out
+              </button>
+            </>
         )}
-		{user && (
+		  {!user && (
+            <>
+			<a href="/login">
+              <button
+                style={{
+                  borderRadius: "4px",
+                  background: "#fff",
+                  padding: "10px 22px",
+                  color: "#4A4E69",
+                  border: "none",
+                  outline: "none",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease-in-out",
+                  textDecoration: "none",
+                  marginLeft: "24px",
+                }}
+              >
+                Login
+              </button>
+			  </a>
+            </>
+          )}
+        </NavMenu>
+
+		{/* {user && (
 			<button style={{borderRadius: '4px', background: '#fff', padding: '10px 22px', color: '#4A4E69', border: 'none', outline: 'none', cursor: 'pointer', transition: 'all 0.2s ease-in-out',
 				textDecoration: 'none', marginLeft: '24px'}} onClick={handleLogout}>Log Out</button>
-        )}
-        </NavMenu>
-        {!user && (
+        )} */}
+
+		{/* {!user && (
           <NavBtn>
             <NavBtnLink to="/login">Login</NavBtnLink>
           </NavBtn>
-        )}
+        )} */}
+        {/* </NavMenu> */}
+ 
       </Nav>
  
     </>

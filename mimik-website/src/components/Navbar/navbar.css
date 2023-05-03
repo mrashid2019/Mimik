@@ -21,8 +21,16 @@ body {
     position: relative;
   }
   
-  .logo {
-  }
+  @media screen and (max-width: 768px) {
+    .NavMenu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+     
+    }
+  }  
   
   .menu-icon {
     display: none;
