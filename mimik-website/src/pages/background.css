@@ -33,6 +33,18 @@
     color: #fff;
     font-size: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    .right-side{
+      order: 2;
+      display: none;
+    }
+    .left-side {
+      order: 1;
+      width: 100%;
+    }
+  }
+  
   section .air{
     position: absolute;
     bottom: 0;
