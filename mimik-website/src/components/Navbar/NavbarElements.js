@@ -4,6 +4,10 @@ import styled from "styled-components";
 
 
 export const Nav = styled.nav`
+font-size: 1.2rem;
+position: sticky;
+top: 0;
+z-index: 10;
 background: #6969A8;
 height: 85px;
 display: flex;
@@ -20,10 +24,9 @@ align-items: right;
 text-decoration: none;
 padding: 0 1rem;
 height: 100%;
-margin-top: 60px;
+margin-top: 40px;
 cursor: pointer;
  
-
 &:hover {
 	color: black;
 }
@@ -38,7 +41,7 @@ color: #fff;
 	top: 0;
 	right: 0;
 	transform: translate(-100%, 75%);
-	font-size: 1.8rem;
+	font-size: 5rem !important;
 	cursor: pointer;
 }
 `
@@ -46,15 +49,17 @@ color: #fff;
 export const NavMenu = styled.div`
 display: flex;
 align-items: center;
-/*margin-right: -24px;*/
-/* Second Nav */
-margin-right: 24px; 
-/* Third Nav */
-/* width: 100vw;
-white-space: nowrap; */
-@media screen and (max-width: 768px) {
-	display: none;
-}
+justify-content: center;
+@media (max-width: 768px) {
+  flex-direction: column;
+  position: fixed;
+  top: 80px;
+  left: ${({ open }) => (open ? "0" : "-100%")};
+  opacity: 1;
+  transition: height 0.3s ease-in-out;
+  background-color: rgb(105 105 167);
+  width: 100%;
+  height: 40vh;
 `;
 
 export const NavBtn = styled.div`
@@ -63,6 +68,9 @@ align-items: center;
 margin-right: 24px;
 @media screen and (max-width: 768px) {
 	display: none;
+	margin-bottom: 25px;
+	margin-top: 20px;
+}
 }
 `
 
@@ -76,8 +84,12 @@ outline: none;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
 text-decoration: none;
-
 margin-left: 24px;
+
+@media screen and (max-width: 768px) {
+	margin-bottom: 20px;
+    margin-top: 30px;
+}
 
 &:hover {
 	transition: all 0.2s ease-in-out;
@@ -86,3 +98,22 @@ margin-left: 24px;
 	color: #000;
 }
 `
+
+
+
+
+export const LogoWrapper = styled.div`
+  margin-left: 20px;
+  font-size: 1.5rem;
+`;
+
+export const Hamburger = styled.div`
+  display: none;
+  color:white;
+  font-size:2rem;
+  cursor: pointer;
+  margin-right: 20px;
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;

@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from 'react-router-dom';
-import { Nav, NavBtn, NavBtnLink, NavLink, NavMenu, Bars }
+import { FaBars } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { Nav, NavBtn, NavBtnLink, NavLink, NavMenu, Hamburger}
 	from "./NavbarElements";
 import logo from "../Navbar/Mimik-logo.png"
 import { useAuth } from "../../context/userAuthContext"
@@ -9,8 +10,9 @@ import { useAuth } from "../../context/userAuthContext"
 
 const Navbar = ({nav}) => {
 	const [user, setUser] = useState(null);
+	const [menuOpen, setMenuOpen] = useState(false);
 	const {currentUser , logOut } = useAuth();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (currentUser) {
@@ -42,8 +44,10 @@ return (
       <img src={logo} alt='logo' height={80} width={100} />
       MIMIK
     </a></div>
-		<Bars />
-		<NavMenu>
+		<Hamburger onClick={() => setMenuOpen(!menuOpen)}>
+          <FaBars />
+        </Hamburger>
+		<NavMenu open={menuOpen}>
 		{user && (
 			<>
 			<NavLink to="/convert">Convert</NavLink>
