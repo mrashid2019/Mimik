@@ -10,7 +10,10 @@ function Footer(){
             <div className="row">
             <div class="col-sm-8 p-3 text-white">
                 
-                <img className="footer_img" src={logo} />
+            <div style={{color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingRight:'0', marginLeft:"20px"}}> <a href="/Mimik" style={{textDecoration: 'none', color:'white',fontSize:'30px'}}>
+      {/* <img src={mimik-logo} alt='logo' height={80} width={100} /> */}
+      MIMIK
+    </a></div>
                 
                 </div>
 
