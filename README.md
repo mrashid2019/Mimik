@@ -12,13 +12,13 @@ Link to Mimik: https://mrashid2019.github.io/Mimik/
 
 ## Screenshots 
 ### Home page 
-<img src="./img/home.gif">
+<img src="./img/home.png">
 
 ### Train page 
-<img src="./img/train.gif">
+<img src="./img/train.png">
 
 ### Convert page 
-<img src="./img/convert.gif">
+<img src="./img/convert.png">
 
 ## Engineering Design Project 
 - Members:
